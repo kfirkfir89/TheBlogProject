@@ -16,14 +16,14 @@ namespace TheBlogProject.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        public byte[] ImageData { get; set; }
-        public string ContentType { get; set; }
+        public byte[]? ImageData { get; set; }
+        public string? ContentType { get; set; }
 
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and no more then {1} characters", MinimumLength = 2)]
-        public string FacebookUrl { get; set; }
+        public string? FacebookUrl { get; set; }
 
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and no more then {1} characters", MinimumLength = 2)]
-        public string TwitterUrl { get; set; }
+        public string? TwitterUrl { get; set; }
 
         [NotMapped]
         public string FullName 
