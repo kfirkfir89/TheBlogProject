@@ -30,12 +30,10 @@ var builder = WebApplication.CreateBuilder(args);
                                                                                                                                                                                  
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var dataContext = services.GetRequiredService<DataService>();
-    await dataContext.ManageDataAsync();
-}
+var dataService = app.Services.CreateScope()
+                     .ServiceProvider
+                     .GetRequiredService<DataService>();
+await dataService.ManageDataAsync();    
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
