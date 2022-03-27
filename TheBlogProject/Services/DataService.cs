@@ -80,7 +80,7 @@ namespace TheBlogProject.Services
                 FirstName = "ModKfir",
                 LastName = "ModAvraham",
             };
-            await _userManager.CreateAsync(modUser, "Abc&123!");
+            await _userManager.CreateAsync(modUser, "Abc&123!33");
             await _userManager.AddToRoleAsync(modUser, BlogRole.Moderator.ToString());
 
         }
