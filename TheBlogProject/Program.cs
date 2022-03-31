@@ -35,6 +35,9 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
     builder.Services.AddScoped<IBlogEmailSender, EmailService>();
+
+    //register our image service
+    builder.Services.AddScoped<IImageService, BasicImageService>();
 }
                                                                                                                                                                                  
 var app = builder.Build();
