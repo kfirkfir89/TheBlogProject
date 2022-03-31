@@ -57,8 +57,8 @@ namespace TheBlogProject.Services
             //creates a new instance of BlogUser
             var adminUser = new BlogUser()
             {
-                Email = "admin@contoso.com",
-                UserName = "admin@contoso.com",
+                Email = "fexoyit329@yeafam.com",
+                UserName = "fexoyit329@yeafam.com",
                 PhoneNumber = "(800) 555-1212",
                 FirstName = "Kfir",
                 LastName = "Avraham",

@@ -20,10 +20,11 @@ namespace TheBlogProject.Controllers
         private readonly IImageService _imageService;
         private readonly UserManager<BlogUser> _userManager;
 
-        public BlogsController(ApplicationDbContext context, IImageService imageService)
+        public BlogsController(ApplicationDbContext context, IImageService imageService, UserManager<BlogUser> userManager)
         {
             _context = context;
             _imageService = imageService;
+            _userManager = userManager;
         }
 
         // GET: Blogs
