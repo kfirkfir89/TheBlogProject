@@ -38,6 +38,9 @@ var builder = WebApplication.CreateBuilder(args);
 
     //register our image service
     builder.Services.AddScoped<IImageService, BasicImageService>();
+
+    //register the slug service
+    builder.Services.AddScoped<ISlugService, BasicSlugService>();
 }
                                                                                                                                                                                  
 var app = builder.Build();
