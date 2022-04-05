@@ -62,6 +62,7 @@ namespace TheBlogProject.Services
                 PhoneNumber = "(800) 555-1212",
                 FirstName = "Kfir",
                 LastName = "Avraham",
+                DisplayName ="kfirkfir",
 
             };
 
@@ -75,10 +76,11 @@ namespace TheBlogProject.Services
             //Create the moderator user
             var modUser = new BlogUser()
             {
-                Email = "kfirkfir89@gmail.com",
-                UserName = "kfirkfir89@gmail.com",
+                Email = "kfirkfir@gmail.com",
+                UserName = "kfirkfir@gmail.com",
                 FirstName = "ModKfir",
                 LastName = "ModAvraham",
+                DisplayName = "Modavrakfir",
             };
             await _userManager.CreateAsync(modUser, "Abc&123!33");
             await _userManager.AddToRoleAsync(modUser, BlogRole.Moderator.ToString());

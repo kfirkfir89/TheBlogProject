@@ -131,7 +131,14 @@ namespace TheBlogProject.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
+                var user = new BlogUser
+                {
+                    FirstName = Input.FirstName,
+                    LastName = Input.LastName,
+                    DisplayName = Input.DisplayName,
+                    UserName = Input.Email,
+                    Email = Input.Email
+                };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
