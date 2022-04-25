@@ -123,6 +123,7 @@ namespace TheBlogProject.Areas.Identity.Pages.Account
                     ContentType = Input.ImageFile is null ? 
                                     Path.GetExtension(_configuration["DefaultUserImage"]) :
                                     _imageService.ContentType(Input.ImageFile)
+
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
