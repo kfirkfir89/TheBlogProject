@@ -35,14 +35,6 @@ namespace TheBlogProject.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public async Task<IActionResult> TagIndex(string tag)
-        {
-            //get all posts that contain this tag
-            var allPostIds = _context.Tags.Where(t => t.Text == tag).Select(t => t.PostId);
-            var posts = _context.Posts.Where(p => allPostIds.Contains(p.Id)).ToList();
-            return View("Index", posts);
-        }
-
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -134,19 +126,22 @@ namespace TheBlogProject.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
             if (post == null)
             {
                 return NotFound();
             }
+
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
+            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
+
             return View(post);
         }
 
         // POST: Posts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -157,7 +152,7 @@ namespace TheBlogProject.Controllers
             {
                 try
                 {
-                    var newPost = await _context.Posts.FindAsync(post.Id);
+                    var newPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
 
                     newPost.Updated = DateTime.UtcNow;
                     newPost.Title = post.Title;
@@ -169,6 +164,20 @@ namespace TheBlogProject.Controllers
                     {
                         newPost.ImageDate = await _imageService.EncodeImageAsync(newImage);
                         newPost.ContentType = _imageService.ContentType(newImage);
+                    }
+
+                    //remove all Tage previously assicuated with this post
+                    _context.Tags.RemoveRange(newPost.Tags);
+
+                    //add in the new Tags from edit form
+                    foreach(var tagText in tagValues)
+                    {
+                        _context.Add(new Tag()
+                        {
+                            PostId = post.Id,
+                            BlogUserId = newPost.BlogUserId,
+                            Text = tagText,
+                        });
                     }
 
                     await _context.SaveChangesAsync();
