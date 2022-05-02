@@ -36,11 +36,11 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string slug)
         {
 
-            var getPost = await _context.Posts.FindAsync(id);
-            var slug = getPost.Slug;
+/*            var getPost = await _context.Posts.FindAsync(id);
+            var slug = getPost.Slug;*/
 
             if (string.IsNullOrEmpty(slug))
             {
