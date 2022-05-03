@@ -30,6 +30,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     //register my custom DataService class
     builder.Services.AddScoped<DataService>();
+    builder.Services.AddScoped<BlogSearchService>();
 
     //register a preconfigured instance of the MailSettings class
     builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
