@@ -32,7 +32,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                <img class="img-fluid" width="200px;" src="@imageService.DecodeImage(item.ImageDate, item.ContentType)" />
+                <img class="img-fluid" width="200" src="@imageService.DecodeImage(item.ImageData, item.ContentType)" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)

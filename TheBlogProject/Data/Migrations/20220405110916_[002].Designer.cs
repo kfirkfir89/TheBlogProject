@@ -370,7 +370,7 @@ namespace TheBlogProject.Data.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<byte[]>("ImageDate")
+                    b.Property<byte[]>("ImageData")
                         .HasColumnType("bytea");
 
                     b.Property<int>("ReadyStatus")

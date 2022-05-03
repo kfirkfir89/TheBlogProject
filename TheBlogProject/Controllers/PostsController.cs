@@ -30,6 +30,34 @@ namespace TheBlogProject.Controllers
             _userManager = userManager;
         }
 
+        public async Task<IActionResult> SearchIndex(int? page, string searchTerm)
+        {
+            ViewData["searchTerm"] = searchTerm;
+
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+            var posts = _context.Posts.Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).AsQueryable();
+            if(searchTerm != null)
+            {
+                searchTerm = searchTerm.ToLower();
+
+                posts = posts.Where(
+                    p => p.Title.ToLower().Contains(searchTerm) ||
+                    p.Abstract.ToLower().Contains(searchTerm) ||
+                    p.Content.ToLower().Contains(searchTerm) ||
+                    p.Comments.Any(c => c.Body.ToLower().Contains(searchTerm)||
+                                        c.ModeratedBody.ToLower().Contains(searchTerm) ||
+                                        c.BlogUser.FirstName.ToLower().Contains(searchTerm) ||
+                                        c.BlogUser.LastName.ToLower().Contains(searchTerm) ||
+                                        c.BlogUser.Email.ToLower().Contains(searchTerm)));
+            }
+
+            posts = posts.OrderByDescending(p => p.Created);
+
+            return View(await posts.ToPagedListAsync(pageNumber, pageSize));
+        }
+
         // GET: Posts
         public async Task<IActionResult> Index()
         {
@@ -105,7 +133,7 @@ namespace TheBlogProject.Controllers
                 post.BlogUserId = authorId;
 
                 //use the _imageService to store the incoming user specified image
-                post.ImageDate = await _imageService.EncodeImageAsync(post.Image);
+                post.ImageData = await _imageService.EncodeImageAsync(post.Image);
                 post.ContentType = _imageService.ContentType(post.Image);
                 
                 //creating the slug and determine if it is unique
@@ -137,6 +165,7 @@ namespace TheBlogProject.Controllers
 
                 if (validationError)
                 {
+                    ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
                     ViewData["TagValues"] = string.Join("," , tagValues);
                     return View(post);
                 }
@@ -227,7 +256,7 @@ namespace TheBlogProject.Controllers
 
                     if(newImage is not null)
                     {
-                        newPost.ImageDate = await _imageService.EncodeImageAsync(newImage);
+                        newPost.ImageData = await _imageService.EncodeImageAsync(newImage);
                         newPost.ContentType = _imageService.ContentType(newImage);
                     }
 

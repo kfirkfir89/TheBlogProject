@@ -36,7 +36,7 @@ namespace TheBlogProject.Models
 
         public string? Slug { get; set; }
 
-        public byte[]? ImageDate { get; set; }
+        public byte[]? ImageData { get; set; }
         public string? ContentType { get; set; }
 
         [NotMapped]

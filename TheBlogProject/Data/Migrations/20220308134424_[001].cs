@@ -200,7 +200,7 @@ namespace TheBlogProject.Data.Migrations
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     ReadyStatus = table.Column<int>(type: "integer", nullable: false),
                     Slug = table.Column<string>(type: "text", nullable: true),
-                    ImageDate = table.Column<byte[]>(type: "bytea", nullable: true),
+                    ImageData = table.Column<byte[]>(type: "bytea", nullable: true),
                     ContentType = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
