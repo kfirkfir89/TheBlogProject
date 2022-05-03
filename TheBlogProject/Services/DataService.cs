@@ -57,18 +57,18 @@ namespace TheBlogProject.Services
             //creates a new instance of BlogUser
             var adminUser = new BlogUser()
             {
-                Email = "kfirAAA@mailinator.com",
-                UserName = "kfirAAA@mailinator.com",
+                Email = "kfirkfir89@gmail.com",
+                UserName = "kfirkfir89@gmail.com",
                 PhoneNumber = "(800) 555-1212",
-                FirstName = "KfirAAAAA",
-                LastName = "AvrahamAAAAA",
-                DisplayName ="kfirkfirAAAAA",
+                FirstName = "Kfir",
+                LastName = "Avraham",
+                DisplayName ="kfirkfir89",
                 EmailConfirmed = true,
 
             };
 
             //use the UserManager to create a new user that is defined by adminUser.
-            await _userManager.CreateAsync(adminUser, "Abc&123!");
+            await _userManager.CreateAsync(adminUser, "kfir123455A!");
 
             //add this new user to the Administrator role
             await _userManager.AddToRoleAsync(adminUser, BlogRole.Administrator.ToString());
@@ -77,8 +77,8 @@ namespace TheBlogProject.Services
             //Create the moderator user
             var modUser = new BlogUser()
             {
-                Email = "kfirkfir@gmail.com",
-                UserName = "kfirkfir@gmail.com",
+                Email = "kfirkfirAAA@mailinator.com",
+                UserName = "kfirkfirAAA@mailinator.com",
                 FirstName = "ModKfir",
                 LastName = "ModAvraham",
                 DisplayName = "Modavrakfir",

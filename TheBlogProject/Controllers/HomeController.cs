@@ -5,6 +5,7 @@ using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
 using TheBlogProject.ViewModels;
+using X.PagedList;
 
 namespace TheBlogProject.Controllers
 {
@@ -21,27 +22,22 @@ namespace TheBlogProject.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
-            var blogs = await _context.Blogs
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
+
+/*            var blogs = _context.Blogs.Where(
+                b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);*/
+
+            var blogs = _context.Blogs
                 .Include(b => b.BlogUser)
-                .ToListAsync();
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
 
-            return View(blogs);
-        }
-
-        //BlogPostIndex
-        public async Task<IActionResult> BlogPostIndex(int? id)
-        {
-            if(id == null)
-            {
-                return NotFound();
-            }
-
-            //get the post for specificuler blog
-            var posts = _context.Posts.Where(p => p.Id == id).ToList();
-
-            return View("Index", posts);
+            return View(await blogs);
         }
 
         public IActionResult About()
