@@ -51,6 +51,14 @@ namespace TheBlogProject.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public async Task<IActionResult> TagIndex(string tag)
+        {
+            //get all posts that contain this tag
+            var allPosts = _context.Tags.Where(t => t.Text == tag).Select(t => t.PostId);
+            var posts = _context.Posts.Where(p => allPosts.Contains(p.Id)).ToList();
+            return View("Index", posts);
+        }
+
         //BlogPostIndex
         public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
@@ -89,6 +97,8 @@ namespace TheBlogProject.Controllers
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .Include(p => p.Tags)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.BlogUser)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
             if (post == null)
             {
