@@ -133,7 +133,7 @@
                         <form asp-action="Delete" asp-controller="Comments">
                             @Html.Hidden("Id", comment.Id)
                             @Html.Hidden("Slug", comment.Post.Slug)
-                            <button type="button" style="width: 100px" class="btn btn-outline-danger fw-bold note-btn-block mb-1 p-1">DELETE</button>
+                            <button type="submit" style="width: 100px" class="btn btn-outline-danger fw-bold note-btn-block mb-1 p-1">DELETE</button>
                         </form>
                     </div>
                 </div>
