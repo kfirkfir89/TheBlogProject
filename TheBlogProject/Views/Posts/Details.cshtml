@@ -86,18 +86,18 @@
             <div class="flex-shrink-0 p-0 mb-2">
                 <img class="mr-3 mt-3 rounded-circle" style="width:100px;" src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" />
             </div>
-            <div class="flex-grow-1 ms-3">
+            <div class="flex-grow-1">
                 <h4>@comment.BlogUser.FirstName</h4>
                 <small>
                     <i>
                         @if (comment.Moderated != null)
                         {
-                        <span class="small">
-                            <span class="fw-bold">
-                                Moderated <span class="text-danger fst-italic">(@comment.ModerationType.ToString().ToLower())</span>
+                            <span class="small">
+                                <span class="fw-bold">
+                                    Moderated <span class="text-danger fst-italic">(@comment.ModerationType.ToString().ToLower())</span>
+                                </span>
+                                : @comment.Moderated?.ToString("MMM dd, yyyy")
                             </span>
-                            : @comment.Moderated?.ToString("MMM dd, yyyy")
-                        </span>
                         }
                         else
                         {
@@ -112,26 +112,34 @@
             @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
             {
                 <hr />
-                <button type="button" data-bs-toggle="modal" data-bs-target="#editModal" class="btn-sm btn-dark float-end fw-bold">EDIT</button>
-            }
-
-            <!--   section 2 : render the moderate and delete buttons   -->
-            @if (User.IsInRole(BlogRole.Moderator.ToString()) && comment.Deleted is null)
-            {
-                <hr />
-                <div class="row">
+                <div class="row-cols-1 align-self-center">
                     <div class="col">
-                        <button type="button" data-bs-toggle="modal" data-bs-target="@($"#moderateModal{counter}")" class="btn-sm btn-dark fw-bold note-btn-block">MODERATE</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#editModal" style="width: 100px" class="btn note-btn-block btn-outline-primary fw-bold mb-1 p-1">EDIT</button>
+                    </div>
+                </div>
+            }
+            else if (User.IsInRole(BlogRole.Moderator.ToString()) && comment.Deleted is null)
+            {
+            <!--   section 2 : render the moderate and delete buttons   -->
+                <hr />
+                <div class="row-cols-1 align-self-center">
+                    <div class="col">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#editModal" style="width: 100px" class="btn btn-outline-primary fw-bold note-btn-block mb-1 p-1">EDIT</button>
+                    </div>
+                    <div class="col">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="@($"#moderateModal{counter}")" style="width: 100px" class="btn btn-outline-primary fw-bold note-btn-block mb-1 p-1">MODERATE</button>
                     </div>
                     <div class="col">
                         <form asp-action="Delete" asp-controller="Comments">
                             @Html.Hidden("Id", comment.Id)
                             @Html.Hidden("Slug", comment.Post.Slug)
-                            <button type="button" class="btn-sm btn-dark fw-bold note-btn-block">DELETE</button>
+                            <button type="button" style="width: 100px" class="btn btn-outline-danger fw-bold note-btn-block mb-1 p-1">DELETE</button>
                         </form>
                     </div>
                 </div>
-            }
+             }
+
+
         </div>
     </div>
 
