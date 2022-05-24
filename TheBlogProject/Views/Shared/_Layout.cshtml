@@ -45,8 +45,8 @@
                             <a class="navbar-brand" href="#">Navbar</a>
                         </div>
                         <div class="col-6 d-flex justify-content-center">
-                            <form class="d-flex">
-                                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                            <form class="d-flex" asp-action="SearchIndex" asp-controller="Posts">
+                                <input class="form-control me-2" type="text" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search">
                                 <button class="btn btn-outline-success" type="submit">Search</button>
                             </form>
                         </div>
@@ -170,18 +170,18 @@
 
         <!-- Main Content-->
 
-        <main class="container-xxl" >
+        <main class="container-xxl vh-100" >
             <div class="row">
 
-                <div class="col-2 text-center shadow bg-secondary">
-                    NAV
+                <div class="col-2 text-center shadow bg-secondary vh-100">
+                    <partial name="_LoginPartial" />
                 </div>
 
-                <div class="col-7 bg-info mx-3 shadow">
+                <div class="col-7 bg-info mx-3 shadow vh-100">
                     @RenderBody()
                 </div>
 
-                <div class="col-2 text-center shadow bg-secondary">
+                <div class="col-2 text-center shadow bg-secondary vh-100">
                     TAGS
                 </div>
 
@@ -191,8 +191,8 @@
 
 
         <!-- Footer-->
-        <footer class="border-top">
-            <div class="container px-4 px-lg-5">
+        <footer class="border-top p-0">
+            <div class="container-sm px-4 px-lg-5 mt-2">
                 <div class="row gx-4 gx-lg-5 justify-content-center">
                     <div class="col-md-10 col-lg-8 col-xl-7">
                         <ul class="list-inline text-center">
@@ -220,8 +220,8 @@
                                     </span>
                                 </a>
                             </li>
-                        </ul>
                         <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2021</div>
+                        </ul>
                     </div>
                 </div>
             </div>
