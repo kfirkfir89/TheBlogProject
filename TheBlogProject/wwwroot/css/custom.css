@@ -33,6 +33,8 @@ option {
     border: 2px solid #ff993b;
 }*/
 
+
+
 /*-----------------NAVIGATION---------------*/
 .nav {
     display: inline-block;
@@ -211,3 +213,15 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     border-radius: 10px;
 }
 
+
+
+
+
+.navbar {
+    height: 80px;
+}
+
+.navbar-toggler {
+    border-color: transparent !important;
+    outline: none;
+}
