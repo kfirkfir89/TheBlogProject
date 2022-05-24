@@ -225,3 +225,15 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     border-color: transparent !important;
     outline: none;
 }
+
+
+
+
+.btn-sm {
+    height: 39px;
+}
+
+#floatingInput {
+    height: 40px;
+    padding: 0px 80px;
+}
