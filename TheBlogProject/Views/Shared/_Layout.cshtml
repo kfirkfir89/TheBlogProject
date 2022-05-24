@@ -38,9 +38,9 @@
 
         <!-- Page Header-->
         <header>
-            <nav class="navbar navbar-expand-md navbar-light bg-light">
+            <nav class="navbar navbar-expand-xxl navbar-light bg-light border-bottom border-secondary shadow" style="background-image: url(@imagePath)">
                 <div class="container-fluid d-flex justify-content-center">
-                    <div class="container-sm row">
+                    <div class="container-xxl row">
                         <div class="col-3 d-flex">
                             <a class="navbar-brand" href="#">Navbar</a>
                         </div>
@@ -170,26 +170,21 @@
 
         <!-- Main Content-->
 
-        <main class="container-sm" >
+        <main class="container-xxl" >
             <div class="row">
-                <div class="col-2 text-center">NAV</div>
-                <div class="col-8">
+
+                <div class="col-2 text-center shadow bg-secondary">
+                    NAV
+                </div>
+
+                <div class="col-7 bg-info mx-3 shadow">
                     @RenderBody()
                 </div>
-                <div class="col-2 text-center">TAGS</div>
-            </div>
 
+                <div class="col-2 text-center shadow bg-secondary">
+                    TAGS
+                </div>
 
-
-
-
-
-
-
-
-
-            <div class="container col-xxl-8 mt-5">
-                
             </div>
         </main>
 
