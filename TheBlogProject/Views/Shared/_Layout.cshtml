@@ -1,4 +1,12 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+@using TheBlogProject.Services
+@using TheBlogProject.ViewModels
+
+@inject SignInManager<BlogUser> SignInManager
+@inject UserManager<BlogUser> UserManager
+@inject IImageService _imageService
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,29 +35,7 @@
 </head>
 <body>
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
-        <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Start Bootstrap</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                Menu
-                <i class="fas fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
-                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
 
-                    @if (User.IsInRole("Administrator"))
-                    {
-                        <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
-                    }
-
-                </ul>
-                <partial name="_LoginPartial" />
-            </div>
-        </div>
-    </nav>
 
     @{ var imagePath = @ViewData["HeaderImage"];
         if (imagePath == null)
@@ -59,36 +45,188 @@
     }
 
     <!-- Page Header-->
-    <header class="masthead" style="background-image: url(@imagePath)">
-        <div class="container position-relative px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <div class="site-heading">
-                        <h1>The Blog Project</h1>
-                        <span class="subheading">A Blog Theme by Start Bootstrap</span>
-                        <form asp-action="SearchIndex" asp-controller="Posts">
-                            <div class="input-group mt-5">
-                                <input type="text" name="SearchTerm" class="form-control" placeholder="Search Term" autocomplete="off">
-                                <div class="input-group-append">
-                                    <button class="btn btn-warning btn-block btn-sm" type="submit">Search</button>
+    <header>
+        <nav class="navbar navbar-expand-xl navbar-light bg-light border-bottom border-secondary shadow" style="background-image: url(@imagePath)">
+            <div class="container-fluid d-flex justify-content-center">
+                <div class="container-xxl row">
+                    <div class="col-3 d-flex">
+                        <a class="navbar-brand" href="#">Navbar</a>
+                    </div>
+                    <div class="col-6 d-flex justify-content-center">
+                        <form class="d-flex" asp-action="SearchIndex" asp-controller="Posts">
+                            <div class="input-group">
+                                <div class="form-floating">
+                                    <input type="text" id="floatingInput" class="form-control me-2" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                                    <label class="form-label p-1" for="floatingInput">search</label>
                                 </div>
+                                <button id="floatingInputButton" class="btn-sm btn-outline-secondary shadow-sm border-0 px-4 rounded-0 rounded-end" type="submit">
+                                    <i class="fas fa-search fa-2x"></i>
+                                </button>
                             </div>
                         </form>
                     </div>
+                    <div class="col-3">
+                        <div class="row">
+                            <div class="col d-flex justify-content-end">
+                                <partial name="_LoginPartial" />
+                            </div>
+                            <div class="col">
+                                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                    <span class="navbar-toggler-icon"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </nav>
+
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>
+                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Disabled</a>
+                    </li>
+                </ul>
+            </div>
         </div>
+
+        @*            <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-image: url(@imagePath)">
+                <div class="container px-4 px-lg-5">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Start Bootstrap</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-expanded="false" aria-label="Toggle navigation">
+                        Menu
+                        <i class="fas fa-bars"></i>
+                    </button>
+
+
+
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        Button with data-bs-target
+                    </button>
+
+                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
+                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
+
+                                @if (User.IsInRole("Administrator"))
+                                {
+                                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
+                                }
+
+                            </ul>
+                            <partial name="_LoginPartial" />
+                        </div>
+                    </div>
+
+
+
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
+
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
+                            }
+
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>*@
+
+
+
+
+
+        @*            <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-image: url(@imagePath)">
+                <div class="container px-4 px-lg-5">
+                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Start Bootstrap</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        Menu
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarResponsive">
+                        <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
+                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
+
+                            @if (User.IsInRole("Administrator"))
+                            {
+                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
+                            }
+
+                        </ul>
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>*@
     </header>
 
     <!-- Main Content-->
 
-    @RenderBody()
+    <main class="container-xxl vh-100">
+        <div class="row">
+
+            <div class="col-2 text-center shadow bg-secondary vh-100">
+                <ul class="navbar-nav">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                <img class="img-thumbnail bg-transparent border-0" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                <i>hello @blogUser.FullName.ToLower()!</i>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="col-7 bg-info mx-3 shadow vh-100">
+                @RenderBody()
+            </div>
+
+            <div class="col-2 text-center shadow bg-secondary vh-100">
+                TAGS
+            </div>
+
+        </div>
+    </main>
 
 
 
     <!-- Footer-->
-    <footer class="border-top">
-        <div class="container px-4 px-lg-5">
+    <footer class="border-top p-0">
+        <div class="container-sm px-4 px-lg-5 mt-2">
             <div class="row gx-4 gx-lg-5 justify-content-center">
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     <ul class="list-inline text-center">
@@ -116,8 +254,8 @@
                                 </span>
                             </a>
                         </li>
+                        <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2021</div>
                     </ul>
-                    <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2021</div>
                 </div>
             </div>
         </div>
