@@ -8,6 +8,10 @@
 @inject UserManager<BlogUser> userManager
 @model PostDetailViewModel
 
+@{ 
+    ViewData["Title"] = "Details";
+}
+
 <article>  
     <div class="row">
         <div class="col-9 border-right">
@@ -72,6 +76,7 @@
 
     <a id="commentSection" class="btn btn-sm btn-dark btn-block mb-2">@Model.Post.Comments.Count COMMENT(S)</a>
 
+    @{ var counter = 0; }
     @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
     {
         <div class="media p-3 mb-2 bg-cf media-border">
@@ -152,7 +157,7 @@
                 @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
                 {
                     <hr>
-                    <button data-toggle="modal" data-target="#editModal" class="btn-sm btn-dark float-right font-weight-bold">EDIT</button>
+                    <button data-bs-toggle="modal" data-bs-target="@($"#editModal{counter}")" class="btn-sm btn-dark float-right font-weight-bold">EDIT</button>
                 }
   
                 @****************************************************************
@@ -163,13 +168,13 @@
                     <hr>
                     <div class="row">                          
                         <div class="col-2">
-                            <button  class="btn-sm btn-dark font-weight-bold btn-block" data-toggle="modal" data-target="#moderate">MODERATE</button>                                                   
+                            <button  class="btn-sm btn-dark font-weight-bold btn-block" data-bs-toggle="modal" data-bs-target="@($"#moderate{counter}")">MODERATE</button>                                                   
                         </div>
-                            <div class="col-2">
+                        <div class="col-2">
                             <form asp-action="Delete" asp-controller="Comments">
-                                @Html.Hidden("CommentId", comment.Id)
+                                @Html.Hidden("Id", comment.Id)
                                 @Html.Hidden("Slug", comment.Post.Slug)
-                                <button  class="btn-sm btn-dark font-weight-bold btn-block">DELETE</button>
+                                <button type="submit" class="btn-sm btn-dark font-weight-bold btn-block">DELETE</button>
                             </form>
                         </div>
                     </div>                  
@@ -181,37 +186,36 @@
 
 
         @*Modals*@
-        <div class="modal" id="editModal">
+        <div class="modal" id="@($"editModal{counter}")">
             <div class="modal-dialog">
-                <div class="modal-content">          
+                <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Editing Comment...</h4>
-                                   
                     </div>
 
                     <!-- Modal body -->
                     <div class="modal-body">
                         <form asp-action="Edit" asp-controller="Comments">
                             @Html.Hidden("Id", comment.Id)
-                                      
+
                             <div class="form-group">
                                 <textarea name="Body" class="form-control" required>@comment.Body</textarea>
                             </div>
-                                       
+
                             <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
                         </form>
                     </div>
 
                     <!-- Modal footer -->
                     <div class="modal-footer">
-                        <button type="button" class="btn-sm btn-dark font-weight-bold" data-dismiss="modal">CLOSE</button>
+                        <button type="button" class="btn-sm btn-dark font-weight-bold" data-bs-dismiss="modal">CLOSE</button>
                     </div>
 
                 </div>
             </div>
         </div>
                
-        <div class="modal" id="moderate">
+        <div class="modal" id="@($"moderate{counter}")">
             <div class="modal-dialog">
                 <div class="modal-content">
 
@@ -258,5 +262,6 @@
                 </div>
             </div>
         </div>
+        counter++;
     }
 </div>

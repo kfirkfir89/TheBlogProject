@@ -33,7 +33,7 @@
     <link href="~/css/styles.css" rel="stylesheet" />
     <link href="~/css/custom.css" rel="stylesheet" />
 </head>
-<body>
+<body class="d-flex flex-column h-100">
     <!-- Navigation-->
 
 
@@ -46,6 +46,7 @@
 
     <!-- Page Header-->
     <header>
+        <!-- NAV-->
         <nav class="navbar navbar-expand-xl navbar-light bg-light border-bottom border-secondary shadow" style="background-image: url(@imagePath)">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="container-xxl row">
@@ -81,6 +82,7 @@
             </div>
         </nav>
 
+        <!--CANVAS NAV-->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
@@ -106,156 +108,78 @@
                 </ul>
             </div>
         </div>
-
-        @*            <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-image: url(@imagePath)">
-                <div class="container px-4 px-lg-5">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Start Bootstrap</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-expanded="false" aria-label="Toggle navigation">
-                        Menu
-                        <i class="fas fa-bars"></i>
-                    </button>
-
-
-
-                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                        Button with data-bs-target
-                    </button>
-
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                        <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                                @if (User.IsInRole("Administrator"))
-                                {
-                                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
-                                }
-
-                            </ul>
-                            <partial name="_LoginPartial" />
-                        </div>
-                    </div>
-
-
-
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
-                            }
-
-                        </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
-                </div>
-            </nav>*@
-
-
-
-
-
-        @*            <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-image: url(@imagePath)">
-                <div class="container px-4 px-lg-5">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Start Bootstrap</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                        Menu
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
-                            }
-
-                        </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
-                </div>
-            </nav>*@
     </header>
 
     <!-- Main Content-->
 
-    <main class="container-xxl vh-100">
-        <div class="row">
+    <main class="d-flex flex-column h-100 mt-2">
+        <div class="container">
+            <div class="row">
 
-            <div class="col-2 text-center shadow bg-secondary vh-100">
-                <ul class="navbar-nav">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+                <!--SIDEBAR NAV-->
+                <div class="col-2 text-center shadow bg-secondary">
+                    <div class="row-cols-1 d-flex flex-column h-100 bg-white border border-dark border-1">
+                        <div class="col">
+                            <ul class="navbar-nav">
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                <img class="img-thumbnail bg-transparent border-0" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                <i>hello @blogUser.FullName.ToLower()!</i>
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <img class="img-thumbnail bg-transparent border-0" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                            <i>hello @blogUser.FullName.ToLower()!</i>
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <hr />
+                        <div class="col"></div>
+                        <div class="col"></div>
+                    </div>
 
-            <div class="col-7 bg-info mx-3 shadow vh-100">
-                @RenderBody()
-            </div>
+                </div>
 
-            <div class="col-2 text-center shadow bg-secondary vh-100">
-                TAGS
-            </div>
+                <!--CONTENT-->
+                <div class="col-8 bg-info shadow">
+                    <div class="row-cols-1 d-flex flex-column h-100">
+                        <div class="col">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
 
+                <!--TAGS LEFT SIDEBAR-->
+                <div class="col-2 text-center shadow bg-secondary">
+                    <div class="row-cols-1 d-flex flex-column h-100 bg-white border border-dark border-1">
+                        <div class="col">
+                            TAGS
+                        </div>
+                        <div class="col"></div>
+                    </div>
+                </div>
         </div>
     </main>
 
 
 
     <!-- Footer-->
-    <footer class="border-top p-0">
-        <div class="container-sm px-4 px-lg-5 mt-2">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <ul class="list-inline text-center">
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2021</div>
-                    </ul>
+    <footer class="footer mt-auto py-2">
+        <div class="container-fluid bg-gradient">
+            <div class="row row-cols-1 row-cols-lg-3 gy-2">
+                <div class="col text-light d-flex align-items-center order-last order-lg-first">
+                    <div class="smallfont"><span>&copy;2022</span>  Kfir Avraham | Kfirkfir89@gmail.com</div>
+                </div>
+                <div class="col d-flex align-items-center justify-content-center">
+                    <img src="/img/White logo - no background.svg" alt="Kfir Avraham Logo" height="43">
+                </div>
+                <div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
+                    <div class="row p-1">
+                        <div class="col social"><a href="https://www.linkedin.com/in/kfir-avraham-91637b123/" target="__blank"><i class="fab fa-linkedin fa-2x"></i></a></div>
+                        <div class="col social"><a href="https://github.com/kfirkfir89" target="__blank"><i class="fab fa-github fa-2x"></i></a></div>
+                        <div class="col social"><a href="https://twitter.com/kfir_avraham" target="__blank"><i class="fab fa-twitter fa-2x"></i></a></div>
+                    </div>
                 </div>
             </div>
         </div>
