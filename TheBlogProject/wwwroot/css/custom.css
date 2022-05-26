@@ -231,6 +231,8 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 .btn-sm {
     height: 39px;
+    padding: 0;
+    margin: 0;
 }
 
 #floatingInput {
@@ -238,5 +240,14 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     padding: 0px 80px;
 }
 
+.btn-primary {
+    padding: 0px 0px 0px 0px;
+    margin: 0;
+    font-size: .9rem;
+    height: 50px
+}
 
-
+.img-thumbnail {
+    padding: 0px;
+    margin: -4px 0px -4px 0px;
+}

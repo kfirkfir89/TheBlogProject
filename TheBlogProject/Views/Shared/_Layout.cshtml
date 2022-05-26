@@ -113,36 +113,43 @@
     <!-- Main Content-->
 
     <main class="d-flex flex-column h-100 mt-2">
-        <div class="container">
+        <div class="container-xxl">
             <div class="row">
 
                 <!--SIDEBAR NAV-->
-                <div class="col-2 text-center shadow bg-secondary">
-                    <div class="row-cols-1 d-flex flex-column h-100 bg-white border border-dark border-1">
+                <div class="col-3 text-center shadow bg-secondary">
+                    <div class="row-cols-1 h-100 bg-white">
                         <div class="col">
                             <ul class="navbar-nav">
                                 @if (SignInManager.IsSignedIn(User))
                                 {
                                     BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                            <img class="img-thumbnail bg-transparent border-0" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                            <i>hello @blogUser.FullName.ToLower()!</i>
+                                <div class="btn-group-vertical d-flex flex-nowrap">
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <img class="rounded-circle img-thumbnail" style="width:40px; height:40px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                            <span class="ms-1 align-self-center">@blogUser.FullName</span>
                                         </a>
-                                    </li>
+                                    </button>
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <i class="">
+                                                <img class="pe-2 pb-1 ms-2" style="width:35px; height:35px;" src="~/assets/img/HomeIcon.svg" />
+                                            </i>
+                                            <span class="ms-1 align-self-center">Home</span>
+                                        </a>
+                                    </button>
+                                </div>
                                 }
                             </ul>
                         </div>
-                        <hr />
-                        <div class="col"></div>
-                        <div class="col"></div>
+
                     </div>
 
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-8 bg-info shadow">
+                <div class="col-7 bg-info shadow">
                     <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col">
                             @RenderBody()
@@ -159,8 +166,21 @@
                         <div class="col"></div>
                     </div>
                 </div>
-        </div>
+
+            </div>
     </main>
+
+
+
+@*    <li class="nav-item">
+        <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+            <img class="mr-3 mt-3 rounded-pill img-thumbnail " style="width:60px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+            <span class="" style="font-size: .5rem">@blogUser.FirstName</span>
+        </a>
+    </li>*@
+
+
+
 
 
 
