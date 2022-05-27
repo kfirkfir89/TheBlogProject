@@ -216,8 +216,8 @@
                 <!--TAGS LEFT SIDEBAR-->
                 <div class="col-2 text-center shadow bg-secondary">
                     <div class="row-cols-1 d-flex flex-column h-100 bg-white">
-                        <div class="col">
-                            <img class="card-img-top" style="background-image: url(@imagePath)">
+                        <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
+                            <span>themes</span>
                         </div>
                         <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">
@@ -234,6 +234,7 @@
                 </div>
 
             </div>
+        </div>
     </main>
 
 
@@ -243,7 +244,8 @@
                 <img class="mr-3 mt-3 rounded-pill img-thumbnail " style="width:60px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
                 <span class="" style="font-size: .5rem">@blogUser.FirstName</span>
             </a>
-        </li>*@
+        </li>
+                                    <a><img class="card-img-top" style="background-image: url(@imagePath)"></a>*@
 
     <!-- Footer-->
     <footer class="footer mt-auto py-2">

@@ -203,7 +203,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 }
 
 .tagViewA {
-    font-size: 0.7rem;
+    font-size: 1rem;
     font-weight: 800;
     font-family:'Segoe UI Emoji';
     font-style:italic;
@@ -323,10 +323,10 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 
 .tagViewBtn {
-    height: 20px;
+    height: 30px;
     border-radius: 3px 3px;
 }
     .tagViewBtn:hover {
-        height: 20px;
+        height: 30px;
         border-radius: 3px 3px;
     }
