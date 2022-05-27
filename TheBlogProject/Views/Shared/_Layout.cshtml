@@ -1,10 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogProject.Services
-@using TheBlogProject.ViewModels
+@using TheBlogProject.Models
+@using TheBlogProject.Data
 
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> UserManager
 @inject IImageService _imageService
+@inject ApplicationDbContext _context
+
 
 
 <!DOCTYPE html>
@@ -33,7 +36,7 @@
     <link href="~/css/styles.css" rel="stylesheet" />
     <link href="~/css/custom.css" rel="stylesheet" />
 </head>
-<body>
+<body class="d-flex flex-column h-100">
     <!-- Navigation-->
 
 
@@ -46,22 +49,29 @@
 
     <!-- Page Header-->
     <header>
-        <nav class="navbar navbar-expand-xl navbar-light bg-light border-bottom border-secondary shadow" style="background-image: url(@imagePath)">
+        <!-- NAV-->
+        <nav class="navbar navbar-expand-xl navbar-light bg-white mb-2 navStyle">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="container-xxl row">
                     <div class="col-3 d-flex">
-                        <a class="navbar-brand" href="#">Navbar</a>
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                            <i class="">
+                                <img class="img-thumbnail rounded-circle" style="width:40px; height:40px;" src="~/assets/img/defualtUser.png" />
+                            </i>
+                        </a>
                     </div>
                     <div class="col-6 d-flex justify-content-center">
                         <form class="d-flex" asp-action="SearchIndex" asp-controller="Posts">
-                            <div class="input-group">
-                                <div class="form-floating">
-                                    <input type="text" id="floatingInput" class="form-control me-2" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                            <div class="input-group d-flex flex-nowrap">
+                                <div class="form-floating searchStyle d-flex flex-nowrap">
+                                    <input type="text" id="floatingInput" class="ps-3 form-control rounded-start shadow-sm floatingInputStyle bg-white" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
                                     <label class="form-label p-1" for="floatingInput">search</label>
+                                    <button id="floatingInputButton" class="btn-sm btn-outline-danger bg-white border-0 shadow-sm px-4 rounded-end rounded-0" type="submit">
+                                        <i class="">
+                                            <img class="pe-2 pb-1 ms-2 opacity-50" style="width:30px; height:30px;" src="~/assets/img/navIcons/Search.svg" />
+                                        </i>
+                                    </button>
                                 </div>
-                                <button id="floatingInputButton" class="btn-sm btn-outline-secondary shadow-sm border-0 px-4 rounded-0 rounded-end" type="submit">
-                                    <i class="fas fa-search fa-2x"></i>
-                                </button>
                             </div>
                         </form>
                     </div>
@@ -81,6 +91,7 @@
             </div>
         </nav>
 
+        <!--CANVAS NAV-->
         <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
@@ -106,156 +117,152 @@
                 </ul>
             </div>
         </div>
-
-        @*            <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-image: url(@imagePath)">
-                <div class="container px-4 px-lg-5">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Start Bootstrap</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" aria-expanded="false" aria-label="Toggle navigation">
-                        Menu
-                        <i class="fas fa-bars"></i>
-                    </button>
-
-
-
-                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                        Button with data-bs-target
-                    </button>
-
-                    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-                        <div class="offcanvas-header">
-                            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-                            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                        </div>
-                        <div class="offcanvas-body">
-                            <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                                @if (User.IsInRole("Administrator"))
-                                {
-                                    <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
-                                }
-
-                            </ul>
-                            <partial name="_LoginPartial" />
-                        </div>
-                    </div>
-
-
-
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
-                            }
-
-                        </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
-                </div>
-            </nav>*@
-
-
-
-
-
-        @*            <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" style="background-image: url(@imagePath)">
-                <div class="container px-4 px-lg-5">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Index">Start Bootstrap</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                        Menu
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav ms-auto py-4 py-lg-0">
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Index">Home</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="About">About</a></li>
-                            <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Home" asp-action="Contact">Contact</a></li>
-
-                            @if (User.IsInRole("Administrator"))
-                            {
-                                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" asp-controller="Blogs" asp-action="Create">Create Blog</a></li>
-                            }
-
-                        </ul>
-                        <partial name="_LoginPartial" />
-                    </div>
-                </div>
-            </nav>*@
     </header>
 
     <!-- Main Content-->
 
-    <main class="container-xxl vh-100">
-        <div class="row">
+    <main class="d-flex flex-column h-100 mt-2">
+        <div class="container-xxl">
+            <div class="row">
 
-            <div class="col-2 text-center shadow bg-secondary vh-100">
-                <ul class="navbar-nav">
-                    @if (SignInManager.IsSignedIn(User))
-                    {
-                        BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+                <!--SIDEBAR NAV-->
+                <div class="col-3 text-center">
+                    <div class="row-cols-1 h-100">
+                        <div class="col">
+                            <ul class="navbar-nav">
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+                                    <div class="btn-group-vertical d-flex flex-nowrap">
+                                        <button class="btn btn-primary nav-link d-inline-flex">
+                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="Index" title="Manage">
+                                                <i class="">
+                                                    <img class="pe-2 pb-1 ms-2" style="width:30px; height:30px;" src="~/assets/img/navIcons/HomeIcon2.svg" />
+                                                </i>
+                                                <span class="ms-1 align-self-center">Home</span>
+                                            </a>
+                                        </button>
+                                        <button class="btn btn-primary nav-link d-inline-flex">
+                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="About" title="Manage">
+                                                <i class="">
+                                                    <img class="pe-2 pb-1 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/About.svg" />
+                                                </i>
+                                                <span class="ms-1 align-self-center">About</span>
+                                            </a>
+                                        </button>
+                                        <button class="btn btn-primary nav-link d-inline-flex">
+                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="Contact" title="Manage">
+                                                <i class="">
+                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Contact.svg" />
+                                                </i>
+                                                <span class="ms-1 align-self-center">Contact</span>
+                                            </a>
+                                        </button>
+                                        <hr />
+                                        <button class="btn btn-primary nav-link d-inline-flex">
+                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                                <img class="rounded-circle img-thumbnail" style="width:35px; height:35px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                                <span class="ms-1 align-self-center">@blogUser.FullName</span>
+                                            </a>
+                                        </button>
+                                        <button class="btn btn-primary nav-link d-inline-flex">
+                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                                <i class="">
+                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Favorite.svg" />
+                                                </i>
+                                                <span class="ms-1 align-self-center">Favorite</span>
+                                            </a>
+                                        </button>
+                                        <button class="btn btn-primary nav-link d-inline-flex">
+                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Comments" asp-action="Index" title="Manage">
+                                                <i class="">
+                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
+                                                </i>
+                                                <span class="ms-1 align-self-center">My Comments</span>
+                                            </a>
+                                        </button>
+                                    </div>
+                                }
+                            </ul>
+                        </div>
 
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                <img class="img-thumbnail bg-transparent border-0" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                <i>hello @blogUser.FullName.ToLower()!</i>
-                            </a>
-                        </li>
-                    }
-                </ul>
+                    </div>
+
+                </div>
+
+                <!--CONTENT-->
+                <div class="col-7 shadow">
+                    <div class="row-cols-1 d-flex flex-column h-100 bg-secondary">
+                        <div class="col">
+                            <div class="btn-group d-flex flex-nowrap">
+                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center leftButtonMenu">
+                                    <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="Index" title="Manage">
+                                        <h6 class="ms-1 align-self-center">SUBJECTS</h6>
+                                    </a>
+                                </button>
+                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center rightButtonMenu">
+                                    <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="About" title="Manage">
+                                        <h6 class="ms-1 align-self-center">ALL POSTS</h6>
+                                    </a>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+
+                <!--TAGS LEFT SIDEBAR-->
+                <div class="col-2 text-center shadow bg-secondary">
+                    <div class="row-cols-1 d-flex flex-column h-100 bg-white">
+                        <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
+                            <span>themes</span>
+                        </div>
+                        <div class="col">
+                            <div class="btn-group-vertical d-flex flex-nowrap">
+
+                                @foreach (var tag in _context.Tags.Select(t => t.Text))
+                                {
+                                    <button class="btn btn-primary nav-link d-inline-flex flex-nowrap justify-content-center tagViewBtn">
+                                        <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="nav-link d-flex flex-nowrap ps-1 tagViewA">#@tag</a>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-
-            <div class="col-7 bg-info mx-3 shadow vh-100">
-                @RenderBody()
-            </div>
-
-            <div class="col-2 text-center shadow bg-secondary vh-100">
-                TAGS
-            </div>
-
         </div>
     </main>
 
 
 
+    @*    <li class="nav-item">
+            <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                <img class="mr-3 mt-3 rounded-pill img-thumbnail " style="width:60px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                <span class="" style="font-size: .5rem">@blogUser.FirstName</span>
+            </a>
+        </li>
+                                    <a><img class="card-img-top" style="background-image: url(@imagePath)"></a>*@
+
     <!-- Footer-->
-    <footer class="border-top p-0">
-        <div class="container-sm px-4 px-lg-5 mt-2">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <ul class="list-inline text-center">
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="#!">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2021</div>
-                    </ul>
+    <footer class="footer mt-auto py-2">
+        <div class="container-fluid bg-gradient">
+            <div class="row row-cols-1 row-cols-lg-3 gy-2">
+                <div class="col text-light d-flex align-items-center order-last order-lg-first">
+                    <div class="smallfont"><span>&copy;2022</span>  Kfir Avraham | Kfirkfir89@gmail.com</div>
+                </div>
+                <div class="col d-flex align-items-center justify-content-center">
+                    <img src="/img/White logo - no background.svg" alt="Kfir Avraham Logo" height="43">
+                </div>
+                <div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
+                    <div class="row p-1">
+                        <div class="col social"><a href="https://www.linkedin.com/in/kfir-avraham-91637b123/" target="__blank"><i class="fab fa-linkedin fa-2x"></i></a></div>
+                        <div class="col social"><a href="https://github.com/kfirkfir89" target="__blank"><i class="fab fa-github fa-2x"></i></a></div>
+                        <div class="col social"><a href="https://twitter.com/kfir_avraham" target="__blank"><i class="fab fa-twitter fa-2x"></i></a></div>
+                    </div>
                 </div>
             </div>
         </div>

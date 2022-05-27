@@ -36,6 +36,10 @@ option {
 
 
 /*-----------------NAVIGATION---------------*/
+body {
+    font-family: sans-serif;
+}
+
 .nav {
     display: inline-block;
 }
@@ -195,9 +199,18 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 }
 
 .tagView {
-    max-height: 300px;
-    overflow-y: scroll;
+
 }
+
+.tagViewA {
+    font-size: 1rem;
+    font-weight: 800;
+    font-family:'Segoe UI Emoji';
+    font-style:italic;
+    opacity: 0.7;
+}
+
+
 /*-----------------WEBKIT SCROOLBAR STYLES---------------*/
 ::-webkit-scrollbar {
     width: 10px;
@@ -216,11 +229,6 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 
 
-
-.navbar {
-    height: 80px;
-}
-
 .navbar-toggler {
     border-color: transparent !important;
     outline: none;
@@ -230,10 +238,95 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 
 .btn-sm {
-    height: 39px;
+    height: 40px;
+    padding: 0;
+    margin: 0;
 }
 
 #floatingInput {
     height: 40px;
     padding: 0px 80px;
 }
+
+.btn-primary {
+    padding: 0px 0px 0px 0px;
+    margin: 0;
+    font-size: .8rem;
+    height: 37px;
+    background-color: white;
+    border: none;
+    font-weight: 500;
+    letter-spacing: 0px;
+    align-items:center;
+    
+}
+
+.btn-primary:hover {
+    border-radius: 5px 5px;
+    background-color:#A1C7E0;
+}
+
+.img-thumbnail {
+    padding: 0px;
+    margin: -4px 0px -4px 0px;
+}
+
+.searchStyle:hover {
+    border: 1px solid rgb(128, 128, 128, 0.3);
+    border-radius: 5px 5px;
+    height: 44px;
+}
+
+.floatingInputStyle {
+    border: none;
+    box-shadow: none;
+    height: 40px;
+    padding: 0px 80px;
+}
+
+.new1 {
+    border-top: 1px solid red;
+}
+
+.navStyle {
+    height: 57px;
+    border-bottom: 1px solid rgb(128, 128, 128, 0.3);
+    font-size: 1.3rem;
+    letter-spacing: 0px;
+    font-family:'Segoe UI Emoji';
+    font-style:italic;
+}
+
+.form-label {
+    font-weight: 100;
+    letter-spacing: 0px;
+    opacity: 0.8;
+}
+
+.rightButtonMenu {
+    border-radius: 0px 5px 0px 0px;
+    height: 35px;
+}
+    .rightButtonMenu:hover {
+        border-radius: 0px 5px 0px 0px;
+        height: 35px;
+    }
+
+.leftButtonMenu {
+    border-radius: 5px 0px 0px 0px;
+    height: 35px;
+}
+    .leftButtonMenu:hover {
+        border-radius: 5px 0px 0px 0px;
+        height: 35px;
+    }
+
+
+.tagViewBtn {
+    height: 30px;
+    border-radius: 3px 3px;
+}
+    .tagViewBtn:hover {
+        height: 30px;
+        border-radius: 3px 3px;
+    }
