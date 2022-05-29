@@ -1,39 +1,4 @@
-﻿/*custom input file*/
-/*.custom-file-button input[type=file] {
-    margin-left: -2px !important;
-}
-
-    .custom-file-button input[type=file]::-webkit-file-upload-button {
-        display: none;
-    }
-
-    .custom-file-button input[type=file]::file-selector-button {
-        display: none;
-    }
-
-.custom-file-button:hover label {
-    background-color: #dde0e3;
-    cursor: pointer;
-}*/
-
-
-/*tag button style*/
-/*button.btn-sm, a.btn-sm {
-    line-height: 2.8;
-    border-radius: 5px;
-}
-
-option {
-    font-weight: bold;
-}*/
-
-/*custom css form sweet alert*/
-/*div.swal2-container.swal2-center.swal2-backdrop-show > div {
-    outline: 4px solid black;
-    border: 2px solid #ff993b;
-}*/
-
-
+﻿
 
 /*-----------------NAVIGATION---------------*/
 body {
@@ -198,9 +163,6 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     font-weight: 600;
 }
 
-.tagView {
-
-}
 
 .tagViewA {
     font-size: 1rem;
@@ -237,17 +199,40 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 
 
-.btn-sm {
+
+
+
+
+/*-----------------Search Inputtt style---------------*/
+#floatingInputSearch {
     height: 40px;
-    padding: 0;
-    margin: 0;
+    width: 360px;
+    padding-top: 20px;
+    border: none;
+    box-shadow: none;
 }
 
-#floatingInput {
-    height: 40px;
-    padding: 0px 80px;
+.searchStyle:hover {
+    border: 1px solid rgb(128, 128, 128, 0.3);
+    border-radius: 5px 5px;
+    height: 42px;
 }
 
+/*-----------------form (search) bootstrap---------------*/
+.form-labelSearch {
+    font-weight: 100;
+    letter-spacing: 0px;
+    opacity: 0.8;
+}
+
+
+#floatingInputButton{
+    height:40px;
+}
+
+
+
+/*-----------------primary buttons bootstrap---------------*/
 .btn-primary {
     padding: 0px 0px 0px 0px;
     margin: 0;
@@ -257,37 +242,26 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     border: none;
     font-weight: 500;
     letter-spacing: 0px;
-    align-items:center;
-    
+    align-items: center;
 }
+
 
 .btn-primary:hover {
     border-radius: 5px 5px;
     background-color:#A1C7E0;
 }
 
+
+
+/*-----------------image  bootstrap---------------*/
 .img-thumbnail {
     padding: 0px;
     margin: -4px 0px -4px 0px;
 }
 
-.searchStyle:hover {
-    border: 1px solid rgb(128, 128, 128, 0.3);
-    border-radius: 5px 5px;
-    height: 44px;
-}
 
-.floatingInputStyle {
-    border: none;
-    box-shadow: none;
-    height: 40px;
-    padding: 0px 80px;
-}
 
-.new1 {
-    border-top: 1px solid red;
-}
-
+/*-----------------navbar---------------*/
 .navStyle {
     height: 57px;
     border-bottom: 1px solid rgb(128, 128, 128, 0.3);
@@ -297,12 +271,8 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     font-style:italic;
 }
 
-.form-label {
-    font-weight: 100;
-    letter-spacing: 0px;
-    opacity: 0.8;
-}
 
+/*-----------------menu buttons subjects and all posts---------------*/
 .rightButtonMenu {
     border-radius: 0px 5px 0px 0px;
     height: 35px;
@@ -321,7 +291,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
         height: 35px;
     }
 
-
+/*-----------------tag buttons---------------*/
 .tagViewBtn {
     height: 30px;
     border-radius: 3px 3px;
@@ -330,3 +300,37 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
         height: 30px;
         border-radius: 3px 3px;
     }
+
+
+
+
+@media screen and (max-width:1200px) {
+
+    #floatingInputSearch {
+        width:260px;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .navStyle {
+        height: 114px;
+    }
+
+    #floatingInputSearch {
+        width:420px;
+    }
+}
+
+
+@media screen and (max-width:576px) {
+    .navStyle {
+        height: 114px;
+    }
+
+    #floatingInputSearch {
+        width:200px;
+    }
+}
+
+
+
