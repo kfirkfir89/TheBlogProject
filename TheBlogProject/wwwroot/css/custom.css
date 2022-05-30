@@ -311,6 +311,8 @@ div > button > a h6 {
 
 
 
+
+
 @media screen and (max-width:1200px) {
 
     #floatingInputSearch {
@@ -338,3 +340,4 @@ div > button > a h6 {
         width:200px;
     }
 }
+

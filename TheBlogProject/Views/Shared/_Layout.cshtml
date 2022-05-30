@@ -2,6 +2,7 @@
 @using TheBlogProject.Services
 @using TheBlogProject.Models
 @using TheBlogProject.Data
+@using TheBlogProject.Enums
 
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> UserManager
@@ -123,44 +124,47 @@
                 <div class="col-3 text-center d-none d-md-block">
                     <div class="row-cols-1 h-100">
                         <div class="col">
-                            <ul class="navbar-nav">
-                                @if (SignInManager.IsSignedIn(User))
-                                {
-                                    BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
-                                    <div class="btn-group-vertical d-flex flex-nowrap">
+
+                                <div class="btn-group-vertical d-flex flex-nowrap">
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
+                                            <i class="">
+                                                <img class="pe-2 pb-1 ms-2" style="width:30px; height:30px;" src="~/assets/img/navIcons/HomeIcon2.svg" />
+                                            </i>
+                                            <span class="ms-1 align-self-center">Home</span>
+                                        </a>
+                                    </button>
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="About" title="Manage">
+                                            <i class="">
+                                                <img class="pe-2 pb-1 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/About.svg" />
+                                            </i>
+                                            <span class="ms-1 align-self-center">About</span>
+                                        </a>
+                                    </button>
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Contact" title="Manage">
+                                            <i class="">
+                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Contact.svg" />
+                                            </i>
+                                            <span class="ms-1 align-self-center">Contact</span>
+                                        </a>
+                                    </button>
+
+                                    <hr />
+
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+                                
                                         <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="Index" title="Manage">
-                                                <i class="">
-                                                    <img class="pe-2 pb-1 ms-2" style="width:30px; height:30px;" src="~/assets/img/navIcons/HomeIcon2.svg" />
-                                                </i>
-                                                <span class="ms-1 align-self-center">Home</span>
-                                            </a>
-                                        </button>
-                                        <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="About" title="Manage">
-                                                <i class="">
-                                                    <img class="pe-2 pb-1 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/About.svg" />
-                                                </i>
-                                                <span class="ms-1 align-self-center">About</span>
-                                            </a>
-                                        </button>
-                                        <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="Contact" title="Manage">
-                                                <i class="">
-                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Contact.svg" />
-                                                </i>
-                                                <span class="ms-1 align-self-center">Contact</span>
-                                            </a>
-                                        </button>
-                                        <hr />
-                                        <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                                                 <img class="rounded-circle img-thumbnail" style="width:35px; height:35px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
                                                 <span class="ms-1 align-self-center">@blogUser.FullName</span>
                                             </a>
                                         </button>
                                         <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                                                 <i class="">
                                                     <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Favorite.svg" />
                                                 </i>
@@ -168,16 +172,31 @@
                                             </a>
                                         </button>
                                         <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Comments" asp-action="Index" title="Manage">
+                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
                                                 <i class="">
                                                     <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
                                                 </i>
                                                 <span class="ms-1 align-self-center">My Comments</span>
                                             </a>
                                         </button>
-                                    </div>
-                                }
-                            </ul>
+                                    }
+                                
+                                
+                                    @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
+                                    {
+                                        <button class="btn btn-primary nav-link d-inline-flex">
+                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
+                                                <i class="">
+                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
+                                                </i>
+                                                <span class="ms-1 align-self-center">All Comments</span>
+                                            </a>
+                                        </button>
+                                    }
+                                
+                                
+                                </div>
+
                         </div>
 
                     </div>
@@ -189,13 +208,13 @@
                     <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col">
                             <div class="btn-group d-flex flex-nowrap">
-                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center pt-2 leftButtonMenu">
-                                    <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="Index" title="Manage">
+                                <button class="btn btn-primary leftButtonMenu">
+                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid justify-content-center" asp-controller="Home" asp-action="Index" title="Manage">
                                         <h6 class="ms-1 align-self-center">SUBJECTS</h6>
                                     </a>
                                 </button>
-                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center pt-2 rightButtonMenu">
-                                    <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="About" title="Manage">
+                                <button class="btn btn-primary rightButtonMenu">
+                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid justify-content-center" asp-controller="Home" asp-action="About" title="Manage">
                                         <h6 class="ms-1 align-self-center">ALL POSTS</h6>
                                     </a>
                                 </button>
@@ -218,8 +237,8 @@
 
                                 @foreach (var tag in _context.Tags.Select(t => t.Text))
                                 {
-                                    <button class="btn btn-primary nav-link d-inline-flex flex-nowrap tagViewBtn ps-3">
-                                        <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="nav-link d-flex flex-nowrap ps-1 tagViewA">#@tag</a>
+                                    <button class="btn btn-primary nav-link d-inline-flex flex-nowrap tagViewBtn">
+                                        <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA">#@tag</a>
                                     </button>
                                 }
                             </div>
