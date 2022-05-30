@@ -1,47 +1,22 @@
-﻿/*custom input file*/
-/*.custom-file-button input[type=file] {
-    margin-left: -2px !important;
+﻿:root {
+    --blueDark-color: #026e81;
+    --backgroundGray-color: #e1e1e1;
+    --hoverLightBlue-color: #a1c7e0;
+    --customOrange-color: #ff993b;
 }
 
-    .custom-file-button input[type=file]::-webkit-file-upload-button {
-        display: none;
-    }
-
-    .custom-file-button input[type=file]::file-selector-button {
-        display: none;
-    }
-
-.custom-file-button:hover label {
-    background-color: #dde0e3;
-    cursor: pointer;
-}*/
-
-
-/*tag button style*/
-/*button.btn-sm, a.btn-sm {
-    line-height: 2.8;
-    border-radius: 5px;
-}
-
-option {
-    font-weight: bold;
-}*/
-
-/*custom css form sweet alert*/
-/*div.swal2-container.swal2-center.swal2-backdrop-show > div {
-    outline: 4px solid black;
-    border: 2px solid #ff993b;
-}*/
 
 
 
 /*-----------------NAVIGATION---------------*/
 body {
     font-family: sans-serif;
+    background-color: var(--backgroundGray-color);
 }
 
 .nav {
     display: inline-block;
+    
 }
 
 #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
@@ -116,18 +91,18 @@ button.btn-sm, a.btn-sm {
 }
 
 .btn-dark:hover {
-    border: 4px solid #ff993b;
+    border: 4px solid var(--customOrange-color);
 }
 
 .btn-warning {
     color: #212121;
-    background-color: #ff993b;
-    border-color: #ff993b;
+    background-color: var(--customOrange-color);
+    border-color: var(--customOrange-color);
 }
     .btn-warning:hover {
         color: white;
         background-color: #212121;
-        outline: 4px solid #ff993b;
+        outline: 4px solid var(--customOrange-color);
     }
 
 /*-----------------CARD STYLE---------------*/
@@ -169,7 +144,7 @@ button.btn-sm, a.btn-sm {
 /*-----------------SWEET ALERT STYLES---------------*/
 div.swal2-container.swal2-center.swal2-backdrop-show > div {
     outline: 4px solid black;
-    border: 4px solid #ff993b;
+    border: 4px solid var(--customOrange-color);
 }
 
 /*-----------------TOOLTIP STYLES---------------*/
@@ -184,7 +159,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     text-align: center;
     background-color: blanchedalmond;
     border-radius: .25rem;
-    border: 2px solid #ff993b;
+    border: 2px solid var(--customOrange-color);
     outline: 4px solid double;
 }
 
@@ -192,23 +167,6 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     opacity: 1;
 }
 
-/*-----------------TAGS---------------*/
-#TagList {
-    width: 100%;
-    font-weight: 600;
-}
-
-.tagView {
-
-}
-
-.tagViewA {
-    font-size: 1rem;
-    font-weight: 800;
-    font-family:'Segoe UI Emoji';
-    font-style:italic;
-    opacity: 0.7;
-}
 
 
 /*-----------------WEBKIT SCROOLBAR STYLES---------------*/
@@ -217,7 +175,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 }
 
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px #ff993b;
+    box-shadow: inset 0 0 5px var(--customOrange-color);
     border-radius: 10px;
 }
 
@@ -237,72 +195,77 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 
 
-.btn-sm {
+
+
+
+
+/*-----------------Search Inputtt style---------------*/
+#floatingInputSearch {
     height: 40px;
-    padding: 0;
-    margin: 0;
+    width: 360px;
+    padding: 0px;
+    margin: 0px;
+    box-shadow: none;
+    border: 1px solid rgb(128, 128, 128, 0.3);
 }
 
-#floatingInput {
-    height: 40px;
-    padding: 0px 80px;
+#floatingInputSearch:hover {
+    border: 2px solid rgb(128, 128, 128, 0.3);
 }
 
+icon-search {
+    padding-left: 25px;
+    background: url("https://static.thenounproject.com/png/101791-200.png") no-repeat left;
+    background-size: 20px
+}
+/*-----------------form (search) bootstrap---------------*/
+.form-labelSearch {
+    font-weight: 100;
+    letter-spacing: 0px;
+    opacity: 0.8;
+}
+
+/*-----------------primary buttons bootstrap---------------*/
 .btn-primary {
     padding: 0px 0px 0px 0px;
     margin: 0;
     font-size: .8rem;
     height: 37px;
-    background-color: white;
+    background-color: var(--backgroundGray-color);
     border: none;
     font-weight: 500;
     letter-spacing: 0px;
-    align-items:center;
-    
+    align-items: center;
 }
+
 
 .btn-primary:hover {
     border-radius: 5px 5px;
-    background-color:#A1C7E0;
+    background-color:var(--hoverLightBlue-color);
 }
 
+
+
+/*-----------------image  bootstrap---------------*/
 .img-thumbnail {
     padding: 0px;
     margin: -4px 0px -4px 0px;
 }
 
-.searchStyle:hover {
-    border: 1px solid rgb(128, 128, 128, 0.3);
-    border-radius: 5px 5px;
-    height: 44px;
-}
 
-.floatingInputStyle {
-    border: none;
-    box-shadow: none;
-    height: 40px;
-    padding: 0px 80px;
-}
 
-.new1 {
-    border-top: 1px solid red;
-}
-
+/*-----------------navbar---------------*/
 .navStyle {
     height: 57px;
-    border-bottom: 1px solid rgb(128, 128, 128, 0.3);
+    border-bottom: 1px solid var(--blueDark-color);
     font-size: 1.3rem;
     letter-spacing: 0px;
     font-family:'Segoe UI Emoji';
     font-style:italic;
 }
 
-.form-label {
-    font-weight: 100;
-    letter-spacing: 0px;
-    opacity: 0.8;
-}
 
+/*-----------------menu buttons subjects and all posts---------------*/
 .rightButtonMenu {
     border-radius: 0px 5px 0px 0px;
     height: 35px;
@@ -321,7 +284,21 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
         height: 35px;
     }
 
+div > button > a h6 {
+    color:var(--blueDark-color);
+}
 
+/*-----------------tags---------------*/
+
+
+.tagViewA {
+    font-size: 1rem;
+    font-weight: 400;
+    font-family:'Segoe UI Emoji';
+    color:var(--blueDark-color);
+}
+
+/*-----------------tag buttons---------------*/
 .tagViewBtn {
     height: 30px;
     border-radius: 3px 3px;
@@ -330,3 +307,34 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
         height: 30px;
         border-radius: 3px 3px;
     }
+
+
+
+
+@media screen and (max-width:1200px) {
+
+    #floatingInputSearch {
+        width:260px;
+    }
+}
+
+@media screen and (max-width:767px) {
+    .navStyle {
+        height: 114px;
+    }
+
+    #floatingInputSearch {
+        width:420px;
+    }
+}
+
+
+@media screen and (max-width:576px) {
+    .navStyle {
+        height: 114px;
+    }
+
+    #floatingInputSearch {
+        width:200px;
+    }
+}
