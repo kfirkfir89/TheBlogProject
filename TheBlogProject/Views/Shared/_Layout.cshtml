@@ -189,7 +189,7 @@
                                                 <i class="">
                                                     <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
                                                 </i>
-                                                <span class="ms-1 align-self-center">All Comments</span>
+                                                <span class="ms-1 align-self-center">Comments Control</span>
                                             </a>
                                         </button>
                                     }
@@ -204,7 +204,7 @@
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-md-9 col-lg-7">
+                <div class="col-md-8 col-lg-6">
                     <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col">
                             <div class="btn-group d-flex flex-nowrap">
@@ -220,14 +220,37 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col">
+
+
+
+                        <div class="card text-center bg-backgroundGray-color">
+                            <img src="~/assets/img/home-bg.jpg" class="card-img-top p-0 m-0" alt="...">
+                            <div class="card-body bg-white">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text p-0 m-0">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                            <div class="card-header bg-white border-top border-1 p-0 m-0">
+                                tags
+                            </div>
+                            <div class="card-footer text-muted p-0 m-0" style="background-color: var(--blueDark-color); width: 100%;">
+                                <span>like</span>
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class="col container-sm">
                             @RenderBody()
                         </div>
                     </div>
                 </div>
 
                 <!--TAGS LEFT SIDEBAR-->
-                <div class="col-2 d-none d-lg-block">
+                <div class="col-3 d-none d-lg-block">
                     <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
                             <span>themes</span>

@@ -11,6 +11,12 @@
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
 :root {
+    /*my colors*/
+    --blueDark-color: #026e81;
+    --backgroundGray-color: #e1e1e1;
+    --hoverLightBlue-color: #a1c7e0;
+    --customOrange-color: #ff993b;
+
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
     --bs-purple: #6f42c1;
