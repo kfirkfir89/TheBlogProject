@@ -50,7 +50,7 @@
     <!-- Page Header-->
     <header>
         <!-- NAV-->
-        <nav class="navbar navbar-expand-md navbar-light bg-white mb-2 navStyle">
+        <nav class="navbar navbar-expand-md navbar-light bg-white mb-3 navStyle">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="container-xxl row">
                     <div class="col-6 col-md-3 d-flex">
@@ -62,29 +62,23 @@
                     </div>
                     <div class="col-md-6 col-12 d-flex order-last justify-content-center pt-md-0 pt-2">
                         <form class="d-flex" asp-action="SearchIndex" asp-controller="Posts">
-                            <div class="input-group d-flex flex-nowrap searchStyle">
+                            <div class="input-group d-flex flex-nowrap">
                                 <div class="form-floating d-flex flex-nowrap">
-                                    <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded-start bg-white" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                                    <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
                                     <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
-                                    <button id="floatingInputButton" class=" bg-white border-0 shadow-sm px-4 rounded-end rounded-0" type="submit">
-                                        <i class="">
-                                            <img class="pe-2 pb-1 ms-2 opacity-50" style="width:30px; height:30px;" src="~/assets/img/navIcons/Search.svg" />
-                                        </i>
-                                    </button>
+                                    <button type="submit" class="btn btn-primary btnSearch px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="col-6 col-md-3 order-md-last">
-                        <div class="row">
-                            <div class="col d-flex justify-content-end d-none d-md-block">
+                        <div class="col d-flex justify-content-end">
+                            <div class="d-flex justify-content-end d-none d-md-block pe-4">
                                 <partial name="_LoginPartial" />
                             </div>
-                            <div class="col d-flex justify-content-end">
-                                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                                    <span class="navbar-toggler-icon"></span>
-                                </button>
-                            </div>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -191,16 +185,16 @@
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-md-9 col-lg-7 shadow">
-                    <div class="row-cols-1 d-flex flex-column h-100 bg-secondary">
+                <div class="col-md-9 col-lg-7">
+                    <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col">
                             <div class="btn-group d-flex flex-nowrap">
-                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center leftButtonMenu">
+                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center pt-2 leftButtonMenu">
                                     <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="Index" title="Manage">
                                         <h6 class="ms-1 align-self-center">SUBJECTS</h6>
                                     </a>
                                 </button>
-                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center rightButtonMenu">
+                                <button class="btn btn-primary nav-link d-inline-flex justify-content-center pt-2 rightButtonMenu">
                                     <a class="nav-link d-flex flex-nowrap ps-1" asp-controller="Home" asp-action="About" title="Manage">
                                         <h6 class="ms-1 align-self-center">ALL POSTS</h6>
                                     </a>
@@ -214,8 +208,8 @@
                 </div>
 
                 <!--TAGS LEFT SIDEBAR-->
-                <div class="col-2 text-center shadow bg-secondary d-none d-lg-block">
-                    <div class="row-cols-1 d-flex flex-column h-100 bg-white">
+                <div class="col-2 d-none d-lg-block">
+                    <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
                             <span>themes</span>
                         </div>
@@ -224,7 +218,7 @@
 
                                 @foreach (var tag in _context.Tags.Select(t => t.Text))
                                 {
-                                    <button class="btn btn-primary nav-link d-inline-flex flex-nowrap justify-content-center tagViewBtn">
+                                    <button class="btn btn-primary nav-link d-inline-flex flex-nowrap tagViewBtn ps-3">
                                         <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="nav-link d-flex flex-nowrap ps-1 tagViewA">#@tag</a>
                                     </button>
                                 }

@@ -4337,9 +4337,9 @@ textarea.form-control-lg {
 }
 
 .navbar-toggler:focus {
-/*    text-decoration: none;
+    text-decoration: none;
     outline: 0;
-    box-shadow: 0 0 0 0.1rem;*/
+    box-shadow: 0 0 0 0.1rem;
 }
 
 .navbar-toggler-icon {
