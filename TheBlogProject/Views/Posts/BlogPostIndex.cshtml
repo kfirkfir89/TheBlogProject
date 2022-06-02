@@ -13,7 +13,9 @@
 
 @model IPagedList<Post>
 
-<div class="row">
+
+
+<div class="row row-cols-1">
     @foreach (var post in Model)
     {
         //Is the logged in user the Author of this post??
@@ -23,33 +25,31 @@
             isAuthor = (post.BlogUserId == userManager.GetUserId(User));
         }
 
-        <div class="col-sm-2 col-lg-4">
-            <div class="card border-dark">
-                <div class="card-body text-center">
-                    <div class="bg-warning">
-                        <hr class="card-hr" />
-                        <h5 class="card-title">@post.Title</h5>
-                        <hr class="card-hr" />
-                    </div>
-                    <div>
-                        <p class="card-text">@post.Abstract</p>
-                    </div>
+        <div class="col">
 
-                    <br />
-                    <div class="text-center">
-                        <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
-                    </div>
-
+            <div class="card text-center bg-backgroundGray-color mb-2">
+                <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                    <img onload="imgSize()" id="postImage" src="@imageService.DecodeImage(post.ImageData,  post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 shadow-sm" alt="...">
+                </a>
+                <div class="card-body bg-white shadow-sm">
+                    <h5 class="card-title">@post.Title</h5>
+                    <p class="card-text p-0 m-0">@post.Abstract</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+                <div class="card-header bg-white border-top border-1 p-0 m-0 shadow-sm">
                     @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
                     {
+  
                         <div class="text-center">
                             <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
                         </div>
                     }
+                    tags
                 </div>
-                <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageData,  post.ContentType)" />
+                <div class="card-footer text-muted p-0 m-0 shadow-sm" style="background-color: var(--blueDark-color); width: 100%;">
+                    <span>like</span>
+                </div>
             </div>
-
         </div>
     }
 </div>
@@ -73,3 +73,6 @@
             })
     </div>
 </div>
+
+
+<script src="~/js/Custom.js"></script>
