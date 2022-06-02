@@ -5,7 +5,7 @@
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
-
+@using System.Drawing
 
 
 @inject UserManager<BlogUser> userManager
@@ -16,10 +16,26 @@
 
 
 <div class="row row-cols-1">
+
+    @{ var counter = 0; }
     @foreach (var post in Model)
     {
         //Is the logged in user the Author of this post??
         var isAuthor = false;
+
+
+        MemoryStream imageStream = new MemoryStream(post.ImageData);
+        Bitmap image = new Bitmap(imageStream);
+        int width = image.Width;
+        int height = image.Height;
+
+        if (width < 800)
+        {
+          <script>console.log("katannn m800");</script>
+        }
+
+        
+        
         if (User.Identity.IsAuthenticated)
         {
             isAuthor = (post.BlogUserId == userManager.GetUserId(User));
@@ -29,7 +45,7 @@
 
             <div class="card text-center bg-backgroundGray-color mb-2">
                 <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                    <img onload="imgSize()" id="postImage" src="@imageService.DecodeImage(post.ImageData,  post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 shadow-sm" alt="...">
+                    <img id="@($"postImage{counter}")" onload="imgSize(@($"postImage{counter}"))" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 shadow-sm" alt="image">
                 </a>
                 <div class="card-body bg-white shadow-sm">
                     <h5 class="card-title">@post.Title</h5>
@@ -39,7 +55,6 @@
                 <div class="card-header bg-white border-top border-1 p-0 m-0 shadow-sm">
                     @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
                     {
-  
                         <div class="text-center">
                             <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
                         </div>
@@ -51,6 +66,8 @@
                 </div>
             </div>
         </div>
+
+        counter++;
     }
 </div>
 
