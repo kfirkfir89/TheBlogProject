@@ -125,80 +125,82 @@
                     <div class="row-cols-1 h-100">
                         <div class="col">
 
-                                <div class="btn-group-vertical d-flex flex-nowrap">
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
-                                            <i class="">
-                                                <img class="pe-2 pb-1 ms-2" style="width:30px; height:30px;" src="~/assets/img/navIcons/HomeIcon2.svg" />
-                                            </i>
-                                            <span class="ms-1 align-self-center">Home</span>
-                                        </a>
-                                    </button>
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="About" title="Manage">
-                                            <i class="">
-                                                <img class="pe-2 pb-1 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/About.svg" />
-                                            </i>
-                                            <span class="ms-1 align-self-center">About</span>
-                                        </a>
-                                    </button>
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Contact" title="Manage">
-                                            <i class="">
-                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Contact.svg" />
-                                            </i>
-                                            <span class="ms-1 align-self-center">Contact</span>
-                                        </a>
-                                    </button>
+                            <div class="btn-group-vertical d-flex flex-nowrap">
+                                <button class="btn btn-primary nav-link d-inline-flex">
+                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
+                                        <i class="">
+                                            <img class="pe-2 pb-1 ms-2" style="width:30px; height:30px;" src="~/assets/img/navIcons/HomeIcon2.svg" />
+                                        </i>
+                                        <span class="ms-1 align-self-center">Home</span>
+                                    </a>
+                                </button>
+                                <button class="btn btn-primary nav-link d-inline-flex">
+                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="About" title="Manage">
+                                        <i class="">
+                                            <img class="pe-2 pb-1 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/About.svg" />
+                                        </i>
+                                        <span class="ms-1 align-self-center">About</span>
+                                    </a>
+                                </button>
+                                <button class="btn btn-primary nav-link d-inline-flex">
+                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Contact" title="Manage">
+                                        <i class="">
+                                            <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Contact.svg" />
+                                        </i>
+                                        <span class="ms-1 align-self-center">Contact</span>
+                                    </a>
+                                </button>
 
-                                    <hr />
+                                <hr />
 
-                                    @if (SignInManager.IsSignedIn(User))
-                                    {
-                                        BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
-                                
-                                        <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                                <img class="rounded-circle img-thumbnail" style="width:35px; height:35px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                                <span class="ms-1 align-self-center">@blogUser.FullName</span>
-                                            </a>
-                                        </button>
-                                        <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                                <i class="">
-                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Favorite.svg" />
-                                                </i>
-                                                <span class="ms-1 align-self-center">Favorite</span>
-                                            </a>
-                                        </button>
-                                        <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                                <i class="">
-                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
-                                                </i>
-                                                <span class="ms-1 align-self-center">My Comments</span>
-                                            </a>
-                                        </button>
-                                    }
-                                
-                                
-                                    @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
-                                    {
-                                        <button class="btn btn-primary nav-link d-inline-flex">
-                                            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                                <i class="">
-                                                    <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
-                                                </i>
-                                                <span class="ms-1 align-self-center">Comments Control</span>
-                                            </a>
-                                        </button>
-                                    }
-                                
-                                
-                                </div>
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <img class="rounded-circle img-thumbnail" style="width:35px; height:35px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                            <span class="ms-1 align-self-center">@blogUser.FullName</span>
+                                        </a>
+                                    </button>
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <i class="">
+                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Favorite.svg" />
+                                            </i>
+                                            <span class="ms-1 align-self-center">Favorite</span>
+                                        </a>
+                                    </button>
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
+                                            <i class="">
+                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
+                                            </i>
+                                            <span class="ms-1 align-self-center">My Comments</span>
+                                        </a>
+                                    </button>
+                                }
+
+
+                                @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
+                                {
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
+                                            <i class="">
+                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
+                                            </i>
+                                            <span class="ms-1 align-self-center">Comments Control</span>
+                                        </a>
+                                    </button>
+                                }
+
+
+                            </div>
 
                         </div>
-
+                        <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
+                            <span>themes</span>
+                        </div>
                     </div>
 
                 </div>
@@ -206,6 +208,8 @@
                 <!--CONTENT-->
                 <div class="col-md-9 col-lg-7">
                     <div class="row-cols-1 d-flex flex-column h-100">
+
+                        <!--MENU BUTTONS (SUBJECTS, ALL POSTS)-->
                         <div class="col">
                             <div class="btn-group d-flex flex-nowrap">
                                 <button class="btn btn-primary leftButtonMenu">
@@ -221,31 +225,10 @@
                             </div>
                         </div>
 
-
-
-                        <div class="card text-center bg-backgroundGray-color">
-                            <img src="~/assets/img/home-bg.jpg" class="card-img-top p-0 m-0" style="height:250px;" alt="...">
-                            <div class="card-body bg-white">
-                                <h5 class="card-title">Special title treatment</h5>
-                                <p class="card-text p-0 m-0">With supporting text below as a natural lead-in to additional content.</p>
-                                <a href="#" class="btn btn-primary">Go somewhere</a>
-                            </div>
-                            <div class="card-header bg-white border-top border-1 p-0 m-0">
-                                tags
-                            </div>
-                            <div class="card-footer text-muted p-0 m-0" style="background-color: var(--blueDark-color); width: 100%;">
-                                <span>like</span>
-                            </div>
-                        </div>
-
-
-
-
-
-
-                        <div class="col container-sm">
+                        <div class="col">
                             @RenderBody()
                         </div>
+
                     </div>
                 </div>
 
@@ -253,7 +236,7 @@
                 <div class="col-2 d-none d-lg-block">
                     <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
-                            <span>themes</span>
+                            <span>top view</span>
                         </div>
                         <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">

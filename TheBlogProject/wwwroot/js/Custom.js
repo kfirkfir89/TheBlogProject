@@ -101,3 +101,23 @@ const swalWithDarkButton = Swal.mixin({
     timer: 5000,
     buttonsStyling: false
 });
+
+
+
+//imgae sizeing
+function imgSize(str) {
+
+    let img = new Image(document.getElementsByTagName(`"${str}"`));
+
+    let h = img.clientHeight;
+    let w = img.clientWidth;
+
+
+    if (w < 10) {
+        console.log("gadoll m300");
+        document.getElementById(`"${str}"`).classList.add("imgSmall");
+    } else if (w > 800) {
+        console.log("katan m300");
+    }
+
+}
