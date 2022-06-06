@@ -29,7 +29,7 @@
 
         <div class="col">
 
-            <div class="card bg-transparent border-0 mb-2 rounded">
+            <div class="card bg-transparent border-0 mb-3 rounded">
                 @if (post.ImageData != null)
                 {
                     <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
@@ -49,7 +49,7 @@
                         </script>
                     }
                 }
-                <div class="card-body bg-white shadow-sm">
+                <div class="card-body bg-white shadow-sm" style="margin-top:1px;">
                     <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
                         <h5 class="card-title">@post.Title</h5>
                     </a>
@@ -82,7 +82,7 @@
                         </button>
                         <button class="btn btn-primary postButtonleft">
                             <a class="justify-content-center" asp-controller="Home" asp-action="About" title="Manage">
-                                <i class="fa-solid fa-book fa-xl" style="color: red;"></i>
+                                <img class="" style="width:100%; height:20px;" src="/assets/img/postIcons/UnUsefulCode.svg" />
                             </a>
                         </button>
                     </div>
