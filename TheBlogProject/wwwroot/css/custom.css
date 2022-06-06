@@ -244,6 +244,15 @@ icon-search {
     background-color:var(--hoverLightBlue-color);
 }
 
+.btn-outline-primary {
+    border:none;
+}
+
+    .btn-outline-primary:hover {
+        border: none;
+        background-color: var(--blueDark-color);
+    }
+
 /*-----------------image  bootstrap---------------*/
 .img-thumbnail {
     padding: 0px;
@@ -285,15 +294,24 @@ div > button > a h6 {
 }
 
 /*-----------------tags---------------*/
-
-
 .tagViewA {
     font-size: 1rem;
     font-weight: 400;
-    font-family:'Segoe UI Emoji';
-    color:var(--blueDark-color);
+    font-family: 'Segoe UI Emoji';
+    color: var(--blueDark-color);
 }
 
+.tagViewB {
+    letter-spacing:normal;
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: 'Segoe UI Emoji';
+    color: var(--blueDark-color);
+}
+
+.tagViewB:hover {
+    color: white;
+}
 /*-----------------tag buttons---------------*/
 .tagViewBtn {
     height: 30px;
@@ -352,7 +370,8 @@ div > button > a h6 {
 }
 
 .imgSmall {
-    object-fit: scale-down;
+    object-fit:scale-down;
+    
     max-height: auto;
     width: 100%;
     background-color:darkblue;
@@ -369,3 +388,22 @@ div > button > a h6 {
     height: 100px;
 }
 
+
+.postButtonRight {
+    background-color: white;
+    border-radius: 0px 0px 0px 5px;
+}
+
+    .postButtonRight:hover {
+        background-color: var(--hoverLightBlue-color);
+        border-radius: 0px 0px 0px 5px;
+    }
+
+.postButtonleft {
+    background-color: white;
+    border-radius: 0px 0px 5px 0px;
+}
+    .postButtonleft:hover {
+        background-color: var(--hoverLightBlue-color);
+        border-radius: 0px 0px 5px 0px;
+    }
