@@ -243,9 +243,16 @@
 
                                 @foreach (var tag in _context.Tags.Select(t => t.Text))
                                 {
-                                    <button class="btn btn-primary nav-link d-inline-flex flex-nowrap tagViewBtn">
-                                        <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA">#@tag</a>
+                                <div class="btn-group">
+                                    <button class="btn btn-primary d-inline-flex tagViewBtn">
+                                        <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
                                     </button>
+                                    <div class="justify-content-end">
+                                        <button class="btn btn-primary d-inline-flex flex-nowrap tagViewBtn justify-content-center" style="width:20px;" >
+                                            <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="">+</a>
+                                        </button>
+                                    </div>
+                                </div>
                                 }
                             </div>
                         </div>

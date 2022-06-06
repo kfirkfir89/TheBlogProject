@@ -355,6 +355,7 @@ div > button > a h6 {
     object-fit: scale-down;
     max-height: auto;
     width: 100%;
+    background-color:darkblue;
 }
 
 .imgBig {
@@ -362,3 +363,9 @@ div > button > a h6 {
     max-height: 100px;
     object-position: left;
 }
+
+
+.blogCard{
+    height: 100px;
+}
+

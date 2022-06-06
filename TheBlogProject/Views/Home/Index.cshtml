@@ -16,11 +16,41 @@
 }
 
 
-<div class="row">
-    
-    @foreach(var blog in Model)
+< class="row">
+
+    @foreach (var blog in Model)
     {
-        <div class="col-sm-12 col-md-6 col-lg-4 mt-5 d-flex flex-wrap">
+@*        MemoryStream imageStream = new MemoryStream(post.ImageData);
+        Bitmap image = new Bitmap(imageStream);
+        int width = image.Width;
+        int height = image.Height;
+*@
+
+
+        
+        <div class="col">
+            <div class="card bg-backgroundGray-color mb-2">
+                <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blog.Id">
+                    <img src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType)" class="card-img blogCard" alt="...">
+                    <div class="card-img-overlay d-flex justify-content-between">
+                        <h5 class="card-title">@blog.Name</h5>
+                        <p class="card-text p-0 m-0">@blog.Description</p>
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()))
+                        {
+                            <div class="">
+                                <a class="btn btn-primary logoutButton border-1 px-4" asp-action="Edit" asp-controller="Blogs" asp-route-id="@blog.Id">
+                                    Edit
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </a>
+            </div>
+        </div>
+
+
+
+@*        <div class="col-sm-12 col-md-6 col-lg-4 mt-5 d-flex flex-wrap">
             <div class="card border-dark">
                 <img class="card-img-top" src="@_imageService.DecodeImage(blog.ImageData, blog.ContentType)" />
                 <div class="card-body text-center">
@@ -64,10 +94,10 @@
 
                 </div>
             </div>
-        </div>
+        </div>*@
     }
 
-</div>
+</>
 
 <hr />
 
