@@ -13,6 +13,7 @@ using TheBlogProject.Services;
 using TheBlogProject.Enums;
 using X.PagedList;
 using TheBlogProject.ViewModels;
+using System.Drawing;
 
 namespace TheBlogProject.Controllers
 {
@@ -67,17 +68,24 @@ namespace TheBlogProject.Controllers
             {
                 return NotFound();
             }
-
-            var pageNumber = page ?? 1;
+            //page system version
+/*            var pageNumber = page ?? 1;
             var pageSize = 5;
-
+*/
             //get the post for specificuler blog
             //var posts = _context.Posts.Where(p => p.BlogId == id).ToList();
 
-            var posts = await _context.Posts
+            //page system version
+/*            var posts = await _context.Posts
                 .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
                 .OrderByDescending(p => p.Created)
-                .ToPagedListAsync(pageNumber, pageSize);
+                .ToPagedListAsync(pageNumber, pageSize);*/
+
+            var posts = await _context.Posts
+                .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
+                .Include(p => p.Tags)
+                .OrderByDescending(p => p.Created)
+                .ToListAsync();
 
             return View(posts);
         }
@@ -141,6 +149,23 @@ namespace TheBlogProject.Controllers
                 var authorId = _userManager.GetUserId(User);
                 post.BlogUserId = authorId;
 
+                //create a variable to store whether an error has occurred
+                var validationError = false;
+
+                //checking for image size
+                if(post.Image != null)
+                {
+                    MemoryStream memoryStreamImgByte = new MemoryStream(await _imageService.EncodeImageAsync(post.Image));
+                    Bitmap image = new Bitmap(memoryStreamImgByte);
+                    int width = image.Width;
+                    int height = image.Height;
+                    if (width < 744)
+                    {
+                        validationError = true;
+                        ModelState.AddModelError("Image", "Minimum image width 744px");
+                    }
+                }
+
                 //use the _imageService to store the incoming user specified image
                 post.ImageData = await _imageService.EncodeImageAsync(post.Image);
                 post.ContentType = _imageService.ContentType(post.Image);
@@ -148,8 +173,6 @@ namespace TheBlogProject.Controllers
                 //creating the slug and determine if it is unique
                 var slug = _slugService.UrlFriendly(post.Title);
 
-                //create a variable to store whether an error has occurred
-                var validationError = false;
                 
                 //detect incoming empty Slugs
                 if (string.IsNullOrEmpty(slug))

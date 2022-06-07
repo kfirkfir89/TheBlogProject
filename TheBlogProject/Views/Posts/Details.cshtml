@@ -22,7 +22,7 @@
                 <img class="card-img-top" src="~/assets/img/tags.png" alt="Tags...">
                 <div class="card-body">
                     <h4 class="card-title">SYSTEM TAGS</h4>
-                    <div class="tagView">
+                    <div class="">
                         @foreach (var tag in Model.Tags)
                         {
                             <a asp-action="TagIndex" asp-route-tag="@tag" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag</a>
