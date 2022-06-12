@@ -62,7 +62,7 @@ namespace TheBlogProject.Controllers
         }
 
         //BlogPostIndex
-        public async Task<IActionResult> BlogPostIndex(int? id, int? page)
+        public async Task<IActionResult> BlogPostIndex(string? id, int? page)
         {
             if (id == null)
             {
@@ -81,8 +81,9 @@ namespace TheBlogProject.Controllers
                 .OrderByDescending(p => p.Created)
                 .ToPagedListAsync(pageNumber, pageSize);*/
 
+
             var posts = await _context.Posts
-                .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
+                .Where(p => p.BlogUser.Id == id && p.ReadyStatus == ReadyStatus.ProductionReady)
                 .Include(p => p.Tags)
                 .OrderByDescending(p => p.Created)
                 .ToListAsync();
