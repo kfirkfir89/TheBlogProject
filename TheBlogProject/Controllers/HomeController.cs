@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TheBlogProject.Data;
+using TheBlogProject.Enums;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
 using TheBlogProject.ViewModels;
@@ -22,22 +23,48 @@ namespace TheBlogProject.Controllers
             _context = context;
         }
 
+
+
+
+        /*        public async Task<IActionResult> Index()
+                {
+                    var posts = await _context.Posts
+                                .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                                .Include(p => p.Tags)
+                                .OrderByDescending(p => p.Created)
+                                .ToListAsync();
+
+                    return View(posts);
+                }*/
+
         public async Task<IActionResult> Index(int? page)
         {
-            var pageNumber = page ?? 1;
+/*            var pageNumber = page ?? 1;
             var pageSize = 5;
 
-/*            var blogs = _context.Blogs.Where(
+            var blogs = _context.Blogs.Where(
                 b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
                 .OrderByDescending(b => b.Created)
-                .ToPagedListAsync(pageNumber, pageSize);*/
+                .ToPagedListAsync(pageNumber, pageSize);
 
             var blogs = _context.Blogs
                 .Include(b => b.BlogUser)
                 .OrderByDescending(b => b.Created)
                 .ToPagedListAsync(pageNumber, pageSize);
 
-            return View(await blogs);
+            return View(await blogs);*/
+
+            var posts = await _context.Posts
+                .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                .Include(p => p.Tags)
+                .OrderByDescending(p => p.Created)
+                .ToListAsync();
+
+
+            return View(posts);
+
+
+
         }
 
         public IActionResult About()

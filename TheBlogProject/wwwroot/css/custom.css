@@ -418,3 +418,15 @@ div > button > a h6 {
     font-size: 0.9rem;
     font-weight: 600;
 }
+
+
+/*-----------------responsive img and video for post details---------------*/
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+iframe, object, embed {
+    max-width: 100%;
+    max-height: 100%;
+}
