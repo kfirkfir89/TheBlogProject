@@ -25,6 +25,10 @@
     <!-- Reference Summernote-->
     <link href="~/css/summernote-lite.min.css" rel="stylesheet" />
 
+
+    <!-- TinyMCE editor  -->
+    <script src="https://cdn.tiny.cloud/1/otpy1ckx769xk96nda6pp2k5q9tt9ww5gc5b9vqk5vt8my3p/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
     <!-- Font Awesome icons (free version)-->
     <script src="https://kit.fontawesome.com/91c94b274c.js" crossorigin="anonymous"></script>
 
@@ -36,10 +40,10 @@
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="~/css/styles.css" rel="stylesheet" />
     <link href="~/css/custom.css" rel="stylesheet" />
+
 </head>
 <body class="d-flex flex-column h-100">
     <!-- Navigation-->
-
 
     @{ var imagePath = @ViewData["HeaderImage"];
         if (imagePath == null)
@@ -115,7 +119,6 @@
     </header>
 
     <!-- Main Content-->
-
     <main class="d-flex flex-column h-100 mt-2">
         <div class="container-xxl">
             <div class="row row-cols-1">
@@ -206,7 +209,7 @@
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-md-9 col-lg-6">
+                <div class="col-md-9 col-lg-7">
                     <div class="row-cols-1 d-flex flex-column h-100">
 
                         <!--MENU BUTTONS (SUBJECTS, ALL POSTS)-->
@@ -233,7 +236,7 @@
                 </div>
 
                 <!--TAGS LEFT SIDEBAR-->
-                <div class="col-3 d-none d-lg-block">
+                <div class="col-2 d-none d-lg-block">
                     <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
                             <span>top view</span>
@@ -243,18 +246,18 @@
 
                                 @foreach (var tag in _context.Tags.Select(t => t.Text))
                                 {
-                                <div class="btn-group">
-                                    <div class="flex-grow-1">
-                                        <button class="btn btn-primary d-inline-flex tagViewBtn">
-                                            <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
-                                        </button>
+                                    <div class="btn-group">
+                                        <div class="flex-grow-1">
+                                            <button class="btn btn-primary d-inline-flex tagViewBtn">
+                                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
+                                            </button>
+                                        </div>
+                                        <div class="justify-content-end">
+                                            <button class="btn btn-primary d-inline-flex flex-nowrap tagViewBtn justify-content-center" style="width:20px;">
+                                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="">+</a>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="justify-content-end">
-                                        <button class="btn btn-primary d-inline-flex flex-nowrap tagViewBtn justify-content-center" style="width:20px;" >
-                                            <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="">+</a>
-                                        </button>
-                                    </div>
-                                </div>
                                 }
                             </div>
                         </div>
