@@ -93,5 +93,20 @@ namespace TheBlogProject.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public async Task<IActionResult> TagManagement()
+        {
+            var tags = _context.Tags.ToList();
+            ViewData["DatabaseTagValues"] = string.Join(",", tags.Select(t => t.Text));
+
+
+            return View(tags);
+        }
+
+/*        [HttpPost]
+        public async Task<IActionResult> TagManagement(List<string> TagValues)
+        {
+            return View();
+        }*/
     }
 }

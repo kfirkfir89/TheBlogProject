@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "TagManagement";
+}
+
+<h1>TagManagement</h1>
+
+<form class="form-group" asp-controller="Home" asp-action="tagManagement">
+    <div class="row">
+        <label class="control-label">Manage Tags</label>
+    </div>
+    <div class="row row-cols-1">
+        <div class="col">
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="text" class="form-control" id="TagEntry" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button onclick="AddTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Add">ADD</button>
+                </div>
+                <div class="col">
+                    <button onclick="DeleteTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Delete">DELETE</button>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <select class="note-btn-block" name="TagValues" id="TagList" multiple></select>
+        </div>
+        <div class="col">
+            <select class="note-btn-block" name="DatabaseTagValues" id="DatabaseTagValues" multiple></select>
+        </div>
+    </div>
+    <button type="submit">submit</button>
+</form>
+
+<script src="~/js/Custom.js"></script>
