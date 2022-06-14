@@ -16,7 +16,6 @@ body {
 
 .nav {
     display: inline-block;
-    
 }
 
 #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
@@ -34,7 +33,7 @@ body {
     text-transform: uppercase;
     padding: 10px 20px;
     color: rgba(255, 255, 255, .8);
-} 
+}
 
 .nav-identity {
     padding-top: 18px !important;
@@ -99,6 +98,7 @@ button.btn-sm, a.btn-sm {
     background-color: var(--customOrange-color);
     border-color: var(--customOrange-color);
 }
+
     .btn-warning:hover {
         color: white;
         background-color: #212121;
@@ -209,9 +209,9 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     border: 1px solid rgb(128, 128, 128, 0.3);
 }
 
-#floatingInputSearch:hover {
-    border: 2px solid rgb(128, 128, 128, 0.3);
-}
+    #floatingInputSearch:hover {
+        border: 2px solid rgb(128, 128, 128, 0.3);
+    }
 
 
 /*-----------------form (search) bootstrap---------------*/
@@ -235,13 +235,13 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 }
 
 
-.btn-primary:hover {
-    border-radius: 5px 5px;
-    background-color:var(--hoverLightBlue-color);
-}
+    .btn-primary:hover {
+        border-radius: 5px 5px;
+        background-color: var(--hoverLightBlue-color);
+    }
 
 .btn-outline-primary {
-    border:none;
+    border: none;
 }
 
     .btn-outline-primary:hover {
@@ -270,22 +270,39 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     border-radius: 0px 5px 0px 0px;
     height: 35px;
 }
+
     .rightButtonMenu:hover {
         border-radius: 0px 5px 0px 0px;
-        height: 35px;
+        border-bottom: 2px solid var(--blueDark-color);
     }
 
 .leftButtonMenu {
     border-radius: 5px 0px 0px 0px;
     height: 35px;
 }
+
     .leftButtonMenu:hover {
         border-radius: 5px 0px 0px 0px;
-        height: 35px;
+        border-bottom: 2px solid var(--blueDark-color);
     }
 
+.middleButtonMenu {
+    border-radius: 0px 0px 0px 0px;
+    height: 35px;
+}
+
+    .middleButtonMenu:hover {
+        border-radius: 0px 0px 0px 0px;
+        border-bottom: 2px solid var(--blueDark-color);
+    }
+
+.myClass {
+    background-color: red;
+}
+
+
 div > button > a h6 {
-    color:var(--blueDark-color);
+    color: var(--blueDark-color);
 }
 
 /*-----------------tags---------------*/
@@ -305,14 +322,15 @@ div > button > a h6 {
     font-family: Segoe UI;
 }
 
-.tagViewB:hover {
-    color: white;
-}
+    .tagViewB:hover {
+        color: white;
+    }
 /*-----------------tag buttons---------------*/
 .tagViewBtn {
     height: 30px;
     border-radius: 3px 3px;
 }
+
     .tagViewBtn:hover {
         height: 30px;
         border-radius: 3px 3px;
@@ -324,20 +342,20 @@ div > button > a h6 {
     border-radius: 3px 3px 3px 3px;
     height: 35px;
     color: var(--blueDark-color);
-    font-weight:600;
+    font-weight: 600;
 }
 
 
 @media screen and (max-width:1200px) {
     #floatingInputSearch {
-        width:260px;
+        width: 260px;
     }
 }
 
 @media screen and (max-width:767px) {
 
     #floatingInputSearch {
-        width:420px;
+        width: 420px;
     }
 }
 
@@ -345,7 +363,7 @@ div > button > a h6 {
 @media screen and (max-width:576px) {
 
     #floatingInputSearch {
-        width:200px;
+        width: 200px;
     }
 }
 
@@ -369,17 +387,16 @@ iframe, object, embed {
 }
 
 .imgSmall {
-    object-fit:scale-down;   
+    object-fit: scale-down;
     max-height: auto;
     width: 100%;
-    background-color:white;
+    background-color: white;
 }
 
 .imgBig {
-    object-fit:cover;
-    object-position:top;
+    object-fit: cover;
+    object-position: top;
     max-height: 350px;
-
 }
 
 .logoImg {
@@ -407,6 +424,7 @@ iframe, object, embed {
     background-color: white;
     border-radius: 0px 0px 5px 0px;
 }
+
     .postButtonleft:hover {
         background-color: var(--hoverLightBlue-color);
         border-radius: 0px 0px 5px 0px;
@@ -426,7 +444,5 @@ iframe, object, embed {
     position: relative;
     background-clip: text;
     -webkit-background-clip: text;
-
     background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
 }
-

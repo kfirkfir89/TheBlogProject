@@ -154,47 +154,47 @@
                     <div class="row-cols-1 h-100">
                         <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">
-@*
-                                @if (SignInManager.IsSignedIn(User))
-                                {
-                                    BlogUser user = (BlogUser)await UserManager.GetUserAsync(User);
-                                    var len = user.FirstName.Length;
+                                @*
+        @if (SignInManager.IsSignedIn(User))
+        {
+            BlogUser user = (BlogUser)await UserManager.GetUserAsync(User);
+            var len = user.FirstName.Length;
 
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
-                                            <span class="fa-layers fa-fw">
-                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1 colorGra"></i>
-                                                <span class="fa-layers-counter fa-2x" style="top: 0; left:-15px;">@len</span>
-                                            </span>
-                                            <span class="ms-1 align-self-center ps-3 pt-1">Home</span>
-                                        </a>
-                                    </button>
-                                }
-                                else
-                                {
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
-                                            <span class="fa-layers fa-fw">
-                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1"></i>
-                                            </span>
-                                            <span class="ms-1 align-self-center ps-3">Home</span>
-                                        </a>
-                                    </button>
-                                }
-                                <button class="btn btn-primary nav-link d-inline-flex">
-                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="About" title="Manage">
-                                        <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
-                                        <span class="ms-1 align-self-center ps-2">About</span>
-                                    </a>
-                                </button>
-                                <button class="btn btn-primary nav-link d-inline-flex">
-                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Contact" title="Manage">
-                                        <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
-                                        <span class="ms-1 align-self-center ps-2">Contact</span>
-                                    </a>
-                                </button>
+            <button class="btn btn-primary nav-link d-inline-flex">
+                <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
+                    <span class="fa-layers fa-fw">
+                        <i class="fa-solid fa-house-user fa-xl align-self-center pb-1 colorGra"></i>
+                        <span class="fa-layers-counter fa-2x" style="top: 0; left:-15px;">@len</span>
+                    </span>
+                    <span class="ms-1 align-self-center ps-3 pt-1">Home</span>
+                </a>
+            </button>
+        }
+        else
+        {
+            <button class="btn btn-primary nav-link d-inline-flex">
+                <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
+                    <span class="fa-layers fa-fw">
+                        <i class="fa-solid fa-house-user fa-xl align-self-center pb-1"></i>
+                    </span>
+                    <span class="ms-1 align-self-center ps-3">Home</span>
+                </a>
+            </button>
+        }
+        <button class="btn btn-primary nav-link d-inline-flex">
+            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="About" title="Manage">
+                <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
+                <span class="ms-1 align-self-center ps-2">About</span>
+            </a>
+        </button>
+        <button class="btn btn-primary nav-link d-inline-flex">
+            <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Contact" title="Manage">
+                <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
+                <span class="ms-1 align-self-center ps-2">Contact</span>
+            </a>
+        </button>
 
-                                <hr />*@
+        <hr />*@
 
                                 @if (SignInManager.IsSignedIn(User))
                                 {
@@ -233,6 +233,13 @@
                                             <span class="ms-1 align-self-center ps-2">Comments Control</span>
                                         </a>
                                     </button>
+
+@*                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="tagManagment" title="Manage">
+                                            <i class="fa-solid fa-comments fa-xl align-self-center"></i>
+                                            <span class="ms-1 align-self-center ps-2">Tag Management</span>
+                                        </a>
+                                    </button>*@
                                 }
 
 
@@ -240,37 +247,58 @@
 
                         </div>
                         <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
-                            <span>themes</span>
+@*                            <form class="form-group" asp-controller="Home" asp-action="tagManagment">
+                                <div class="row">
+                                    <label class="control-label">Manage Tags</label>
+                                </div>
+                                <div class="row row-cols-1">
+                                    <div class="col">
+                                        <div class="row mb-3">
+                                            <div class="col">
+                                                <input type="text" class="form-control" id="TagEntry" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <button onclick="AddTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Add">ADD</button>
+                                            </div>
+                                            <div class="col">
+                                                <button onclick="DeleteTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Delete">DELETE</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <select class="note-btn-block" name="TagValues" id="TagList" multiple></select>
+                                    </div>
+                                </div>
+                                <button type="submit">submit</button>
+                            </form>*@
                         </div>
                     </div>
 
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-md-9 col-lg-7">
-                    <div class="row-cols-1 d-flex flex-column h-100">
-
-                        <!--MENU BUTTONS (SUBJECTS, ALL POSTS)-->
-                        <div class="col">
-                            <div class="btn-group d-flex flex-nowrap">
-                                <button class="btn btn-primary leftButtonMenu">
-                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid justify-content-center" asp-controller="Home" asp-action="Index" title="Manage">
-                                        <h6 class="ms-1 align-self-center">SUBJECTS</h6>
-                                    </a>
-                                </button>
-                                <button class="btn btn-primary rightButtonMenu">
-                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid justify-content-center" asp-controller="Home" asp-action="About" title="Manage">
-                                        <h6 class="ms-1 align-self-center">ALL POSTS</h6>
-                                    </a>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            @RenderBody()
-                        </div>
-
+                <div class="col-md-9 col-lg-7 d-flex flex-column h-100">
+                    <div class="row btn-group d-flex flex-nowrap">
+                        <button class="btn btn-primary leftButtonMenu" id="leftButtonMenu">
+                            <a class="d-flex flex-nowrap container-fluid justify-content-center" asp-controller="Home" asp-action="Index" title="Relevant">
+                                <h6 class="pt-2">RELEVANT</h6>
+                            </a>
+                        </button>
+                        <button class="btn btn-primary middleButtonMenu" id="middleButtonMenu">
+                            <a class="d-flex flex-nowrap justify-content-center ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Home Page">
+                                <i class="fa-solid fa-house-user fa-xl align-self-center" style="color: var(--blueDark-color);"></i>
+                            </a>
+                        </button>
+                        <button class="btn btn-primary rightButtonMenu" id="rightButtonMenu">
+                            <a class="d-flex flex-nowrapcontainer-fluid justify-content-center" asp-controller="Home" asp-action="About" title="Top View">
+                                <h6 class="pt-2">TOP VIEW</h6>
+                            </a>
+                        </button>
                     </div>
+
+                    @RenderBody()
                 </div>
 
                 <!--TAGS LEFT SIDEBAR-->
