@@ -31,6 +31,7 @@
 
     <!-- Font Awesome icons (free version)-->
     <script src="https://kit.fontawesome.com/91c94b274c.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/js/all.min.js"></script>
 
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
@@ -55,36 +56,61 @@
     <!-- Page Header-->
     <header>
         <!-- NAV-->
-        <nav class="navbar navbar-expand-md navbar-light bg-white mb-3 navStyle">
+        <nav class="navbar navbar-expand-md navbar-light bg-white mb-3 navStyle shadow-sm">
             <div class="container-fluid d-flex justify-content-center">
-                <div class="container-xxl row">
-                    <div class="col-6 col-md-3 d-flex">
-                        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                            <i class="">
-                                <img class="img-thumbnail rounded-circle" style="width:40px; height:40px;" src="~/assets/img/defualtUser.png" />
-                            </i>
-                        </a>
-                    </div>
-                    <div class="col-md-6 col-12 d-flex order-last justify-content-center pt-md-0 pt-2">
-                        <form class="d-flex" asp-action="SearchIndex" asp-controller="Posts">
+                <div class="container-xxl row p-0 m-0">
+                    <div class="col-md-4 d-flex d-inline-block pt-md-0">
+                        <form class="d-flex d-none d-md-block shadow-sm" style="height:40px;" asp-action="SearchIndex" asp-controller="Posts">
                             <div class="input-group d-flex flex-nowrap">
                                 <div class="form-floating d-flex flex-nowrap">
                                     <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
                                     <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
-                                    <button type="submit" class="btn btn-primary btnSearch px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
+                                    <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="col-6 col-md-3 order-md-last">
-                        <div class="col d-flex justify-content-end">
-                            <div class="d-flex justify-content-end d-none d-md-block pe-4">
+                    <div class="col-md-4 col-6 d-flex justify-content-md-center">
+                        <a class="p-0 m-0 ps-md-5 ms-md-4" asp-controller="Home" asp-action="Index">
+                            <i class="">
+                                <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
+                            </i>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end align-items-center">
+
+                            <button class="btn btn-primary logoutButton px-2 me-1">
+                                <a class="" asp-controller="Home" asp-action="About" title="Manage">
+                                    <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
+                                </a>
+                            </button>
+                            <button class="btn btn-primary logoutButton px-2 me-1">
+                                <a class="" asp-controller="Home" asp-action="Contact" title="Manage">
+                                    <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
+                                </a>
+                            </button>
+                            <partial name="_LogoutPartial" />
+                            <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+@*                        <div class="btn-group d-flex justify-content-end">
+                            <button class="btn btn-primary logoutButton">
+                                <a class="" asp-controller="Home" asp-action="About" title="Manage">
+                                    <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
+                                </a>
+                            </button>
+                            <button class="btn btn-primary">
+                                <a class="" asp-controller="Home" asp-action="Contact" title="Manage">
+                                    <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
+                                </a>
+                            </button>
+                            <div class="d-flex justify-content-end d-none d-md-block shadow-sm">
                                 <partial name="_LoginPartial" />
                             </div>
                             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
@@ -127,61 +153,75 @@
                 <div class="col-3 text-center d-none d-md-block">
                     <div class="row-cols-1 h-100">
                         <div class="col">
-
                             <div class="btn-group-vertical d-flex flex-nowrap">
-                                <button class="btn btn-primary nav-link d-inline-flex">
-                                    <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
-                                        <i class="">
-                                            <img class="pe-2 pb-1 ms-2" style="width:30px; height:30px;" src="~/assets/img/navIcons/HomeIcon2.svg" />
-                                        </i>
-                                        <span class="ms-1 align-self-center">Home</span>
-                                    </a>
-                                </button>
+@*
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    BlogUser user = (BlogUser)await UserManager.GetUserAsync(User);
+                                    var len = user.FirstName.Length;
+
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
+                                            <span class="fa-layers fa-fw">
+                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1 colorGra"></i>
+                                                <span class="fa-layers-counter fa-2x" style="top: 0; left:-15px;">@len</span>
+                                            </span>
+                                            <span class="ms-1 align-self-center ps-3 pt-1">Home</span>
+                                        </a>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
+                                            <span class="fa-layers fa-fw">
+                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1"></i>
+                                            </span>
+                                            <span class="ms-1 align-self-center ps-3">Home</span>
+                                        </a>
+                                    </button>
+                                }
                                 <button class="btn btn-primary nav-link d-inline-flex">
                                     <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="About" title="Manage">
-                                        <i class="">
-                                            <img class="pe-2 pb-1 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/About.svg" />
-                                        </i>
-                                        <span class="ms-1 align-self-center">About</span>
+                                        <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
+                                        <span class="ms-1 align-self-center ps-2">About</span>
                                     </a>
                                 </button>
                                 <button class="btn btn-primary nav-link d-inline-flex">
                                     <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Contact" title="Manage">
-                                        <i class="">
-                                            <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Contact.svg" />
-                                        </i>
-                                        <span class="ms-1 align-self-center">Contact</span>
+                                        <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
+                                        <span class="ms-1 align-self-center ps-2">Contact</span>
                                     </a>
                                 </button>
 
-                                <hr />
+                                <hr />*@
 
                                 @if (SignInManager.IsSignedIn(User))
                                 {
                                     BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
 
                                     <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                            <img class="rounded-circle img-thumbnail" style="width:35px; height:35px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                            <span class="ms-1 align-self-center">@blogUser.FullName</span>
+                                        <a class="nav-link d-flex flex-nowrap ps-0 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                            <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                            <span class="ms-1 align-self-center ps-2">@blogUser.FullName</span>
                                         </a>
                                     </button>
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                            <i class="">
-                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Favorite.svg" />
-                                            </i>
-                                            <span class="ms-1 align-self-center">Favorite</span>
+                                            <i class="fa-solid fa-heart fa-xl align-self-center "></i>
+                                            <span class="ms-1 align-self-center ps-3">Favorite</span>
                                         </a>
                                     </button>
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                            <i class="">
-                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
-                                            </i>
-                                            <span class="ms-1 align-self-center">My Comments</span>
+                                            <i class="fa-solid fa-comment fa-xl align-self-center"></i>
+                                            <span class="ms-1 align-self-center ps-3">My Comments</span>
                                         </a>
                                     </button>
+                                }
+                                else
+                                {
+                                    <partial name="_LoginPartial" />
                                 }
 
 
@@ -189,10 +229,8 @@
                                 {
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                            <i class="">
-                                                <img class="pe-2 ms-2" style="width: 30px; height: 30px;" src="~/assets/img/navIcons/Comments.svg" />
-                                            </i>
-                                            <span class="ms-1 align-self-center">Comments Control</span>
+                                            <i class="fa-solid fa-comments fa-xl align-self-center"></i>
+                                            <span class="ms-1 align-self-center ps-2">Comments Control</span>
                                         </a>
                                     </button>
                                 }

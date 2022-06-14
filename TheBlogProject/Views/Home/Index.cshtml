@@ -53,8 +53,10 @@
                         @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
                         {
                             <div class="d-flex justify-content-end">
-                                <button class="btn btn-primary logoutButton">
-                                    <a class="justify-content-center" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                                <button class="btn btn-primary logoutButton bg-white">
+                                    <a class="justify-content-center" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
+                                        <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
+                                    </a>
                                 </button>
                             </div>
                         }
@@ -63,8 +65,6 @@
                     @*-------------   Title   ------------*@
                     <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
                         <div class="card-title ps-3 h1">@post.Title</div>
-                    </a>
-                    <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
                         <p class="card-text ps-3 m-0">@post.Abstract</p>
                     </a>
 
