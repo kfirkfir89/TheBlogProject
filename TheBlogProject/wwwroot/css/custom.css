@@ -427,6 +427,6 @@ iframe, object, embed {
     background-clip: text;
     -webkit-background-clip: text;
 
-    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+    background-image: linear-gradient(150deg, #0093E9 0%, #80D0C7 100%);
 }
 
