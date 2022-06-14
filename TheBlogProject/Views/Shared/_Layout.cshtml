@@ -56,34 +56,61 @@
     <!-- Page Header-->
     <header>
         <!-- NAV-->
-        <nav class="navbar navbar-expand-md navbar-light bg-white mb-3 navStyle">
+        <nav class="navbar navbar-expand-md navbar-light bg-white mb-3 navStyle shadow-sm">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="container-xxl row p-0 m-0">
-                    <div class="col-6 d-flex d-inline-block pt-md-0">
-                        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                            <i class="">
-                                <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
-                            </i>
-                        </a>
-                        <form class="d-flex d-none d-md-block" asp-action="SearchIndex" asp-controller="Posts">
+                    <div class="col-md-4 d-flex d-inline-block pt-md-0">
+                        <form class="d-flex d-none d-md-block shadow-sm" style="height:40px;" asp-action="SearchIndex" asp-controller="Posts">
                             <div class="input-group d-flex flex-nowrap">
                                 <div class="form-floating d-flex flex-nowrap">
                                     <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
                                     <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
-                                    <button type="submit" class="btn btn-primary btnSearch px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
+                                    <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="col-6">
-                        <div class="col d-flex justify-content-end">
-                            <div class="d-flex justify-content-end d-none d-md-block pe-4">
+                    <div class="col-md-4 col-6 d-flex justify-content-md-center">
+                        <a class="p-0 m-0 ps-md-5 ms-md-4" asp-controller="Home" asp-action="Index">
+                            <i class="">
+                                <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
+                            </i>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end align-items-center">
+
+                            <button class="btn btn-primary logoutButton px-2 me-1">
+                                <a class="" asp-controller="Home" asp-action="About" title="Manage">
+                                    <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
+                                </a>
+                            </button>
+                            <button class="btn btn-primary logoutButton px-2 me-1">
+                                <a class="" asp-controller="Home" asp-action="Contact" title="Manage">
+                                    <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
+                                </a>
+                            </button>
+                            <partial name="_LogoutPartial" />
+                            <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+@*                        <div class="btn-group d-flex justify-content-end">
+                            <button class="btn btn-primary logoutButton">
+                                <a class="" asp-controller="Home" asp-action="About" title="Manage">
+                                    <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
+                                </a>
+                            </button>
+                            <button class="btn btn-primary">
+                                <a class="" asp-controller="Home" asp-action="Contact" title="Manage">
+                                    <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
+                                </a>
+                            </button>
+                            <div class="d-flex justify-content-end d-none d-md-block shadow-sm">
                                 <partial name="_LoginPartial" />
                             </div>
                             <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
             </div>
@@ -127,7 +154,7 @@
                     <div class="row-cols-1 h-100">
                         <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">
-
+@*
                                 @if (SignInManager.IsSignedIn(User))
                                 {
                                     BlogUser user = (BlogUser)await UserManager.GetUserAsync(User);
@@ -136,7 +163,7 @@
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
                                             <span class="fa-layers fa-fw">
-                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1"></i>
+                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1 colorGra"></i>
                                                 <span class="fa-layers-counter fa-2x" style="top: 0; left:-15px;">@len</span>
                                             </span>
                                             <span class="ms-1 align-self-center ps-3 pt-1">Home</span>
@@ -167,7 +194,7 @@
                                     </a>
                                 </button>
 
-                                <hr />
+                                <hr />*@
 
                                 @if (SignInManager.IsSignedIn(User))
                                 {
@@ -191,6 +218,10 @@
                                             <span class="ms-1 align-self-center ps-3">My Comments</span>
                                         </a>
                                     </button>
+                                }
+                                else
+                                {
+                                    <partial name="_LoginPartial" />
                                 }
 
 

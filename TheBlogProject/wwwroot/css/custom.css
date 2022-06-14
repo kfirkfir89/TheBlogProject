@@ -1,8 +1,8 @@
 ﻿:root {
-    --blueDark-color: #026e81;
-    --backgroundGray-color: #e1e1e1;
-    --hoverLightBlue-color: #a1c7e0;
-    --customOrange-color: #ff993b;
+    --blueDark-color: #4d77ab;
+    --backgroundGray-color: #F9F7F5;
+    --hoverLightBlue-color: #A4E2ED;
+    --customOrange-color: #BAA798;
 }
 
 
@@ -202,7 +202,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 /*-----------------Search Inputtt style---------------*/
 #floatingInputSearch {
     height: 40px;
-    width: 250px;
+    width: 240px;
     padding: 0px;
     margin: 0px;
     box-shadow: none;
@@ -213,11 +213,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     border: 2px solid rgb(128, 128, 128, 0.3);
 }
 
-icon-search {
-    padding-left: 25px;
-    background: url("https://static.thenounproject.com/png/101791-200.png") no-repeat left;
-    background-size: 20px
-}
+
 /*-----------------form (search) bootstrap---------------*/
 .form-labelSearch {
     font-weight: 100;
@@ -262,7 +258,6 @@ icon-search {
 /*-----------------navbar---------------*/
 .navStyle {
     height: 57px;
-    border-bottom: 1px solid var(--blueDark-color);
     font-size: 1.3rem;
     letter-spacing: 0px;
     font-family: 'Segoe UI Emoji';
@@ -421,5 +416,17 @@ iframe, object, embed {
 .smallFont {
     font-size: 0.9rem;
     font-weight: 600;
+}
+
+
+
+
+.fa-circle-exclamation:before {
+    color: transparent;
+    position: relative;
+    background-clip: text;
+    -webkit-background-clip: text;
+
+    background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
 }
 
