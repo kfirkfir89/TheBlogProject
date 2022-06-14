@@ -202,7 +202,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 /*-----------------Search Inputtt style---------------*/
 #floatingInputSearch {
     height: 40px;
-    width: 360px;
+    width: 250px;
     padding: 0px;
     margin: 0px;
     box-shadow: none;
@@ -340,9 +340,6 @@ div > button > a h6 {
 }
 
 @media screen and (max-width:767px) {
-    .navStyle {
-        height: 114px;
-    }
 
     #floatingInputSearch {
         width:420px;
@@ -351,9 +348,6 @@ div > button > a h6 {
 
 
 @media screen and (max-width:576px) {
-    .navStyle {
-        height: 114px;
-    }
 
     #floatingInputSearch {
         width:200px;
@@ -393,7 +387,10 @@ iframe, object, embed {
 
 }
 
-
+.logoImg {
+    max-width: 250px;
+    height: 33px;
+}
 
 
 

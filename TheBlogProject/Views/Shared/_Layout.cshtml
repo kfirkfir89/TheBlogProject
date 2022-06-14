@@ -58,16 +58,14 @@
         <!-- NAV-->
         <nav class="navbar navbar-expand-md navbar-light bg-white mb-3 navStyle">
             <div class="container-fluid d-flex justify-content-center">
-                <div class="container-xxl row">
-                    <div class="col-6 col-md-3 d-flex">
+                <div class="container-xxl row p-0 m-0">
+                    <div class="col-6 d-flex d-inline-block pt-md-0">
                         <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                             <i class="">
-                                <img class="img-thumbnail rounded-circle" style="width:40px; height:40px;" src="~/assets/img/defualtUser.png" />
+                                <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
                             </i>
                         </a>
-                    </div>
-                    <div class="col-md-6 col-12 d-flex order-last justify-content-center pt-md-0 pt-2">
-                        <form class="d-flex" asp-action="SearchIndex" asp-controller="Posts">
+                        <form class="d-flex d-none d-md-block" asp-action="SearchIndex" asp-controller="Posts">
                             <div class="input-group d-flex flex-nowrap">
                                 <div class="form-floating d-flex flex-nowrap">
                                     <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
@@ -77,7 +75,7 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-6 col-md-3 order-md-last">
+                    <div class="col-6">
                         <div class="col d-flex justify-content-end">
                             <div class="d-flex justify-content-end d-none d-md-block pe-4">
                                 <partial name="_LoginPartial" />
@@ -137,11 +135,11 @@
 
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
-                                            <span class="fa-layers fa-fw me-1">
-                                                <i class="fa-solid fa-house-user fa-2x pb-1"></i>
-                                                <span class="fa-layers-counter fa-3x">@len</span>
+                                            <span class="fa-layers fa-fw">
+                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1"></i>
+                                                <span class="fa-layers-counter fa-2x" style="top: 0; left:-15px;">@len</span>
                                             </span>
-                                            <span class="ms-1 align-self-center ps-4 pt-1">Home</span>
+                                            <span class="ms-1 align-self-center ps-3 pt-1">Home</span>
                                         </a>
                                     </button>
                                 }
@@ -150,22 +148,22 @@
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Manage">
                                             <span class="fa-layers fa-fw">
-                                                <i class="fa-solid fa-house-user fa-2x pb-1"></i>
+                                                <i class="fa-solid fa-house-user fa-xl align-self-center pb-1"></i>
                                             </span>
-                                            <span class="ms-1 align-self-center ps-2">Home</span>
+                                            <span class="ms-1 align-self-center ps-3">Home</span>
                                         </a>
                                     </button>
                                 }
                                 <button class="btn btn-primary nav-link d-inline-flex">
                                     <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="About" title="Manage">
-                                        <i class="fa-solid fa-circle-exclamation fa-2x pe-1"></i>
-                                        <span class="ms-1 align-self-center ps-3">About</span>
+                                        <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
+                                        <span class="ms-1 align-self-center ps-2">About</span>
                                     </a>
                                 </button>
                                 <button class="btn btn-primary nav-link d-inline-flex">
                                     <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="Contact" title="Manage">
-                                        <i class="fa-regular fa-id-card fa-2x"></i>
-                                        <span class="ms-1 align-self-center ps-3">Contact</span>
+                                        <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
+                                        <span class="ms-1 align-self-center ps-2">Contact</span>
                                     </a>
                                 </button>
 
@@ -177,19 +175,19 @@
 
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-0 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                            <img class="rounded-circle img-thumbnail me-1" style="width:35px; height:35px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                            <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
                                             <span class="ms-1 align-self-center ps-2">@blogUser.FullName</span>
                                         </a>
                                     </button>
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                            <i class="fa-solid fa-heart fa-2x"></i>
+                                            <i class="fa-solid fa-heart fa-xl align-self-center "></i>
                                             <span class="ms-1 align-self-center ps-3">Favorite</span>
                                         </a>
                                     </button>
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                            <i class="fa-solid fa-comment fa-2x"></i>
+                                            <i class="fa-solid fa-comment fa-xl align-self-center"></i>
                                             <span class="ms-1 align-self-center ps-3">My Comments</span>
                                         </a>
                                     </button>
@@ -200,7 +198,7 @@
                                 {
                                     <button class="btn btn-primary nav-link d-inline-flex">
                                         <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                            <i class="fa-solid fa-comments fa-2x"></i>
+                                            <i class="fa-solid fa-comments fa-xl align-self-center"></i>
                                             <span class="ms-1 align-self-center ps-2">Comments Control</span>
                                         </a>
                                     </button>
