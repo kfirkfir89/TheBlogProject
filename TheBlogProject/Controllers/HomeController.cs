@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TheBlogProject.Data;
@@ -94,13 +95,24 @@ namespace TheBlogProject.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
+
         public async Task<IActionResult> TagManagement()
         {
-            var tags = _context.Tags.ToList();
-            ViewData["DatabaseTagValues"] = string.Join(",", tags.Select(t => t.Text));
+/*            var tag = _context.Tags.ToList();
+            SelectList tags = _context.Tags.ToList();
+            IEnumerable<string> tagText = tags.Select(t => t.Text).ToList();
+            ViewData["tagValues"] = string.Join(",", tagText);
+            var tags = _context.Tags.Select(t => t.Text.ToString()).ToList();
+            ViewData["DatabaseTagValues"] = string.Join(",", tags);*/
+
+            this.ViewData["DatabaseTagValues"] = _context.Tags.Select(x => new SelectListItem
+            {
+                Text = x.Text.ToString()
+            }).ToList();
 
 
-            return View(tags);
+            return View();
         }
 
 /*        [HttpPost]
