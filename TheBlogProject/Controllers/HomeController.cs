@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -16,12 +17,14 @@ namespace TheBlogProject.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IBlogEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager)
         {
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _userManager = userManager;
         }
 
 
@@ -73,7 +76,7 @@ namespace TheBlogProject.Controllers
             return View();
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
             return View();
         }
@@ -99,26 +102,56 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> TagManagement()
         {
-/*            var tag = _context.Tags.ToList();
-            SelectList tags = _context.Tags.ToList();
-            IEnumerable<string> tagText = tags.Select(t => t.Text).ToList();
-            ViewData["tagValues"] = string.Join(",", tagText);
-            var tags = _context.Tags.Select(t => t.Text.ToString()).ToList();
-            ViewData["DatabaseTagValues"] = string.Join(",", tags);*/
+
+
+/*            this.ViewData["TagValues"] = _context.Tags.Select(x => new SelectListItem
+            {
+                Text = x.Text.ToString()
+            }).ToList();
+*/
+
+            ViewData["TagValues"] = string.Join(",", _context.Tags.Select(t => t.Text));
+
+
+            return View();
+        }
+
+
+        public async Task<IActionResult> UserTags()
+        {
 
             this.ViewData["DatabaseTagValues"] = _context.Tags.Select(x => new SelectListItem
             {
                 Text = x.Text.ToString()
             }).ToList();
 
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserTags([Bind("Id ,BlogUserId, Text")] Tag tag ,List<string> tagValues)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var index = 1;
+
+            //how do i loop over the incoming list of string?
+            foreach (var t in tagValues)
+            {
+                tag.Text = t.ToString();
+                tag.BlogUserId = user.Id;
+                tag.Id = index;
+                user.Tags.Add(tag);
+                index++;
+            }
+            await _context.SaveChangesAsync();
 
             return View();
         }
 
-/*        [HttpPost]
-        public async Task<IActionResult> TagManagement(List<string> TagValues)
-        {
-            return View();
-        }*/
+        /*        [HttpPost]
+                public async Task<IActionResult> TagManagement(List<string> TagValues)
+                {
+                    return View();
+                }*/
     }
 }

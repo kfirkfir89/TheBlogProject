@@ -6,7 +6,7 @@ namespace TheBlogProject.Models
     public class Tag
     {
         public int Id { get; set; }
-        public int PostId { get; set; }
+        public int? PostId { get; set; }
         public string? BlogUserId { get; set; }
 
         [Required]

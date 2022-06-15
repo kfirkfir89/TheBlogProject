@@ -1,7 +1,6 @@
 ﻿let index = 0;
 
 function AddTag() {
-
     //get a reference to the TagEntry input element
     var tagEntry = document.getElementById("TagEntry");
 
@@ -17,6 +16,7 @@ function AddTag() {
         //create a new select option
         let newOption = new Option(tagEntry.value, tagEntry.value);
         document.getElementById("TagList").options[index++] = newOption;
+
     }
     //clear out the TagEntry control
     tagEntry.value = "";
@@ -24,11 +24,22 @@ function AddTag() {
 
 }
 
+function AddMyTag() {
+    let i = $("select[name='DatabaseTagValues'] option:selected").index()
+    let selectedTag = document.getElementById("DatabaseTagValues").options[i].value;
+    let newOption = new Option(selectedTag, selectedTag);
+    document.getElementById("TagList").options[index++] = newOption;
+
+    if (!tagList) return false;
+
+    return true;
+}
+
 function DeleteTag() {
 
     let tagCount = 1;
     let tagList = document.getElementById("TagList");
-
+    let databaseTagValues = document.getElementById("DatabaseTagValues");
     if (!tagList) return false;
 
     if (tagList.selectedIndex == -1) {

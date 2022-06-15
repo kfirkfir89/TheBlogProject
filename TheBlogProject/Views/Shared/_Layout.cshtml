@@ -149,6 +149,8 @@
         <div class="container-xxl">
             <div class="row row-cols-1">
 
+                @{ var user = await UserManager.GetUserAsync(User); }
+
                 <!--SIDEBAR NAV-->
                 <div class="col-3 text-center d-none d-md-block">
                     <div class="row-cols-1 h-100">
@@ -218,6 +220,12 @@
                                             <span class="ms-1 align-self-center ps-3">My Comments</span>
                                         </a>
                                     </button>
+                                    <button class="btn btn-primary nav-link d-inline-flex">
+                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="UserTags" title="Manage">
+                                            <i class="fa-solid fa-comments fa-xl align-self-center"></i>
+                                            <span class="ms-1 align-self-center ps-2">My Tags</span>
+                                        </a>
+                                    </button>
                                 }
                                 else
                                 {
@@ -273,6 +281,50 @@
                                 </div>
                                 <button type="submit">submit</button>
                             </form>*@
+
+@*
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+
+                                    foreach (var tagText in userTag)
+                                    {
+                                        foreach(var t in _context.Tags.Select(t => t.Text).ToList())
+                                        {
+                                            if(t == tagText)
+                                            {
+                                                <div class="btn-group">
+                                                    <div class="flex-grow-1">
+                                                        <button class="btn btn-primary d-inline-flex tagViewBtn">
+                                                            <a asp-controller="Post" asp-action="TagIndex" asp-route-tag="@t" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@t</a>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }*@
+
+
+
+
+
+
+
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+                                    var userTag = user.Tags.Select(t => t.Text).ToList();
+                                    foreach (var tag in _context.Tags.Where(t => t.Text == userTag[index]).Select(t => t.Text))
+                                    {
+                                        <div class="btn-group">
+                                            <div class="flex-grow-1">
+                                                <button class="btn btn-primary d-inline-flex tagViewBtn">
+                                                    <a asp-controller="Home" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    }
+                                }
                         </div>
                     </div>
 
