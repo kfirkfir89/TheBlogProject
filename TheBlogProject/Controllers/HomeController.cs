@@ -140,11 +140,6 @@ namespace TheBlogProject.Controllers
                 Text = x.ToString()
             }).ToList();
 
-/*            this.ViewData["TagValues"] = user.MyTags.Select(x => new SelectListItem
-            {
-                Text = x.ToString()
-            }).ToList();*/
-
             ViewData["TagValues"] = string.Join(",", user.MyTags);
 
             return View();

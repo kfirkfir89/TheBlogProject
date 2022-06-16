@@ -23,11 +23,11 @@
         </div>
         <div class="col-6">
             <span>My Tags</span>
-            <select class="note-btn-block" name="TagValues" id="TagList" multiple></select>
+            <select class="note-btn-block" name="TagValues" id="TagList" style="height:500px" multiple></select>
         </div>
         <div class="col-6">
             <span>Tags</span>
-            <select class="note-btn-block" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues" multiple></select>
+            <select class="note-btn-block" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues" style="height:500px" multiple></select>
         </div>
     </div>
     <button type="submit">submit</button>
@@ -38,7 +38,6 @@
     <script>
 
         let tagValues = '@ViewData["TagValues"]';
-        let DatabaseTagValues = '@ViewData["DatabaseTagValues"]';
 
     </script>
 
