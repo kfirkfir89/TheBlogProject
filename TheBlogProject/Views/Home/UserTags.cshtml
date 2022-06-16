@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewData["Title"] = "UserTags";
+}
+
+<h1>UserTags</h1>
+
+
+<form class="form-group" asp-controller="Home" asp-action="UserTags">
+    <div class="row">
+        <label class="control-label">Manage Tags</label>
+    </div>
+    <div class="row row-cols-1">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <button onclick="AddMyTag()" type="button" class="btn btn-success note-btn-block" name="Add">ADD</button>
+                </div>
+                <div class="col">
+                    <button onclick="AddMyTagBack()" type="button" class="btn btn-danger note-btn-block" name="Delete">ADD BACK</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <span>My Tags</span>
+            <select class="note-btn-block" name="TagValues" id="TagList" style="height:500px" multiple></select>
+        </div>
+        <div class="col-6">
+            <span>Tags</span>
+            <select class="note-btn-block" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues" style="height:500px" multiple></select>
+        </div>
+    </div>
+    <button type="submit">submit</button>
+</form>
+
+@section Scripts {
+
+    <script>
+
+        let tagValues = '@ViewData["TagValues"]';
+
+    </script>
+
+    <script src="~/js/Custom.js"></script>
+}

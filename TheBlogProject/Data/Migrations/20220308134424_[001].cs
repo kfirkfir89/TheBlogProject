@@ -263,7 +263,7 @@ namespace TheBlogProject.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PostId = table.Column<int>(type: "integer", nullable: false),
+                    PostId = table.Column<int>(type: "integer", nullable: true),
                     BlogUserId = table.Column<string>(type: "text", nullable: true),
                     Text = table.Column<string>(type: "character varying(25)", maxLength: 25, nullable: false)
                 },
