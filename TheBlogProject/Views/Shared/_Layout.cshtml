@@ -255,47 +255,77 @@
 
                         </div>
                         <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
-@*                            <form class="form-group" asp-controller="Home" asp-action="tagManagement">
-                                <div class="row">
-                                    <label class="control-label">Manage Tags</label>
-                                </div>
-                                <div class="row row-cols-1">
-                                    <div class="col">
-                                        <div class="row mb-3">
-                                            <div class="col">
-                                                <input type="text" class="form-control" id="TagEntry" />
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col">
-                                                <button onclick="AddTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Add">ADD</button>
-                                            </div>
-                                            <div class="col">
-                                                <button onclick="DeleteTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Delete">DELETE</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <select class="note-btn-block" name="TagValues" id="TagList" multiple></select>
-                                    </div>
-                                </div>
-                                <button type="submit">submit</button>
-                            </form>*@
+                            @*                            <form class="form-group" asp-controller="Home" asp-action="tagManagement">
+            <div class="row">
+                <label class="control-label">Manage Tags</label>
+            </div>
+            <div class="row row-cols-1">
+                <div class="col">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <input type="text" class="form-control" id="TagEntry" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button onclick="AddTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Add">ADD</button>
+                        </div>
+                        <div class="col">
+                            <button onclick="DeleteTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Delete">DELETE</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <select class="note-btn-block" name="TagValues" id="TagList" multiple></select>
+                </div>
+            </div>
+            <button type="submit">submit</button>
+        </form>*@
 
-@*
-                                @if (SignInManager.IsSignedIn(User))
+                            @*
+        @if (SignInManager.IsSignedIn(User))
+        {
+
+            foreach (var tagText in userTag)
+            {
+                foreach(var t in _context.Tags.Select(t => t.Text).ToList())
+                {
+                    if(t == tagText)
+                    {
+                        <div class="btn-group">
+                            <div class="flex-grow-1">
+                                <button class="btn btn-primary d-inline-flex tagViewBtn">
+                                    <a asp-controller="Post" asp-action="TagIndex" asp-route-tag="@t" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@t</a>
+                                </button>
+                            </div>
+                        </div>
+                        break;
+                    }
+                }
+            }
+        }*@
+
+
+
+
+
+
+
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                if (user.MyTags != null)
                                 {
 
-                                    foreach (var tagText in userTag)
+                                    foreach (var tag in user.MyTags)
                                     {
-                                        foreach(var t in _context.Tags.Select(t => t.Text).ToList())
+                                        foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
                                         {
-                                            if(t == tagText)
+                                            if (tag == tagText)
                                             {
                                                 <div class="btn-group">
                                                     <div class="flex-grow-1">
                                                         <button class="btn btn-primary d-inline-flex tagViewBtn">
-                                                            <a asp-controller="Post" asp-action="TagIndex" asp-route-tag="@t" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@t</a>
+                                                            <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -303,28 +333,8 @@
                                             }
                                         }
                                     }
-                                }*@
-
-
-
-
-
-
-
-                                @if (SignInManager.IsSignedIn(User))
-                                {
-                                    var userTag = user.Tags.Select(t => t.Text).ToList();
-                                    foreach (var tag in _context.Tags.Where(t => t.Text == userTag[index]).Select(t => t.Text))
-                                    {
-                                        <div class="btn-group">
-                                            <div class="flex-grow-1">
-                                                <button class="btn btn-primary d-inline-flex tagViewBtn">
-                                                    <a asp-controller="Home" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    }
                                 }
+                            }
                         </div>
                     </div>
 

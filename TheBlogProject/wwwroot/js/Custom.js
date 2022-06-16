@@ -1,4 +1,4 @@
-﻿let index = 0;
+﻿let index = 0
 
 function AddTag() {
     //get a reference to the TagEntry input element
@@ -25,15 +25,60 @@ function AddTag() {
 }
 
 function AddMyTag() {
+    let indexAdd = document.getElementById("TagList").length;
     let i = $("select[name='DatabaseTagValues'] option:selected").index()
     let selectedTag = document.getElementById("DatabaseTagValues").options[i].value;
-    let newOption = new Option(selectedTag, selectedTag);
-    document.getElementById("TagList").options[index++] = newOption;
+    document.getElementById("DatabaseTagValues").options[i] = null;
+
+    let array = [];
+
+    for (i = 0; i < indexAdd; i++) {
+        array[i] = document.getElementById("TagList").options[i].value;
+    }
+
+    array.unshift(selectedTag);
+
+    for (i = 0; i < array.length; i++) {
+        let str = array[i];
+        let newOption = new Option(str, str);
+        document.getElementById("TagList").options[i] = newOption;
+    }
+
 
     if (!tagList) return false;
 
     return true;
+
 }
+
+
+function AddMyTagBack() {
+    let indexAddBack = document.getElementById("DatabaseTagValues").length;
+    let i = $("select[name='TagValues'] option:selected").index()
+    let selectedTag = document.getElementById("TagList").options[i].value;
+    document.getElementById("TagList").options[i] = null;
+
+    let array = [];
+
+    for (i = 0; i < indexAddBack; i++) {
+        array[i] = document.getElementById("DatabaseTagValues").options[i].value;
+    }
+
+    array.unshift(selectedTag);
+
+    for (i = 0; i < array.length; i++) {
+        let str = array[i];
+        let newOption = new Option(str, str);
+        document.getElementById("DatabaseTagValues").options[i] = newOption;
+    }
+
+
+    if (!tagList) return false;
+
+    return true;
+
+}
+
 
 function DeleteTag() {
 

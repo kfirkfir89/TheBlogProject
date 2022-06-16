@@ -119,11 +119,33 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> UserTags()
         {
+            var user = await _userManager.GetUserAsync(User);
+            List<string> tags = new List<string>();
+            tags = _context.Tags.Select(t => t.Text).ToList();
 
-            this.ViewData["DatabaseTagValues"] = _context.Tags.Select(x => new SelectListItem
+
+            foreach (var tag in user.MyTags)
             {
-                Text = x.Text.ToString()
+                foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
+                {
+                    if (tag == tagText)
+                    {
+                        tags.Remove(tagText);
+                    }
+                }
+            }
+
+            this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+            {
+                Text = x.ToString()
             }).ToList();
+
+/*            this.ViewData["TagValues"] = user.MyTags.Select(x => new SelectListItem
+            {
+                Text = x.ToString()
+            }).ToList();*/
+
+            ViewData["TagValues"] = string.Join(",", user.MyTags);
 
             return View();
         }
@@ -131,7 +153,7 @@ namespace TheBlogProject.Controllers
         [HttpPost]
         public async Task<IActionResult> UserTags([Bind("Id ,BlogUserId, Text")] Tag tag ,List<string> tagValues)
         {
-            var user = await _userManager.GetUserAsync(User);
+/*            var user = await _userManager.GetUserAsync(User);
             var index = 1;
 
             //how do i loop over the incoming list of string?
@@ -143,9 +165,15 @@ namespace TheBlogProject.Controllers
                 user.Tags.Add(tag);
                 index++;
             }
+*/
+
+            var user = await _userManager.GetUserAsync(User);
+            string[] array = tagValues.ToArray();
+            user.MyTags = array;
             await _context.SaveChangesAsync();
 
-            return View();
+
+            return RedirectToAction(nameof(UserTags));
         }
 
         /*        [HttpPost]
