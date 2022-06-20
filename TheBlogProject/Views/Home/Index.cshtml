@@ -170,7 +170,10 @@
 
 
 
+@{ 
+    var postId = Model.FirstOrDefault().Id; 
 
+ }
  @section Scripts {
 
      <script>
@@ -182,7 +185,7 @@
                 $.ajax({
                     type: "GET",
                     url: "@Url.Action("Like")",
-                    data: {id: 5},
+                    data: {id: @postId },
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
