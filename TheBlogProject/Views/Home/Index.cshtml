@@ -1,6 +1,7 @@
 ﻿@using TheBlogProject.Models
 @using TheBlogProject.Services
 @using TheBlogProject.Enums
+@using TheBlogProject.Data
 @using Microsoft.AspNetCore.Identity;
 @using X.PagedList
 @using X.PagedList.Mvc.Core
@@ -10,10 +11,11 @@
 
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
+@inject ApplicationDbContext _context
 
 @model IEnumerable<TheBlogProject.Models.Post>
 
-
+<input id="btnGet" type="button" value="Upload" class="btn btn-primary" />
 <div class="row row-cols-1">
 
     @{ var counter = 0; }
@@ -110,16 +112,31 @@
                 <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom">
                     <div>like useful view comments</div>
                     <div class="btn-group d-flex flex-nowrap">
-                        <button class="btn btn-primary postButtonRight">
-                            <a class="justify-content-center" asp-controller="Home" asp-action="Index" title="Manage">
-                                <img class="" style="width:100%; height:20px;" src="/assets/img/postIcons/unlike.svg" />
-                            </a>
-                        </button>
-                        <button class="btn btn-primary postButtonleft">
-                            <a class="justify-content-center" asp-controller="Home" asp-action="About" title="Manage">
-                                <img class="" style="width:100%; height:20px;" src="/assets/img/postIcons/UnUsefulCode.svg" />
-                            </a>
-                        </button>
+
+                        @if (post.Likes != null)
+                        {
+                            foreach (var id in post.Likes)
+                            {
+                                @if (id == blogUser.Id)
+                                {
+                                    <button class="btn btn-primary postButtonRight">
+                                        <a class="justify-content-center" href='@Url.Action("Like", "Home")' title="Manage">
+                                            <i class="fa-solid fa-thumbs-up fa-xl"></i>
+                                        </a>
+                                    </button>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary postButtonRight" id="LikeButton">
+                                <a class="justify-content-center" title="Manage">
+                                    <i class="fa-regular fa-thumbs-up fa-xl"></i>
+                                </a>
+                            </button>
+                        }
+
+
                     </div>
                 </div>
             </div>
@@ -150,3 +167,46 @@
         </div>
     </div>
 *@
+
+
+
+
+ @section Scripts {
+
+     <script>
+
+         $(document).ready(function () {
+
+             $("#btnGet").click(function () {
+
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("Like")",
+                    data: {id: 5},
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+             });
+
+
+@*            $.ajax({
+                type: "POST",
+                url: "@Url.Action("PostNames")",
+                dataType: "json",
+                data: {name: "bobik"},
+                success: function (result) {
+                    console.log(result);
+                },
+                error: function (req, status, error) {
+                    console.log(status)
+                }
+            });*@
+         })
+
+     </script>
+ }

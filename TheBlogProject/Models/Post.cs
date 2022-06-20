@@ -39,6 +39,10 @@ namespace TheBlogProject.Models
         public byte[]? ImageData { get; set; }
         public string? ContentType { get; set; }
 
+        public List<string>? Likes { get; set; }
+
+        public List<string>? UsefulCodes { get; set; }
+
         [NotMapped]
         public  IFormFile? Image { get; set; }
 

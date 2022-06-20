@@ -43,20 +43,20 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-/*            var pageNumber = page ?? 1;
-            var pageSize = 5;
+            /*            var pageNumber = page ?? 1;
+                        var pageSize = 5;
 
-            var blogs = _context.Blogs.Where(
-                b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
-                .OrderByDescending(b => b.Created)
-                .ToPagedListAsync(pageNumber, pageSize);
+                        var blogs = _context.Blogs.Where(
+                            b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
+                            .OrderByDescending(b => b.Created)
+                            .ToPagedListAsync(pageNumber, pageSize);
 
-            var blogs = _context.Blogs
-                .Include(b => b.BlogUser)
-                .OrderByDescending(b => b.Created)
-                .ToPagedListAsync(pageNumber, pageSize);
+                        var blogs = _context.Blogs
+                            .Include(b => b.BlogUser)
+                            .OrderByDescending(b => b.Created)
+                            .ToPagedListAsync(pageNumber, pageSize);
 
-            return View(await blogs);*/
+                        return View(await blogs);*/
 
             var posts = await _context.Posts
                 .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
@@ -104,16 +104,34 @@ namespace TheBlogProject.Controllers
         {
 
 
-/*            this.ViewData["TagValues"] = _context.Tags.Select(x => new SelectListItem
-            {
-                Text = x.Text.ToString()
-            }).ToList();
-*/
+            /*            this.ViewData["TagValues"] = _context.Tags.Select(x => new SelectListItem
+                        {
+                            Text = x.Text.ToString()
+                        }).ToList();
+            */
 
             ViewData["TagValues"] = string.Join(",", _context.Tags.Select(t => t.Text));
 
 
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> TagManagement(List<string> tagValues)
+        {
+
+            _context.Tags.RemoveRange(_context.Tags);
+
+            foreach (var tag in tagValues)
+            {
+                _context.Add(new Tag()
+                {
+                    Text = tag
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(TagManagement));
         }
 
 
@@ -146,21 +164,8 @@ namespace TheBlogProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserTags([Bind("Id ,BlogUserId, Text")] Tag tag ,List<string> tagValues)
+        public async Task<IActionResult> UserTags([Bind("Id ,BlogUserId, Text")] Tag tag, List<string> tagValues)
         {
-/*            var user = await _userManager.GetUserAsync(User);
-            var index = 1;
-
-            //how do i loop over the incoming list of string?
-            foreach (var t in tagValues)
-            {
-                tag.Text = t.ToString();
-                tag.BlogUserId = user.Id;
-                tag.Id = index;
-                user.Tags.Add(tag);
-                index++;
-            }
-*/
 
             var user = await _userManager.GetUserAsync(User);
             string[] array = tagValues.ToArray();
@@ -171,10 +176,26 @@ namespace TheBlogProject.Controllers
             return RedirectToAction(nameof(UserTags));
         }
 
-        /*        [HttpPost]
-                public async Task<IActionResult> TagManagement(List<string> TagValues)
-                {
-                    return View();
-                }*/
+        [HttpGet]
+        public JsonResult Like(int? id)
+        {
+            var post = _context.Posts.Find(id);
+            List<string> likes = new List<string>();
+
+            likes.Add("kfir");
+            likes.Add("bobik");
+            likes.Add("noam");
+
+            _context.SaveChangesAsync();
+
+            return Json(likes);
+        }
+
+        [HttpPost]
+        public JsonResult AddLike(List<string> str)
+        {
+            return new JsonResult(Ok());
+        }
+
     }
 }
