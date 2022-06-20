@@ -15,7 +15,7 @@
 
 @model IEnumerable<TheBlogProject.Models.Post>
 
-<input id="btnGet" type="button" value="Upload" class="btn btn-primary" />
+
 <div class="row row-cols-1">
 
     @{ var counter = 0; }
@@ -131,7 +131,7 @@
                         {
                             <button class="btn btn-primary postButtonRight" id="LikeButton">
                                 <a class="justify-content-center" title="Manage">
-                                    <i class="fa-regular fa-thumbs-up fa-xl"></i>
+                                    <i id="likeBtn" class="fa-regular fa-thumbs-up fa-xl likeBtn"></i>
                                 </a>
                             </button>
                         }
@@ -171,16 +171,15 @@
 
 
 @{ 
-    var postId = Model.FirstOrDefault().Id; 
-
+    var postId = Model.FirstOrDefault().Id;
+    
  }
  @section Scripts {
 
      <script>
-
          $(document).ready(function () {
 
-             $("#btnGet").click(function () {
+             $("#likeBtn").click(function () {
 
                 $.ajax({
                     type: "GET",
@@ -189,6 +188,14 @@
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
+                        var btn = document.getElementById("likeBtn");
+                        if (btn.classList.contains("fa-regular")) {
+                            btn.classList.remove("fa-regular");
+                            btn.classList.add("fa-solid");
+                        } else if (btn.classList.contains("fa-solid")) {
+                            btn.classList.remove("fa-solid");
+                            btn.classList.add("fa-regular");
+                        }
                     },
                     error: function (req, status, error) {
                         console.log(status)
