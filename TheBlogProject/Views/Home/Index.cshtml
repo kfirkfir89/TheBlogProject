@@ -68,7 +68,7 @@
 
                     @*-------------   Title   ------------*@
                     <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                        <div class="card-title ps-3 h1">@post.Title</div>
+                        <div id="postTitle" class="card-title ps-3 h1">@post.Title</div>
                         <p class="card-text ps-3 m-0">@post.Abstract</p>
                     </a>
 
@@ -122,8 +122,16 @@
                                 @if (id == blogUser.Id)
                                 {
                                     <button class="btn btn-primary postButtonRight">
-                                        <a class="justify-content-center" href='@Url.Action("Like", "Home")' title="Manage">
-                                            <i class="fa-solid fa-thumbs-up fa-xl"></i>
+                                        <a class="justify-content-center" title="Manage">
+                                            <i id="@($"likeBtn{counter}")" class="likeBtn fa-solid fa-thumbs-up fa-xl"></i>
+                                        </a>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary postButtonRight">
+                                        <a class="justify-content-center" title="Manage">
+                                            <i id="@($"likeBtn{counter}")" class="likeBtn fa-regular fa-thumbs-up fa-xl"></i>
                                         </a>
                                     </button>
                                 }
@@ -179,13 +187,14 @@
          $(document).ready(function () {
 
              $(".likeBtn").click(function () {
+                 let title = document.getElementById("postTitle").textContent;
                  let modalId = this.id;
-                 console.log(@counter);
+                 console.log(title);
                  $.ajax({
 
                     type: "GET",
                     url: "@Url.Action("Like")",
-                     data: { id: @counter},
+                     data: { title: title},
                     dataType: "json",
                     success: function (result) {
                         console.log(result);

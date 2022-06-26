@@ -18,13 +18,15 @@ namespace TheBlogProject.Controllers
         private readonly IBlogEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly ISlugService _slugService;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService)
         {
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
             _userManager = userManager;
+            _slugService = slugService;
         }
 
 
@@ -177,18 +179,34 @@ namespace TheBlogProject.Controllers
         }
 
         [HttpGet]
-        public JsonResult Like(int? id)
+        public JsonResult Like(string? title)
         {
-            var post = _context.Posts.Find(id);
+            var slug = _slugService.UrlFriendly(title);
+            var post = _context.Posts.Where(x => x.Slug == slug).FirstOrDefault();
+            var user =  _userManager.GetUserAsync(User).Result;
             List<string> likes = new List<string>();
 
-            likes.Add("kfir");
-            likes.Add("bobik");
-            likes.Add("noam");
+            post.Likes.RemoveRange(0, post.Likes.Count);
+
+            likes.Add(user.Id);
+            post.Likes = likes;
+
+
+/*            foreach(var item in likes)
+            {
+                if(item != user.Id)
+                {
+                    likes.Add(user.Id);
+                }
+                else 
+                {
+                    likes.Remove(user.Id);
+                }
+            }*/
 
             _context.SaveChangesAsync();
 
-            return Json(likes);
+            return Json(post.Likes);
         }
 
         [HttpPost]
