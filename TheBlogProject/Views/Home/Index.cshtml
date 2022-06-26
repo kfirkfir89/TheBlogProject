@@ -18,7 +18,9 @@
 <input id="btnGet" type="button" value="Upload" class="btn btn-primary" />
 <div class="row row-cols-1">
 
-    @{ var counter = 0; }
+    @{ var counter = 0;
+
+     }
     @foreach (var post in Model)
     {
         //Is the logged in user the Author of this post??
@@ -129,9 +131,9 @@
                         }
                         else
                         {
-                            <button class="btn btn-primary postButtonRight" id="LikeButton">
+                            <button class="btn btn-primary postButtonRight">
                                 <a class="justify-content-center" title="Manage">
-                                    <i class="fa-regular fa-thumbs-up fa-xl"></i>
+                                    <i id="@($"likeBtn{counter}")" class="likeBtn fa-regular fa-thumbs-up fa-xl"></i>
                                 </a>
                             </button>
                         }
@@ -141,7 +143,6 @@
                 </div>
             </div>
         </div>
-
         counter++;
     }
 </div>
@@ -171,27 +172,40 @@
 
 
 
- @section Scripts {
+@section Scripts {
 
-     <script>
+    <script>
 
          $(document).ready(function () {
 
-             $("#btnGet").click(function () {
+             $(".likeBtn").click(function () {
+                 let modalId = this.id;
+                 console.log(@counter);
+                 $.ajax({
 
-                $.ajax({
                     type: "GET",
                     url: "@Url.Action("Like")",
-                    data: {id: 5},
+                     data: { id: @counter},
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
+                        var btn = document.getElementById(modalId);
+
+                        if (btn.classList.contains("fa-regular")) {
+                            btn.classList.remove("fa-regular");
+                            btn.classList.add("fa-solid");
+                        } else if (btn.classList.contains("fa-solid")) {
+                            btn.classList.remove("fa-solid");
+                            btn.classList.add("fa-regular");
+                        }
                     },
                     error: function (req, status, error) {
                         console.log(status)
                     }
                 });
              });
+
+
 
 
 @*            $.ajax({
@@ -208,5 +222,6 @@
             });*@
          })
 
-     </script>
- }
+    </script>
+}
+
