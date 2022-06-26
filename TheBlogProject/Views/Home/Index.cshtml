@@ -15,10 +15,12 @@
 
 @model IEnumerable<TheBlogProject.Models.Post>
 
-
+<input id="btnGet" type="button" value="Upload" class="btn btn-primary" />
 <div class="row row-cols-1">
 
-    @{ var counter = 0; }
+    @{ var counter = 0;
+
+     }
     @foreach (var post in Model)
     {
         //Is the logged in user the Author of this post??
@@ -129,9 +131,9 @@
                         }
                         else
                         {
-                            <button class="btn btn-primary postButtonRight" id="LikeButton">
+                            <button class="btn btn-primary postButtonRight">
                                 <a class="justify-content-center" title="Manage">
-                                    <i id="likeBtn" class="fa-regular fa-thumbs-up fa-xl likeBtn"></i>
+                                    <i id="@($"likeBtn{counter}")" class="likeBtn fa-regular fa-thumbs-up fa-xl"></i>
                                 </a>
                             </button>
                         }
@@ -141,7 +143,6 @@
                 </div>
             </div>
         </div>
-
         counter++;
     }
 </div>
@@ -170,25 +171,26 @@
 
 
 
-@{ 
-    var postId = Model.FirstOrDefault().Id;
-    
- }
- @section Scripts {
 
-     <script>
+@section Scripts {
+
+    <script>
+
          $(document).ready(function () {
 
-             $("#likeBtn").click(function () {
+             $(".likeBtn").click(function () {
+                 let modalId = this.id;
+                 console.log(@counter);
+                 $.ajax({
 
-                $.ajax({
                     type: "GET",
                     url: "@Url.Action("Like")",
-                    data: {id: @postId },
+                     data: { id: @counter},
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
-                        var btn = document.getElementById("likeBtn");
+                        var btn = document.getElementById(modalId);
+
                         if (btn.classList.contains("fa-regular")) {
                             btn.classList.remove("fa-regular");
                             btn.classList.add("fa-solid");
@@ -202,6 +204,8 @@
                     }
                 });
              });
+
+
 
 
 @*            $.ajax({
@@ -218,5 +222,6 @@
             });*@
          })
 
-     </script>
- }
+    </script>
+}
+
