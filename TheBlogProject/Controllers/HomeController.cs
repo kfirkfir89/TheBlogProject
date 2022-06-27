@@ -18,13 +18,15 @@ namespace TheBlogProject.Controllers
         private readonly IBlogEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
+        private readonly ISlugService _slugService;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService)
         {
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
             _userManager = userManager;
+            _slugService = slugService;
         }
 
 
@@ -177,18 +179,53 @@ namespace TheBlogProject.Controllers
         }
 
         [HttpGet]
-        public JsonResult Like(int? id)
+        public JsonResult Like(string? slug)
         {
-            var post = _context.Posts.Find(id);
+
+            var post = _context.Posts.Where(x => x.Slug == slug).FirstOrDefault();
+            var user =  _userManager.GetUserAsync(User).Result;
+
+            /*            post.Likes.RemoveRange(0, post.Likes.Count);*/
+
             List<string> likes = new List<string>();
 
-            likes.Add("kfir");
-            likes.Add("bobik");
-            likes.Add("noam");
+            if (post.Likes == null)
+            {
+                likes.Add(user.Id);
+                post.Likes = likes;
+            }
+            else if (post.Likes.Contains(user.Id))
+            {
+                post.Likes.Remove(user.Id);
+                if(post.Likes.Count <= 0)
+                {
+                    post.Likes = null;
+                }
+            }
+            else
+            {
+                post.Likes.Add(user.Id);
+/*                likes = post.Likes;
+                likes.Add(user.Id);
+                post.Likes = likes;*/
+            }
 
-            _context.SaveChangesAsync();
 
-            return Json(likes);
+/*            foreach (var item in post.Likes)
+            {
+                if (item != user.Id)
+                {
+                    likes.Add(user.Id);
+                }
+                else
+                {
+                    likes.Remove(user.Id);
+                }
+            }*/
+
+            _context.SaveChanges();
+
+            return Json(post.Likes);
         }
 
         [HttpPost]
