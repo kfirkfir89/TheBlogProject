@@ -179,32 +179,51 @@ namespace TheBlogProject.Controllers
         }
 
         [HttpGet]
-        public JsonResult Like(string? title)
+        public JsonResult Like(string? slug)
         {
-            var slug = _slugService.UrlFriendly(title);
+
             var post = _context.Posts.Where(x => x.Slug == slug).FirstOrDefault();
             var user =  _userManager.GetUserAsync(User).Result;
+
+            /*            post.Likes.RemoveRange(0, post.Likes.Count);*/
+
             List<string> likes = new List<string>();
 
-            post.Likes.RemoveRange(0, post.Likes.Count);
-
-            likes.Add(user.Id);
-            post.Likes = likes;
-
-
-/*            foreach(var item in likes)
+            if (post.Likes == null)
             {
-                if(item != user.Id)
+                likes.Add(user.Id);
+                post.Likes = likes;
+            }
+            else if (post.Likes.Contains(user.Id))
+            {
+                post.Likes.Remove(user.Id);
+                if(post.Likes.Count <= 0)
+                {
+                    post.Likes = null;
+                }
+            }
+            else
+            {
+                post.Likes.Add(user.Id);
+/*                likes = post.Likes;
+                likes.Add(user.Id);
+                post.Likes = likes;*/
+            }
+
+
+/*            foreach (var item in post.Likes)
+            {
+                if (item != user.Id)
                 {
                     likes.Add(user.Id);
                 }
-                else 
+                else
                 {
                     likes.Remove(user.Id);
                 }
             }*/
 
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
 
             return Json(post.Likes);
         }
