@@ -43,7 +43,7 @@
                     }
 
                     <div class="d-flex d-inline-block px-2 pt-1">
-                        @if (User.Identity.IsAuthenticated) 
+                        @if (User.Identity.IsAuthenticated)
                         {
                         }
                         <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
@@ -135,16 +135,17 @@
                                 if (contain is true)
                                 {
                                     <button class="btn btn-primary postButtonRight">
-                                        <a class="justify-content-center" title="Like">
-                                            <i id="@($"likeBtn{counter}")" class="likeBtn fa-solid fa-thumbs-up fa-xl" data-slug="@post.Slug"></i>
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn d-flex flex-nowrap justify-content-center" title="Like" data-slug="@post.Slug">
+                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center"></i>
                                         </a>
                                     </button>
+
                                 }
                                 else
                                 {
                                     <button class="btn btn-primary postButtonRight">
-                                        <a class="justify-content-center" title="Like">
-                                            <i id="@($"likeBtn{counter}")" class="likeBtn fa-regular fa-thumbs-up fa-xl" data-slug="@post.Slug"></i>
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn d-flex flex-nowrap justify-content-center" title="Like" data-slug="@post.Slug">
+                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center"></i>
                                         </a>
                                     </button>
                                 }
@@ -152,19 +153,74 @@
                             else
                             {
                                 <button class="btn btn-primary postButtonRight">
-                                    <a class="justify-content-center" title="Like">
-                                        <i id="@($"likeBtn{counter}")" class="likeBtn fa-regular fa-thumbs-up fa-xl" data-slug="@post.Slug"></i>
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn d-flex flex-nowrap justify-content-center" title="Like" data-slug="@post.Slug">
+                                        <i class="fa-regular fa-thumbs-up fa-xl align-self-center"></i>
                                     </a>
                                 </button>
                             }
+
+                            if (post.UsefulCodes != null)
+                            {
+                                bool contain = false;
+                                foreach (var item in post.UsefulCodes)
+                                {
+                                    if (item == user.Id)
+                                    {
+                                        contain = true;
+                                    }
+                                }
+                                if (contain is true)
+                                {
+                                    <button class="btn btn-primary postButtonMiddle">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn d-flex flex-nowrap justify-content-center" title="Useful Code" data-slug="@post.Slug">
+                                            <i class="fa-solid fa-file-code fa-xl align-self-center"></i>
+                                        </a>
+                                    </button>
+
+                                }
+                                else
+                                {
+                                    <button class="btn btn-primary postButtonMiddle">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn d-flex flex-nowrap justify-content-center" title="Useful Code" data-slug="@post.Slug">
+                                            <i class="fa-regular fa-file-code fa-xl align-self-center"></i>
+                                        </a>
+                                    </button>
+                                }
+                            }
+                            else
+                            {
+                                <button class="btn btn-primary postButtonMiddle">
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn d-flex flex-nowrap justify-content-center" title="Useful Code" data-slug="@post.Slug">
+                                        <i class="fa-regular fa-file-code fa-xl align-self-center"></i>
+                                    </a>
+                                </button>
+                            }
+
+                            <button class="btn btn-primary postButtonLeft">
+                                <a class="d-flex flex-nowrap justify-content-center" title="Like" asp-controller="Posts" asp-action="Details" asp-fragment="commentSection" asp-route-slug="@post.Slug">
+                                    <i class="fa-regular fa-comments fa-xl align-self-center"></i>
+                                </a>
+                            </button>
 
                         }
                         else
                         {
 
-                            <button class="btn btn-primary postButtonRight">
-                                <a class="justify-content-center" title="Like" asp-area="Identity" asp-page="/Account/Login">
-                                    <i class="fa-regular fa-thumbs-up fa-xl"></i>
+                            <button class="btn btn-primary postButtonRight" title="Like">
+                                <a class="d-flex flex-nowrap justify-content-center" asp-area="Identity" asp-page="/Account/Login">
+                                    <i class="fa-regular fa-thumbs-up fa-xl align-self-center"></i>
+                                </a>
+                            </button>
+
+                            <button class="btn btn-primary postButtonMiddle" title="Useful Code">
+                                <a class="d-flex flex-nowrap justify-content-center" asp-area="Identity" asp-page="/Account/Login">
+                                    <i class="fa-regular fa-file-code fa-xl align-self-center"></i>
+                                </a>
+                            </button>
+
+                            <button class="btn btn-primary postButtonLeft" title="Comments">
+                                <a class="d-flex flex-nowrap justify-content-center" asp-area="Identity" asp-page="/Account/Login">
+                                    <i class="fa-regular fa-comments fa-xl align-self-center"></i>
                                 </a>
                             </button>
 
@@ -220,24 +276,62 @@
                  let modalId = $(this).attr('id');
 
                  console.log($el.data('slug'));
+                 console.log("ziki zuki `` ose string"+`@counter`);
+                 $.ajax({
 
+                    type: "POST",
+                    url: "@Url.Action("Like")",
+                     data: { slug: slug },
+                    dataType: "json",
+                     success: function (result) {
+                         console.log(result);
+
+                         var modalAnchor = document.getElementById(modalId);
+                         var icon = modalAnchor.firstElementChild;
+
+                         if (icon.classList.contains("fa-regular")) {
+                             icon.classList.remove("fa-regular");
+                             icon.classList.add("fa-solid");
+                         } else if (icon.classList.contains("fa-solid")) {
+                             icon.classList.remove("fa-solid");
+                             icon.classList.add("fa-regular");
+                         }
+                     },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+             });
+
+             $(".usefulBtn").click(function () {
+@*                 var postTitle = $(".postTitle").on(function () {
+
+                     this.id;
+                 });*@
+                 var $el = $(this);
+                 var slug = $el.data('slug');
+                 let modalId = $(this).attr('id');
+
+                 console.log($el.data('slug'));
+                 console.log("ziki zuki `` ose string"+`@counter`);
 
                  $.ajax({
 
-                    type: "GET",
-                    url: "@Url.Action("Like")",
+                    type: "POST",
+                    url: "@Url.Action("UsefulCode")",
                      data: { slug: slug },
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
-                        var btn = document.getElementById(modalId);
+                        var modalAnchor = document.getElementById(modalId);
+                        var icon = modalAnchor.firstElementChild;
 
-                        if (btn.classList.contains("fa-regular")) {
-                            btn.classList.remove("fa-regular");
-                            btn.classList.add("fa-solid");
-                        } else if (btn.classList.contains("fa-solid")) {
-                            btn.classList.remove("fa-solid");
-                            btn.classList.add("fa-regular");
+                        if (icon.classList.contains("fa-regular")) {
+                            icon.classList.remove("fa-regular");
+                            icon.classList.add("fa-solid");
+                        } else if (icon.classList.contains("fa-solid")) {
+                            icon.classList.remove("fa-solid");
+                            icon.classList.add("fa-regular");
                         }
                     },
                     error: function (req, status, error) {
@@ -247,20 +341,6 @@
              });
 
 
-
-
-@*            $.ajax({
-                type: "POST",
-                url: "@Url.Action("PostNames")",
-                dataType: "json",
-                data: {name: "bobik"},
-                success: function (result) {
-                    console.log(result);
-                },
-                error: function (req, status, error) {
-                    console.log(status)
-                }
-            });*@
          })
 
     </script>
