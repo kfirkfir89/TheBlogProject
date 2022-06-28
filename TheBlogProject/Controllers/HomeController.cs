@@ -178,14 +178,12 @@ namespace TheBlogProject.Controllers
             return RedirectToAction(nameof(UserTags));
         }
 
-        [HttpGet]
+        [HttpPost]
         public JsonResult Like(string? slug)
         {
 
             var post = _context.Posts.Where(x => x.Slug == slug).FirstOrDefault();
             var user =  _userManager.GetUserAsync(User).Result;
-
-            /*            post.Likes.RemoveRange(0, post.Likes.Count);*/
 
             List<string> likes = new List<string>();
 
@@ -205,23 +203,8 @@ namespace TheBlogProject.Controllers
             else
             {
                 post.Likes.Add(user.Id);
-/*                likes = post.Likes;
-                likes.Add(user.Id);
-                post.Likes = likes;*/
+
             }
-
-
-/*            foreach (var item in post.Likes)
-            {
-                if (item != user.Id)
-                {
-                    likes.Add(user.Id);
-                }
-                else
-                {
-                    likes.Remove(user.Id);
-                }
-            }*/
 
             _context.SaveChanges();
 
@@ -229,10 +212,38 @@ namespace TheBlogProject.Controllers
         }
 
         [HttpPost]
-        public JsonResult AddLike(List<string> str)
+        public JsonResult UsefulCode(string? slug)
         {
-            return new JsonResult(Ok());
+
+            var post = _context.Posts.Where(x => x.Slug == slug).FirstOrDefault();
+            var user = _userManager.GetUserAsync(User).Result;
+
+            List<string> usefulCodes = new List<string>();
+
+            if (post.UsefulCodes == null)
+            {
+                usefulCodes.Add(user.Id);
+                post.UsefulCodes = usefulCodes;
+            }
+            else if (post.UsefulCodes.Contains(user.Id))
+            {
+                post.UsefulCodes.Remove(user.Id);
+                if (post.UsefulCodes.Count <= 0)
+                {
+                    post.UsefulCodes = null;
+                }
+            }
+            else
+            {
+                post.UsefulCodes.Add(user.Id);
+
+            }
+
+            _context.SaveChanges();
+
+            return Json(post.UsefulCodes);
         }
+
 
     }
 }

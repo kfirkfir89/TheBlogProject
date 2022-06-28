@@ -420,16 +420,25 @@ iframe, object, embed {
         border-radius: 0px 0px 0px 5px;
     }
 
-.postButtonleft {
+.postButtonLeft {
     background-color: white;
     border-radius: 0px 0px 5px 0px;
 }
 
-    .postButtonleft:hover {
+    .postButtonLeft:hover {
         background-color: var(--hoverLightBlue-color);
         border-radius: 0px 0px 5px 0px;
     }
 
+.postButtonMiddle {
+    background-color: white;
+    border-radius: 0px 0px 0px 0px;
+}
+
+    .postButtonMiddle:hover {
+        background-color: var(--hoverLightBlue-color);
+        border-radius: 0px 0px 0px 0px;
+    }
 
 .smallFont {
     font-size: 0.9rem;
@@ -445,4 +454,9 @@ iframe, object, embed {
     background-clip: text;
     -webkit-background-clip: text;
     background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+}
+
+
+button > a {
+    height:inherit;
 }
