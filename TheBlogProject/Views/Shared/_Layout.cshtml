@@ -56,7 +56,7 @@
     <!-- Page Header-->
     <header>
         <!-- NAV-->
-        <nav class="navbar navbar-expand-md navbar-light bg-white mb-3 navStyle shadow-sm">
+        <nav class="navbar navbar-expand-md mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="container-xxl row p-0 m-0">
                     <div class="col-md-4 d-flex d-inline-block pt-md-0">
@@ -344,17 +344,17 @@
                 <div class="col-md-9 col-lg-7 d-flex flex-column h-100">
                     <div class="row btn-group d-flex flex-nowrap">
                         <button class="btn btn-primary leftButtonMenu" id="leftButtonMenu">
-                            <a class="d-flex flex-nowrap container-fluid justify-content-center" asp-controller="Home" asp-action="Index" title="Relevant">
+                            <a class="d-flex flex-nowrap container-fluid justify-content-center leftButtonMenu" asp-controller="Home" asp-action="Index" title="Relevant">
                                 <h6 class="pt-2">RELEVANT</h6>
                             </a>
                         </button>
                         <button class="btn btn-primary middleButtonMenu" id="middleButtonMenu">
-                            <a class="d-flex flex-nowrap justify-content-center ps-1 container-fluid" asp-controller="Home" asp-action="Index" title="Home Page">
-                                <i class="fa-solid fa-house-user fa-xl align-self-center" style="color: var(--blueDark-color);"></i>
+                            <a class="d-flex flex-nowrap justify-content-center ps-1 container-fluid middleButtonMenu" asp-controller="Home" asp-action="Index" title="Home Page">
+                                <i class="fa-solid fa-house-user fa-xl align-self-center" style="color: var(--hoverLightBlue-color); "></i>
                             </a>
                         </button>
                         <button class="btn btn-primary rightButtonMenu" id="rightButtonMenu">
-                            <a class="d-flex flex-nowrapcontainer-fluid justify-content-center" asp-controller="Home" asp-action="About" title="Top View">
+                            <a class="d-flex flex-nowrapcontainer-fluid justify-content-center rightButtonMenu" asp-controller="Home" asp-action="About" title="Top View">
                                 <h6 class="pt-2">TOP VIEW</h6>
                             </a>
                         </button>
@@ -375,16 +375,9 @@
                                 @foreach (var tag in _context.Tags.Select(t => t.Text))
                                 {
                                     <div class="btn-group">
-                                        <div class="flex-grow-1">
-                                            <button class="btn btn-primary d-inline-flex tagViewBtn">
-                                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="container-fluid d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
-                                            </button>
-                                        </div>
-                                        <div class="justify-content-end">
-                                            <button class="btn btn-primary d-inline-flex flex-nowrap tagViewBtn justify-content-center" style="width:20px;">
-                                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class="">+</a>
-                                            </button>
-                                        </div>
+                                        <button class="btn btn-primary d-inline-flex tagViewBtn ps-3">
+                                            <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag" class=" d-flex flex-nowrap tagViewA" style="width:100%;">#@tag</a>
+                                        </button>
                                     </div>
                                 }
                             </div>

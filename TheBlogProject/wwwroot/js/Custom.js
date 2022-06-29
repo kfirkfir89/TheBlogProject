@@ -158,4 +158,3 @@ const swalWithDarkButton = Swal.mixin({
     buttonsStyling: false
 });
 
-
