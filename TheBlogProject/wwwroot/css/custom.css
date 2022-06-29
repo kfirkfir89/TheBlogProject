@@ -1,8 +1,8 @@
 ﻿:root {
-    --blueDark-color: #4d77ab;
-    --backgroundGray-color: #F9F7F5;
-    --hoverLightBlue-color: #A4E2ED;
-    --customOrange-color: #BAA798;
+    --blueDark-color: #2F3337;
+    --backgroundGray-color: #EAEAEC;
+    --hoverLightBlue-color: #205CE9;
+    --customBlack-color: #2F3337;
 }
 
 
@@ -12,18 +12,20 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     background-color: var(--backgroundGray-color);
+    color:var(--customBlack-color);
 }
 
 .nav {
     display: inline-block;
 }
 
+
 #navbarResponsive > ul:nth-child(2) > li:nth-child(2) > form > button {
     line-height: 1.5;
     font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     list-style: none;
     box-sizing: border-box;
-    background-color: transparent;
+    background-color: var(--blueDark-color);
     transition: all .2s;
     display: block;
     text-decoration: none;
@@ -206,11 +208,11 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
     padding: 0px;
     margin: 0px;
     box-shadow: none;
-    border: 1px solid rgb(128, 128, 128, 0.3);
+    border: 1px solid var(--backgroundGray-color);
 }
 
     #floatingInputSearch:hover {
-        border: 2px solid rgb(128, 128, 128, 0.3);
+        border: 2px solid var(--hoverLightBlue-color);
     }
 
 
@@ -239,6 +241,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
         border-radius: 5px 5px;
         background-color: var(--hoverLightBlue-color);
     }
+
 
 .btn-outline-primary {
     border: none;
@@ -273,7 +276,9 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
     .rightButtonMenu:hover {
         border-radius: 0px 5px 0px 0px;
-        border-bottom: 2px solid var(--blueDark-color);
+        border-bottom: 2px solid var(--hoverLightBlue-color);
+        background-color: white;
+        color: var(--hoverLightBlue-color);
     }
 
 .leftButtonMenu {
@@ -283,7 +288,9 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
     .leftButtonMenu:hover {
         border-radius: 5px 0px 0px 0px;
-        border-bottom: 2px solid var(--blueDark-color);
+        border-bottom: 2px solid var(--hoverLightBlue-color);
+        background-color: white;
+        color: var(--hoverLightBlue-color);
     }
 
 .middleButtonMenu {
@@ -293,18 +300,16 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
     .middleButtonMenu:hover {
         border-radius: 0px 0px 0px 0px;
-        border-bottom: 2px solid var(--blueDark-color);
+        border-bottom: 2px solid var(--hoverLightBlue-color);
+        background-color: white;
+        color: var(--hoverLightBlue-color);
     }
 
-.myClass {
-    background-color: red;
-}
-
-
+/*
 div > button > a h6 {
-    color: var(--blueDark-color);
+    color: var(--customBlack-color);
 }
-
+*/
 /*-----------------tags---------------*/
 .tagViewA {
     font-size: 1rem;
@@ -313,14 +318,18 @@ div > button > a h6 {
     color: var(--blueDark-color);
 }
 
-.tagViewB {
-    letter-spacing: normal;
-    font-size: 1rem;
-    font-weight: 400;
-    color: var(--blueDark-color);
-    padding: 3px;
-    font-family: Segoe UI;
-}
+    .tagViewA:hover {
+        color: white;
+    }
+
+    .tagViewB {
+        letter-spacing: normal;
+        font-size: 1rem;
+        font-weight: 400;
+        color: var(--blueDark-color);
+        padding: 3px;
+        font-family: Segoe UI;
+    }
 
     .tagViewB:hover {
         color: white;
@@ -340,10 +349,14 @@ div > button > a h6 {
 /*-----------------logout buttons---------------*/
 .logoutButton {
     border-radius: 3px 3px 3px 3px;
-    height: 35px;
-    color: var(--blueDark-color);
+    color: white;
     font-weight: 600;
+    border:3px solid white;
+    background-color:var(--customBlack-color);
 }
+    .logoutButton:hover {
+        border: 3px solid white;
+    }
 
 
 @media screen and (max-width:1200px) {
@@ -459,4 +472,34 @@ iframe, object, embed {
 
 button > a {
     height:inherit;
+}
+
+.bg-example {
+    background-color: var(--customBlack-color);
+    
+}
+
+.likeBtn {
+    color: #069DEF;
+}
+
+.usefulBtn {
+    color: #8A1EAE;
+}
+
+
+
+.postLUCBtn, .postLUCBtn:active, .postLUCBtn:after, .postLUCBtn:before, .postLUCBtn:focus, .postLUCBtn:target, .postLUCBtn:visited {
+    background-color: white;
+
+}
+    .postLUCBtn:hover {
+        background-color: var(--backgroundGray-color);
+    }
+
+.aTextStyle {
+    letter-spacing: normal;
+    font-weight: 600;
+    padding: 3px;
+    font-style: normal;
 }

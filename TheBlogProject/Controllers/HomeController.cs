@@ -144,25 +144,39 @@ namespace TheBlogProject.Controllers
             tags = _context.Tags.Select(t => t.Text).ToList();
 
 
-            foreach (var tag in user.MyTags)
+            if (user.MyTags != null && user.MyTags.Length > 0)
             {
-                foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
+                foreach (var tag in user.MyTags)
                 {
-                    if (tag == tagText)
+                    foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
                     {
-                        tags.Remove(tagText);
+                        if (tag == tagText)
+                        {
+                            tags.Remove(tagText);
+                        }
                     }
                 }
+
+                this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+                {
+                    Text = x.ToString()
+                }).ToList();
+
+                ViewData["TagValues"] = string.Join(",", user.MyTags);
+
+                return View();
             }
 
-            this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+            else
             {
-                Text = x.ToString()
-            }).ToList();
+                this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+                {
+                    Text = x.ToString()
+                }).ToList();
 
-            ViewData["TagValues"] = string.Join(",", user.MyTags);
+                return View();
+            }
 
-            return View();
         }
 
         [HttpPost]

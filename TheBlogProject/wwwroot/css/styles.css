@@ -12,10 +12,10 @@
  */
 :root {
     /*my colors*/
-    --blueDark-color: #026e81;
-    --backgroundGray-color: #e1e1e1;
-    --hoverLightBlue-color: #a1c7e0;
-    --customOrange-color: #ff993b;
+    --blueDark-color: #0F3795;
+    --backgroundGray-color: #EAEAEC;
+    --hoverLightBlue-color: #A4E2ED;
+    --customBlack-color: #1C1F21;
 
     --bs-blue: #0d6efd;
     --bs-indigo: #6610f2;
