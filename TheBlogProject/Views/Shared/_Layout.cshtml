@@ -202,30 +202,31 @@
                                 {
                                     BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
 
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-0 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                            <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                            <span class="ms-1 align-self-center ps-2">@blogUser.FullName</span>
-                                        </a>
-                                    </button>
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                            <i class="fa-solid fa-heart fa-xl align-self-center "></i>
-                                            <span class="ms-1 align-self-center ps-3">Favorite</span>
-                                        </a>
-                                    </button>
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                            <i class="fa-solid fa-comment fa-xl align-self-center"></i>
-                                            <span class="ms-1 align-self-center ps-3">My Comments</span>
-                                        </a>
-                                    </button>
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="UserTags" title="Manage">
-                                            <i class="fa-solid fa-comments fa-xl align-self-center"></i>
-                                            <span class="ms-1 align-self-center ps-2">My Tags</span>
-                                        </a>
-                                    </button>
+
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                        <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                        <span class=" align-self-center ps-1">@blogUser.FullName</span>
+                                    </a>
+
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Comments" asp-action="Index" title="User Likes">
+                                        <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar ps-2"></i>
+                                        <span class="align-self-center ps-2">Likes</span>
+                                    </a>
+
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Comments" asp-action="Index" title="User Useful Codes">
+                                        <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar ps-1  ms-1"></i>
+                                        <span class="align-self-center ps-2 ms-1">Useful Codes</span>
+                                    </a>
+
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Comments" asp-action="Index" title="User Comments">
+                                        <i class="fa-regular fa-comment fa-xl align-self-center commentsIconSideBar ps-2"></i>
+                                        <span class="align-self-center ps-2">Comments</span>
+                                    </a>
+
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Home" asp-action="UserTags" title="User Tags">
+                                        <i class="fa-solid fa-tag fa-xl align-self-center tagsIconSideBar ps-2  ms-1"></i>
+                                        <span class=" align-self-center ps-2">Tags</span>
+                                    </a>
                                 }
                                 else
                                 {
@@ -235,19 +236,17 @@
 
                                 @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
                                 {
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Comments" asp-action="Index" title="Manage">
-                                            <i class="fa-solid fa-comments fa-xl align-self-center"></i>
-                                            <span class="ms-1 align-self-center ps-2">Comments Control</span>
-                                        </a>
-                                    </button>
 
-                                    <button class="btn btn-primary nav-link d-inline-flex">
-                                        <a class="nav-link d-flex flex-nowrap ps-1 container-fluid" asp-controller="Home" asp-action="TagManagement" title="Manage">
-                                            <i class="fa-solid fa-comments fa-xl align-self-center"></i>
-                                            <span class="ms-1 align-self-center ps-2">Tag Management</span>
-                                        </a>
-                                    </button>
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn " asp-controller="Comments" asp-action="Index" title="Comments Controler">
+                                        <i class="fa-regular fa-comments fa-xl align-self-center commentsManIconSideBar ps-1"></i>
+                                        <span class="ms-1 align-self-center ps-1">Comments Management</span>
+                                    </a>
+
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn " asp-controller="Home" asp-action="TagManagement" title="Tag Management">
+                                        <i class="fa-solid fa-tags fa-xl align-self-center tagsManIconSideBar ps-2"></i>
+                                        <span class="ms-1 align-self-center ps-1">Tags Management</span>
+                                    </a>
+
                                 }
 
 
@@ -345,7 +344,7 @@
                     <div class="row btn-group d-flex flex-nowrap">
                         <button class="btn btn-primary leftButtonMenu" id="leftButtonMenu">
                             <a class="d-flex flex-nowrap container-fluid justify-content-center leftButtonMenu" asp-controller="Home" asp-action="Index" title="Relevant">
-                                <h6 class="pt-2">RELEVANT</h6>
+                                <h6 class="pt-2">latest</h6>
                             </a>
                         </button>
                         <button class="btn btn-primary middleButtonMenu" id="middleButtonMenu">
