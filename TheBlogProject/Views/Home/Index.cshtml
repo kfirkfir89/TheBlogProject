@@ -344,9 +344,9 @@
                           </div>
                           <div class="ms-auto bd-highlight">
                               <i class="fa-regular fa-eye fa-2xs text-muted">
-                                  @if (post.Comments != null)
+                                  @if (post.Views != null)
                                   {
-                                      @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                      @post.Views
                                   }
                                   else
                                   {
