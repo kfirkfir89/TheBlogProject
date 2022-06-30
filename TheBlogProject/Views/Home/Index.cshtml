@@ -50,7 +50,7 @@
                             }
                             <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
                             <div class="d-flex flex-column m-1 flex-grow-1">
-                                <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color: var(--customBlack-color);">@blogUser.FullName</a>
+                                <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
 
                                 @if (post.Updated is not null)
                                 {
@@ -74,7 +74,7 @@
                         </div>
 
                         @*-------------   Title   ------------*@
-                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color:var(--customBlack-color);">
+                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
                             <div class="card-title ps-3 h1 d-flex flex-wrap">@post.Title</div>
                             <p class="card-text ps-3 m-0">@post.Abstract</p>
                         </a>
@@ -117,7 +117,59 @@
 
                     @*-------------   Post footer buttons   ------------*@
                     <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom">
-                        <div>like useful view comments</div>
+                        <div class="d-flex bd-highlight px-3 border-bottom border-top border-1">
+                            @{ var zero = 0;}
+                            <div class="bd-highlight">
+                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2">
+                                    @if (post.Likes != null)
+                                    {
+                                        @post.Likes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="bd-highlight">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
+                                    @if (post.UsefulCodes != null)
+                                    {
+                                        @post.UsefulCodes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="bd-highlight">
+                                <i class="fa-regular fa-comments fa-2xs text-muted pe-2">
+                                    @if (post.Comments != null)
+                                    {
+                                        @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="ms-auto bd-highlight">
+                                <i class="fa-regular fa-eye fa-2xs text-muted">
+                                    @if (post.Views != null)
+                                    {
+                                        @post.Views
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                    Views
+                                </i>
+                            </div>
+                        </div>
+
                         <div class="btn-group d-flex flex-nowrap">
 
                             @if (User.Identity.IsAuthenticated)
@@ -174,21 +226,21 @@
                                     if (contain is true)
                                     {
 
-                                        <a id="@($"UsefulBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
                                             <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                         </a>
 
                                     }
                                     else
                                     {
-                                        <a id="@($"UsefulBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
                                             <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                         </a>
                                     }
                                 }
                                 else
                                 {
-                                    <a id="@($"UsefulBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
                                         <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                     </a>
                                 }
@@ -318,43 +370,43 @@
                                     }
                                 </i>
                             </div>
-                          <div class="bd-highlight">
-                              <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
-                                  @if (post.UsefulCodes != null)
-                                  {
-                                      @post.UsefulCodes.Count()
-                                  }
-                                  else
-                                  {
-                                      @zero
-                                  }
-                              </i>
-                          </div>
-                          <div class="bd-highlight">
-                              <i class="fa-regular fa-comments fa-2xs text-muted pe-2">
-                                  @if (post.Comments != null)
-                                  {
-                                      @_context.Comments.Where(c => c.PostId == post.Id).Count()
-                                  }
-                                  else
-                                  {
-                                      @zero
-                                  }
-                              </i>
-                          </div>
-                          <div class="ms-auto bd-highlight">
-                              <i class="fa-regular fa-eye fa-2xs text-muted">
-                                  @if (post.Views != null)
-                                  {
-                                      @post.Views
-                                  }
-                                  else
-                                  {
-                                      @zero
-                                  }
-                                  Views
-                              </i>
-                          </div>
+                            <div class="bd-highlight">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
+                                    @if (post.UsefulCodes != null)
+                                    {
+                                        @post.UsefulCodes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="bd-highlight">
+                                <i class="fa-regular fa-comments fa-2xs text-muted pe-2">
+                                    @if (post.Comments != null)
+                                    {
+                                        @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="ms-auto bd-highlight">
+                                <i class="fa-regular fa-eye fa-2xs text-muted">
+                                    @if (post.Views != null)
+                                    {
+                                        @post.Views
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                    Views
+                                </i>
+                            </div>
                         </div>
 
                         <div class="btn-group d-flex flex-nowrap">
