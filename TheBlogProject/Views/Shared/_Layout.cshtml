@@ -269,51 +269,69 @@
                 <!--TAGS LEFT SIDEBAR-->
                 <div class="col-2 d-none d-lg-block">
                     <div class="row-cols-1 d-flex flex-column h-100">
-                        <div class="col border border-1 border-secondary rounded-2 " style="height:300px">
+
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                for (var i = 0; i < 1; i++)
+                                if (user.MyTags != null)
                                 {
                                     Post selectedPost = new Post();
-
-                                    if (user.MyTags != null)
+                                    int postCounter = 0;
+                                    int counter = 0;
+                                    foreach (var userTag in user.MyTags)
                                     {
-                                        int counter = 0;
-                                        foreach (var userTag in user.MyTags)
+                                        foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
                                         {
-                                            foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
+                                            var postTags = post.Tags.Select(t => t.Text);
+                                            if (counter >= 2)
                                             {
-                                                var postTags = post.Tags.Select(t => t.Text);
+                                                selectedPost = post;
+                                                counter = 0;
+                                                postCounter++;
+
+                                                <div class="row-cols-1">
+                                                    <div class="col d-flex d-inline-block">
+                                                        <h5 class="">@selectedPost.Title</h5>
+                                                        <p class="">@selectedPost.Abstract</p>
+                                                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug" class="btn btn-primary" style="height:20px;">Read More</a>
+                                                    </div>
+                                                </div>
+
+                                                break;
+                                            }
+                                            foreach (var item in postTags)
+                                            {
+                                                if (item == userTag)
+                                                {
+                                                    counter++;
+                                                }
                                                 if (counter >= 2)
                                                 {
                                                     selectedPost = post;
                                                     counter = 0;
-                                                    <div>@selectedPost.Title</div>
+                                                    postCounter++;
+                                                    <div class="col my-1">
+                                                        <div class="card cardPostSM rounded rounded-2 shadow-sm">
+                                                            <div class="card-title d-flex flex-wrap h6 p-1 pb-0 m-0">@selectedPost.Title</div>
+                                                            <p class="card-text px-1 m-0 d-flex flex-wrap">@selectedPost.Abstract</p>
+                                                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center tagViewA sideBarBtn readBtn" asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug">
+                                                                <span class="align-self-center likeIconSideBar">Read</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
                                                     break;
                                                 }
-                                                foreach (var item in postTags)
-                                                {
-                                                    if (item == userTag)
-                                                    {
-                                                        counter++;
-                                                    }
-                                                    if (counter >= 2)
-                                                    {
-                                                        selectedPost = post;
-                                                        counter = 0;
-                                                        <div>@selectedPost.Id</div>
-                                                        break;
-                                                    }
-                                                }
-
                                             }
                                         }
+                                        if (postCounter == 3)
+                                        {
+                                            break;
+                                        }
                                     }
-                                    @*
-                <div>@selectedPost.Title</div>*@
                                 }
+
                             }
-                        </div>
+
                         <div class="col">
                            
                             <div class="btn-group-vertical note-btn-block">

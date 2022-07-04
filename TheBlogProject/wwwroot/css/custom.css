@@ -519,3 +519,12 @@ button > a {
     .postBtnsComments:hover {
         border-radius: 0px 0px 5px 0px;
     }
+
+.cardPostSM{
+    font-size: 0.9rem;
+    color:var(--customBlack-color);
+}
+
+.readBtn{
+    height:28px;
+}
