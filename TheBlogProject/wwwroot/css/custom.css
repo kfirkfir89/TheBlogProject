@@ -315,21 +315,22 @@ div > button > a h6 {
     font-size: 1rem;
     font-weight: 400;
     font-family: Segoe UI;
-    color: var(--blueDark-color);
+    color: var(--customBlack-color);
 }
 
     .tagViewA:hover {
         color: white;
     }
 
-    .tagViewB {
-        letter-spacing: normal;
-        font-size: 1rem;
-        font-weight: 400;
-        color: var(--blueDark-color);
-        padding: 3px;
-        font-family: Segoe UI;
-    }
+.tagViewB {
+    letter-spacing: normal;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--customBlack-color);
+    background-color:white;
+    padding: 3px;
+    font-family: Segoe UI;
+}
 
     .tagViewB:hover {
         color: white;
@@ -418,41 +419,6 @@ iframe, object, embed {
 }
 
 
-
-
-
-
-
-.postButtonRight {
-    background-color: white;
-    border-radius: 0px 0px 0px 5px;
-}
-
-    .postButtonRight:hover {
-        background-color: var(--hoverLightBlue-color);
-        border-radius: 0px 0px 0px 5px;
-    }
-
-.postButtonLeft {
-    background-color: white;
-    border-radius: 0px 0px 5px 0px;
-}
-
-    .postButtonLeft:hover {
-        background-color: var(--hoverLightBlue-color);
-        border-radius: 0px 0px 5px 0px;
-    }
-
-.postButtonMiddle {
-    background-color: white;
-    border-radius: 0px 0px 0px 0px;
-}
-
-    .postButtonMiddle:hover {
-        background-color: var(--hoverLightBlue-color);
-        border-radius: 0px 0px 0px 0px;
-    }
-
 .smallFont {
     font-size: 0.9rem;
     font-weight: 600;
@@ -479,23 +445,8 @@ button > a {
     
 }
 
-.likeBtn {
-    color: #069DEF;
-}
-
-.usefulBtn {
-    color: #8A1EAE;
-}
 
 
-
-.postLUCBtn, .postLUCBtn:active, .postLUCBtn:after, .postLUCBtn:before, .postLUCBtn:focus, .postLUCBtn:target, .postLUCBtn:visited {
-    background-color: white;
-
-}
-    .postLUCBtn:hover {
-        background-color: var(--backgroundGray-color);
-    }
 
 .aTextStyle {
     letter-spacing: normal;
@@ -503,3 +454,64 @@ button > a {
     padding: 3px;
     font-style: normal;
 }
+
+.sideBarBtn{
+    color:var(--customBlack-color);
+}
+    .sideBarBtn:hover {
+        background-color: white;
+        color: var(--customBlack-color);
+    }
+        .sideBarBtn:hover .likeIconSideBar {
+            color: var(--hoverLightBlue-color);
+        }
+        .sideBarBtn:hover .usefulIconSideBar {
+            color: #8A1EAE;
+        }
+        .sideBarBtn:hover .commentsIconSideBar {
+            color: #747481;
+        }
+        .sideBarBtn:hover .tagsIconSideBar {
+            color: #F59300;
+        }
+        .sideBarBtn:hover .commentsManIconSideBar {
+            color: #747481;
+        }
+        .sideBarBtn:hover .tagsManIconSideBar {
+            color: #F59300;
+        }
+
+
+.postBtns, .postBtns:visited {
+    color: var(--customBlack-color);
+    background-color:white;
+}
+    .postBtns:hover {
+        background-color: var(--backgroundGray-color);
+        color: var(--customBlack-color);
+    }
+
+
+.postBtnsLike {
+    border-radius: 0px 0px 0px 5px;
+    
+}
+    .postBtnsLike:hover {
+        border-radius: 0px 0px 0px 5px;
+    }
+
+.postBtnsUseful {
+    border-radius: 0px 0px 0px 0px;
+}
+
+    .postBtnsUseful:hover {
+        border-radius: 0px 0px 0px 0px;
+    }
+
+.postBtnsComments {
+    border-radius: 0px 0px 5px 0px;
+}
+
+    .postBtnsComments:hover {
+        border-radius: 0px 0px 5px 0px;
+    }

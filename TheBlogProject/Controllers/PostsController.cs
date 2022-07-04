@@ -127,6 +127,20 @@ namespace TheBlogProject.Controllers
             ViewData["MainText"] = post.Title;
             ViewData["SubText"] = post.Abstract;
 
+            if(post.Views == null)
+            {
+                var views = 1;
+                post.Views = views;
+            }
+            else
+            {
+                var views = post.Views;
+                views++;
+                post.Views = views;
+            }
+
+            await _context.SaveChangesAsync();
+
             return View(dataVM);
         }
 

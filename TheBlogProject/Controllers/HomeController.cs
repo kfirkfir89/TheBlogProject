@@ -19,14 +19,16 @@ namespace TheBlogProject.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<BlogUser> _userManager;
         private readonly ISlugService _slugService;
+        private readonly SignInManager<BlogUser> _signInManager;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService, SignInManager<BlogUser> signInManager = null)
         {
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
             _userManager = userManager;
             _slugService = slugService;
+            _signInManager = signInManager;
         }
 
 
@@ -258,6 +260,27 @@ namespace TheBlogProject.Controllers
             return Json(post.UsefulCodes);
         }
 
+        public async Task<IActionResult> DemoLogin(string? Id)
+        {
+
+            if (Id == "admin")
+            {
+                await _signInManager.PasswordSignInAsync("kfirkfir89@gmail.com", "kfir123455A!", false, lockoutOnFailure: false);
+                return RedirectToAction(nameof(Index));
+            }
+            else if(Id == "moderator")
+            {
+                await _signInManager.PasswordSignInAsync("kfirkfirAAA@mailinator.com", "Abc&123!33", false, lockoutOnFailure: false);
+                return RedirectToAction(nameof(Index));
+            }
+            else if(Id == "user1")
+            {
+                await _signInManager.PasswordSignInAsync("kfirAAA@mailinator.com", "kfir123455A!", false, lockoutOnFailure: false);
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
 
     }
 }

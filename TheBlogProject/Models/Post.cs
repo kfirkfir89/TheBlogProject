@@ -43,6 +43,8 @@ namespace TheBlogProject.Models
 
         public List<string>? UsefulCodes { get; set; } = new List<string>();
 
+        public int? Views { get; set; }
+
         [NotMapped]
         public  IFormFile? Image { get; set; }
 
