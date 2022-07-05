@@ -82,6 +82,8 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> Contact()
         {
+
+            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
             return View();
         }
 
@@ -113,7 +115,7 @@ namespace TheBlogProject.Controllers
                             Text = x.Text.ToString()
                         }).ToList();
             */
-
+            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
             ViewData["TagValues"] = string.Join(",", _context.Tags.Select(t => t.Text));
 
 
@@ -165,6 +167,7 @@ namespace TheBlogProject.Controllers
                 }).ToList();
 
                 ViewData["TagValues"] = string.Join(",", user.MyTags);
+                ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
 
                 return View();
             }
