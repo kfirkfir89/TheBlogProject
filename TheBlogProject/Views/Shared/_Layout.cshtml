@@ -275,56 +275,64 @@
                                 if (user.MyTags != null)
                                 {
                                     Post selectedPost = new Post();
+                                    bool flag = false;
                                     int postCounter = 0;
                                     int counter = 0;
-                                    foreach (var userTag in user.MyTags)
+                                    int[] postsIds = new int[3];
+
+                                    foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
                                     {
-                                        foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
+                                        foreach (var userTag in user.MyTags)
                                         {
                                             var postTags = post.Tags.Select(t => t.Text);
-                                            if (counter >= 2)
-                                            {
-                                                selectedPost = post;
-                                                counter = 0;
-                                                postCounter++;
 
-                                                <div class="row-cols-1">
-                                                    <div class="col d-flex d-inline-block">
-                                                        <h5 class="">@selectedPost.Title</h5>
-                                                        <p class="">@selectedPost.Abstract</p>
-                                                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug" class="btn btn-primary" style="height:20px;">Read More</a>
-                                                    </div>
-                                                </div>
-
-                                                break;
-                                            }
                                             foreach (var item in postTags)
                                             {
                                                 if (item == userTag)
                                                 {
                                                     counter++;
-                                                }
-                                                if (counter >= 2)
-                                                {
-                                                    selectedPost = post;
-                                                    counter = 0;
-                                                    postCounter++;
-                                                    <div class="col my-1">
-                                                        <div class="card cardPostSM rounded rounded-2 shadow-sm">
-                                                            <div class="card-title d-flex flex-wrap h6 p-1 pb-0 m-0">@selectedPost.Title</div>
-                                                            <p class="card-text px-1 m-0 d-flex flex-wrap">@selectedPost.Abstract</p>
-                                                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center tagViewA sideBarBtn readBtn" asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug">
-                                                                <span class="align-self-center likeIconSideBar">Read</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
                                                     break;
                                                 }
                                             }
+
+                                            if (counter >= 2)
+                                            {
+                                                counter = 0;
+
+                                                foreach(var pId in postsIds)
+                                                {
+                                                    if(pId == post.Id)
+                                                    {
+                                                        flag = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if(flag == false)
+                                                {
+                                                    postsIds[postCounter] = post.Id;
+                                                    postCounter++;
+                                                    selectedPost = post;
+                                                    <div class="col my-2">
+                                                            <div class="card cardPostSM rounded rounded-2 shadow-sm">
+                                                                <div class="card-title d-flex flex-wrap h6 p-1 pb-0 m-0">@selectedPost.Title</div>
+                                                                <p class="card-text px-1 m-0 d-flex flex-wrap">@selectedPost.Abstract</p>
+                                                                <a class="btn btn-primary d-flex flex-nowrap justify-content-center tagViewA sideBarBtn readBtn" asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug">
+                                                                    <span class="align-self-center likeIconSideBar">Read</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                }
+                                            }
                                         }
+
                                         if (postCounter == 3)
                                         {
+                                            foreach(var item in postsIds)
+                                            {
+                                                @item
+                                                <hr />
+                                            }
+
                                             break;
                                         }
                                     }
