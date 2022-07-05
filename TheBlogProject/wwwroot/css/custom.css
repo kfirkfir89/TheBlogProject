@@ -317,9 +317,12 @@ div > button > a h6 {
     font-family: Segoe UI;
     color: var(--customBlack-color);
 }
+    .tagViewA:hover{
+        font-weight: 600;
+    }
 
-    .tagViewA:hover {
-        color: white;
+    .tagViewA:hover i{
+        font-weight: 900;
     }
 
 .tagViewB {
@@ -344,6 +347,7 @@ div > button > a h6 {
     .tagViewBtn:hover {
         height: 30px;
         border-radius: 3px 3px;
+        background-color: white;
     }
 
 
@@ -515,3 +519,12 @@ button > a {
     .postBtnsComments:hover {
         border-radius: 0px 0px 5px 0px;
     }
+
+.cardPostSM{
+    font-size: 0.9rem;
+    color:var(--customBlack-color);
+}
+
+.readBtn{
+    height:28px;
+}
