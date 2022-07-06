@@ -45,7 +45,7 @@ namespace TheBlogProject.Controllers
                     return View(posts);
                 }*/
 
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page , string? text)
         {
             /*            var pageNumber = page ?? 1;
                         var pageSize = 5;
@@ -74,6 +74,7 @@ namespace TheBlogProject.Controllers
 
 
         }
+
 
         public IActionResult About()
         {

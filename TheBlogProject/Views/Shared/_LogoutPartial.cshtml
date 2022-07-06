@@ -15,10 +15,13 @@
 
         <div class="btn-group d-flex d-inline-block">
 
-            <a class="btn btn-primary logoutButton border-1 px-4 pt-2 me-2 shadow-none" asp-controller="Posts" asp-action="Create">
-                <span class="aTextStyle">CREATE POST</span>
+            <a class="btn btn-primary logoutButton border-1 px-2 pt-2 me-2 shadow-none d-none d-md-block" asp-controller="Posts" asp-action="Create">
+                <span class="aTextStyle ">CREATE POST</span>
             </a>
-            <form class="me-2" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+            <a class="btn btn-primary logoutButton border-1 px-2 pt-2 me-2 shadow-none d-none d-md-block" asp-area="Identity" asp-area="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                <span class="aTextStyle ">CREATE </span>
+            </a>
+            <form class="d-none d-md-block" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                 <button type="submit" class="btn btn-primary logoutButton border-1 px-4 shadow-none">LOGOUT</button>
             </form>
         </div>

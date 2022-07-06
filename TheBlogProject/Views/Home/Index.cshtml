@@ -80,10 +80,10 @@
                         </a>
 
                         @*-------------   TAGS   ------------*@
-                        <div class="card-header bg-white m-0 border-0 btn-group">
+                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
                             @foreach (var tag in post.Tags.ToList())
                             {
-                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="width:100%; height:24px;">#@tag.Text</a>
+                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
                             }
                         </div>
                     </div>
@@ -102,15 +102,15 @@
                         if (width < 744)
                         {
                             <script>
-                               console.log("katannn m800");
-                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
                         }
                         else if (width >= 1024 && height >= 768)
                         {
                             <script>
-                               document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
                     }
@@ -188,8 +188,8 @@
                                     {
 
                                         @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
-                                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
-                                            </a>*@
+                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
+                                        </a>*@
 
                                         <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
@@ -319,10 +319,10 @@
                         </a>
 
                         @*-------------   TAGS   ------------*@
-                        <div class="card-header bg-white m-0 border-0 btn-group">
+                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
                             @foreach (var tag in post.Tags.ToList())
                             {
-                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="width:100%; height:24px;">#@tag.Text</a>
+                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
                             }
                         </div>
                     </div>
