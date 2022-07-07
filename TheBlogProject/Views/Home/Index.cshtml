@@ -35,8 +35,28 @@
         if (counter == 0)
         {
             <div class="col" style="padding:0px;">
+
                 @*-------------   Post card   ------------*@
                 <div class="card bg-transparent mb-3 shadow-sm rounded-bottom border-0" style="padding:0px;">
+
+                    <div class="card-header border-0" style="padding:0px; margin:0px;">
+
+                        <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
+
+                            @{ string[] arr = { "foryou", "useful", "top" }; }
+                            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[0]" title="For you">
+                                <span class="pt-2 smallFont pb-2">FOR YOU</span>
+                            </a>
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[1]" title="Useful">
+                                <span class="pt-2 smallFont pb-2">USEFUL</span>
+                            </a>
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[2]" title="Top View">
+                                <span class="pt-2 smallFont pb-2">TOP</span>
+                            </a>
+
+                        </div>
+                    </div>
+
                     <div class="card-body bg-white" style="margin-top: 1px; padding: 5px;">
                         @*-------------   User info   ------------*@
                         @{
@@ -188,8 +208,8 @@
                                     {
 
                                         @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
-                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
-                                        </a>*@
+                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
+                            </a>*@
 
                                         <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>

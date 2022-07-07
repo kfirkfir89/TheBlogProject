@@ -306,7 +306,7 @@
                                             {
                                                 if (tag == tagText)
                                                 {
-                                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag">
                                                         <i class="align-self-center likeIconSideBar">#</i>
                                                         <span class="align-self-center">@tag</span>
                                                     </a>
@@ -324,102 +324,11 @@
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-md-9 col-lg-6 d-flex flex-column h-100">
+                <div class="col-8 d-flex flex-column h-100">
                     @RenderBody()
                 </div>
 
-                <!--TAGS RIGHT SIDEBAR-->
-                <div class="col-3 col-3-right d-none d-lg-block ms-2">
-                    <div class="row-cols-1 d-flex flex-column h-100">
-                        <div class="col">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-                                if (user.MyTags != null)
-                                {
-                                    Post selectedPost = new Post();
-                                    bool flag = false;
-                                    int postCounter = 0;
-                                    int counter = 0;
-                                    int[] postsIds = new int[3];
-
-                                    foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
-                                    {
-                                        foreach (var userTag in user.MyTags)
-                                        {
-                                            var postTags = post.Tags.Select(t => t.Text);
-
-                                            foreach (var item in postTags)
-                                            {
-                                                if (item == userTag)
-                                                {
-                                                    counter++;
-                                                    break;
-                                                }
-                                            }
-
-                                            if (counter >= 2)
-                                            {
-                                                counter = 0;
-
-                                                foreach (var pId in postsIds)
-                                                {
-                                                    if (pId == post.Id)
-                                                    {
-                                                        flag = true;
-                                                        break;
-                                                    }
-                                                }
-                                                if (flag == false)
-                                                {
-                                                    postsIds[postCounter] = post.Id;
-                                                    postCounter++;
-                                                    selectedPost = post;
-
-                                                    <a class="card cardPostSM p-1 " asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug">
-                                                        <div class="card-title d-flex flex-wrap p-1 pb-1 m-0 border-1 border-bottom">@selectedPost.Title</div>
-                                                        <i class="fa-regular fa-eye fa-xs text-muted py-2 mt-1 ms-auto">
-                                                            @{ var zero = 0; }
-                                                            @if (post.Views != null)
-                                                            {
-                                                                @selectedPost.Views
-                                                            }
-                                                            else
-                                                            {
-                                                                @zero
-                                                            }
-                                                            Views
-                                                        </i>
-                                                    </a>
-
-                                                }
-                                            }
-                                        }
-
-                                        if (postCounter == 3)
-                                        {
-                                            break;
-                                        }
-                                    }
-                                }
-
-                            }
-                        </div>
-
-                        <div class="col">
-
-                            <div class="btn-group-vertical note-btn-block">
-
-                                @foreach (var tag in _context.Tags.Select(t => t.Text))
-                                {
-                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
-                                        <i class="align-self-center likeIconSideBar">#</i>
-                                        <span class="align-self-center">@tag</span>
-                                    </a>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <div class="col-1"></div>
 
             </div>
         </div>
