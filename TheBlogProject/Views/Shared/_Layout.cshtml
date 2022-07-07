@@ -78,7 +78,7 @@
                             </i>
                         </a>
                     </div>
-                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end pe-md-5 align-items-center">
+                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end pe-lg-5 align-items-center">
                         <partial name="_LogoutPartial" />
                         <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                             <span class="navbar-toggler-icon"></span>
@@ -101,12 +101,12 @@
                     </a>
                 </div>
                 <div class="col d-flex justify-content-center my-1">
-                    <form class="d-flex shadow-sm" style="height:40px;" asp-action="SearchIndex" asp-controller="Posts">
+                    <form class="d-flex shadow-sm" style="height: 40px;" asp-action="SearchIndex" asp-controller="Posts">
                         <div class="input-group d-flex flex-nowrap">
                             <div class="form-floating d-flex flex-nowrap">
-                                <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                                <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0"  style="width: 200px;"  name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
                                 <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
-                                <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
+                                <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px;"><i class="fa fa-search fa-lg"></i></button>
                             </div>
                         </div>
                     </form>
