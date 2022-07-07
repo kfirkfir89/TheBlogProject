@@ -65,9 +65,7 @@
                         }
 
                         <div class="d-flex d-inline-block px-2 pt-1">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                            }
+
                             <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
                             <div class="d-flex flex-column m-1 flex-grow-1">
                                 <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
@@ -86,7 +84,7 @@
                                 <div class="d-flex justify-content-end">
                                     <button class="btn btn-primary logoutButton bg-white">
                                         <a class="justify-content-center" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
-                                            <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
+                                            <i class="fa-regular fa-pen-to-square fa-xl px-2"></i>
                                         </a>
                                     </button>
                                 </div>
@@ -95,12 +93,12 @@
 
                         @*-------------   Title   ------------*@
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
-                            <div class="card-title ps-3 h1 d-flex flex-wrap">@post.Title</div>
-                            <p class="card-text ps-3 m-0">@post.Abstract</p>
+                            <div class="card-title px-4 h1 d-flex flex-wrap">@post.Title</div>
+                            <p class="card-text ms-1 px-4 m-0">@post.Abstract</p>
                         </a>
 
                         @*-------------   TAGS   ------------*@
-                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
+                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap px-4">
                             @foreach (var tag in post.Tags.ToList())
                             {
                                 <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>

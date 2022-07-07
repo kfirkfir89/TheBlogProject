@@ -3,20 +3,18 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TheBlogProject.Data;
 
 #nullable disable
 
-namespace TheBlogProject.Data.Migrations
+namespace TheBlogProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220627112339_[005]")]
-    partial class _005
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,46 +153,6 @@ namespace TheBlogProject.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("TheBlogProject.Models.Blog", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("BlogUserId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ContentType")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<byte[]>("ImageData")
-                        .HasColumnType("bytea");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogUserId");
-
-                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("TheBlogProject.Models.BlogUser", b =>
@@ -358,9 +316,6 @@ namespace TheBlogProject.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
-                    b.Property<int>("BlogId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("BlogUserId")
                         .HasColumnType("text");
 
@@ -397,9 +352,10 @@ namespace TheBlogProject.Data.Migrations
                     b.Property<List<string>>("UsefulCodes")
                         .HasColumnType("text[]");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("Views")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("BlogId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BlogUserId");
 
@@ -485,15 +441,6 @@ namespace TheBlogProject.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TheBlogProject.Models.Blog", b =>
-                {
-                    b.HasOne("TheBlogProject.Models.BlogUser", "BlogUser")
-                        .WithMany("Blogs")
-                        .HasForeignKey("BlogUserId");
-
-                    b.Navigation("BlogUser");
-                });
-
             modelBuilder.Entity("TheBlogProject.Models.Comment", b =>
                 {
                     b.HasOne("TheBlogProject.Models.BlogUser", "BlogUser")
@@ -519,17 +466,9 @@ namespace TheBlogProject.Data.Migrations
 
             modelBuilder.Entity("TheBlogProject.Models.Post", b =>
                 {
-                    b.HasOne("TheBlogProject.Models.Blog", "Blog")
-                        .WithMany("Posts")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TheBlogProject.Models.BlogUser", "BlogUser")
                         .WithMany("Posts")
                         .HasForeignKey("BlogUserId");
-
-                    b.Navigation("Blog");
 
                     b.Navigation("BlogUser");
                 });
@@ -549,15 +488,8 @@ namespace TheBlogProject.Data.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("TheBlogProject.Models.Blog", b =>
-                {
-                    b.Navigation("Posts");
-                });
-
             modelBuilder.Entity("TheBlogProject.Models.BlogUser", b =>
                 {
-                    b.Navigation("Blogs");
-
                     b.Navigation("Posts");
                 });
 
