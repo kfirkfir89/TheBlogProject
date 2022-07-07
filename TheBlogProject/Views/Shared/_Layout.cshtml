@@ -122,27 +122,27 @@
                                 BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
 
 
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                                     <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
                                     <span class=" align-self-center ps-1">@blogUser.FullName</span>
                                 </a>
 
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Likes">
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Likes">
                                     <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar ps-2"></i>
                                     <span class="align-self-center ps-2">Likes</span>
                                 </a>
 
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Useful Codes">
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Useful Codes">
                                     <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar ps-1  ms-1"></i>
                                     <span class="align-self-center ps-2 ms-1">Useful Codes</span>
                                 </a>
 
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Comments">
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Comments">
                                     <i class="fa-regular fa-comment fa-xl align-self-center commentsIconSideBar ps-2"></i>
                                     <span class="align-self-center ps-2">Comments</span>
                                 </a>
 
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="UserTags" title="User Tags">
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-controller="Home" asp-action="UserTags" title="User Tags">
                                     <i class="fa-solid fa-tag fa-xl align-self-center tagsIconSideBar ps-2 ms-1"></i>
                                     <span class=" align-self-center ps-2">Tags</span>
                                 </a>
@@ -155,24 +155,24 @@
 
                             }
 
-                            <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="About" title="About">
+                            <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-controller="Home" asp-action="About" title="About">
                                 <i class="fa-solid fa-circle-exclamation fa-xl align-self-center tagsIconSideBar ps-1  ms-1"></i>
                                 <span class=" align-self-center ps-2">About</span>
                             </a>
 
-                            <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="Contact" title="Contact">
+                            <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-controller="Home" asp-action="Contact" title="Contact">
                                 <i class="fa-regular fa-id-card fa-lg align-self-center tagsIconSideBar ps-1 ms-1"></i>
                                 <span class=" align-self-center ps-2">Contact</span>
                             </a>
 
                             @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
                             {
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="Index" title="Comments Controler">
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="Index" title="Comments Controler">
                                     <i class="fa-regular fa-comments fa-xl align-self-center commentsManIconSideBar ps-1"></i>
                                     <span class="ms-1 align-self-center ps-1">Comments Management</span>
                                 </a>
 
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="TagManagement" title="Tag Management">
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn offcanvasBtn shadow-none" asp-controller="Home" asp-action="TagManagement" title="Tag Management">
                                     <i class="fa-solid fa-tags fa-xl align-self-center tagsManIconSideBar ps-2"></i>
                                     <span class="ms-1 align-self-center ps-1">Tags Management</span>
                                 </a>
@@ -195,7 +195,7 @@
                                         {
                                             if (tag == tagText)
                                             {
-                                                <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag">
+                                                <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn offcanvasBtn py-1" asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag">
                                                     <i class="align-self-center likeIconSideBar">#</i>
                                                     <span class="align-self-center">@tag</span>
                                                 </a>

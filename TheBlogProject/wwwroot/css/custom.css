@@ -371,12 +371,15 @@ div > button > a h6 {
     width: 200px;
 }
 
+.offcanvasBtn {
+
+}
 
 @media screen and (max-width:992px) {
 
-    #floatingInputSearch {
+/*    #floatingInputSearch {
         width: 260px;
-    }
+    }*/
     .sideBarBtn > span{
         font-size: 0.7rem;
     }
@@ -385,6 +388,12 @@ div > button > a h6 {
     }
     .hoverWidthSideBar {
         width: 160px;
+    }
+    .offcanvasBtn > span{
+        font-size: 0.8rem;
+    }
+    .offcanvasBtn > i {
+        font-size:initial;
     }
 
 }
@@ -396,9 +405,17 @@ div > button > a h6 {
         width: 256.39px;
     }
 
-    #floatingInputSearch {
+/*    #floatingInputSearch {
         width: 420px;
+    }*/
+
+    .offcanvasBtn > span{
+        font-size: 0.8rem;
     }
+    .offcanvasBtn > i {
+        font-size: initial;
+    }
+
 }
 
 
