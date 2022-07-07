@@ -271,8 +271,8 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 /*-----------------menu buttons subjects and all posts---------------*/
 .rightButtonMenu {
     border-radius: 0px 5px 0px 0px;
-    height: 30px;
-    color:GrayText;
+    height: 24px;
+    color: GrayText;
 }
 
     .rightButtonMenu:hover {
@@ -283,7 +283,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 .leftButtonMenu {
     border-radius: 5px 0px 0px 0px;
-    height: 30px;
+    height: 24px;
     color: GrayText;
 }
 
@@ -295,7 +295,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 .middleButtonMenu {
     border-radius: 0px 0px 0px 0px;
-    height: 30px;
+    height: 24px;
     color: GrayText;
 }
 
@@ -367,26 +367,40 @@ div > button > a h6 {
     }
 
 
-@media screen and (max-width:1200px) {
+.hoverWidthSideBar {
+    width: 200px;
+}
+
+
+@media screen and (max-width:992px) {
+
     #floatingInputSearch {
         width: 260px;
     }
+    .sideBarBtn > span{
+        font-size: 0.7rem;
+    }
+    .sideBarBtn > i {
+        font-size: 0.8rem;
+    }
+    .hoverWidthSideBar {
+        width: 160px;
+    }
+
 }
 
-@media screen and (max-width:767px) {
+@media screen and (min-width:1200px) {
+
+
+    .hoverWidthSideBar {
+        width: 256.39px;
+    }
 
     #floatingInputSearch {
         width: 420px;
     }
 }
 
-
-@media screen and (max-width:576px) {
-
-    #floatingInputSearch {
-        width: 200px;
-    }
-}
 
 /*-----------------responsive img and video for post details---------------*/
 img {
@@ -430,11 +444,6 @@ iframe, object, embed {
     font-size: 0.9rem;
     font-weight: 600;
 }
-.bigFont {
-    font-size: 1rem;
-    font-weight: 600;
-}
-
 
 
 .fa-circle-exclamation:before {

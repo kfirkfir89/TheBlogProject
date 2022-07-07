@@ -225,7 +225,7 @@
 
                 <!--SIDEBAR NAV-->
                 <div class="col-3 col-3-left text-center d-none d-md-block me-2">
-                    <div class="row-cols-1 h-100 position-fixed" style="width:256.39px;">
+                    <div class="row-cols-1 h-100 position-fixed hoverWidthSideBar" >
                         <div class="col" >
                             <div class="btn-group-vertical d-flex flex-nowrap">
 
@@ -325,20 +325,6 @@
 
                 <!--CONTENT-->
                 <div class="col-md-9 col-lg-6 d-flex flex-column h-100">
-                    <div class="row btn-group d-flex flex-nowrap">
-                        @{ string[] arr = { "foryou", "useful", "top" }; }
-                        <a class="btn btn-primary d-flex flex-nowrap container-fluid justify-content-center leftButtonMenu" asp-controller="Home" asp-action="Index" asp-route-text="@arr[0]" title="For you">
-                            <span class="pt-2 bigFont pb-1">FOR YOU</span>
-                        </a>
-                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 container-fluid middleButtonMenu" asp-controller="Home" asp-action="Index" asp-route-text="@arr[1]" title="Useful">
-                            <span class="pt-2 bigFont pb-1">USEFUL</span>
-                        </a>
-                        <a class="btn btn-primary d-flex flex-nowrapcontainer-fluid justify-content-center rightButtonMenu" asp-controller="Home" asp-action="Index" asp-route-text="@arr[2]" title="Top View">
-                            <span class="pt-2 bigFont pb-1">TOP</span>
-                        </a>
-
-                    </div>
-
                     @RenderBody()
                 </div>
 
