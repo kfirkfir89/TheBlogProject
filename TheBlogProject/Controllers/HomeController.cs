@@ -45,7 +45,7 @@ namespace TheBlogProject.Controllers
                     return View(posts);
                 }*/
 
-        public async Task<IActionResult> Index(int? page , string? text)
+        public async Task<IActionResult> Index(int? page , string? text, string? tag)
         {
             /*            var pageNumber = page ?? 1;
                         var pageSize = 5;
@@ -73,7 +73,7 @@ namespace TheBlogProject.Controllers
                     int counter = 0;
                     List<int> postsIds = new List<int>();
 
-                    foreach(var post in _context.Posts.Where(p => p.Tags.Count() > 0).Include(t => t.Tags))
+                    foreach(var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(t => t.Tags))
                     {
                         foreach(var userTag in user.MyTags)
                         {
@@ -136,6 +136,51 @@ namespace TheBlogProject.Controllers
 
                     return View(selectedPosts);
                 }
+            }
+            else if(tag != null)
+            {
+                List<Post> selectedPosts = new List<Post>();
+                bool flag = false;
+                int counter = 0;
+                List<int> postsIds = new List<int>();
+
+                foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(t => t.Tags))
+                {
+
+                        var postTags = post.Tags.Select(t => t.Text);
+
+                        foreach (var item in postTags)
+                        {
+                            if (item == tag)
+                            {
+                                counter++;
+                                break;
+                            }
+                        }
+
+                        if (counter >= 1)
+                        {
+                            counter = 0;
+                            flag = false;
+
+                            foreach (var pId in postsIds)
+                            {
+                                if (pId == post.Id)
+                                {
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if (flag == false)
+                            {
+                                postsIds.Add(post.Id);
+                                selectedPosts.Add(post);
+                            }
+                        }
+
+                }
+
+                return View(selectedPosts.OrderByDescending(p => p.Created));
             }
 
             var posts = await _context.Posts
