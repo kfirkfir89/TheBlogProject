@@ -45,7 +45,7 @@ namespace TheBlogProject.Controllers
                     return View(posts);
                 }*/
 
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page , string? text)
         {
             /*            var pageNumber = page ?? 1;
                         var pageSize = 5;
@@ -62,18 +62,94 @@ namespace TheBlogProject.Controllers
 
                         return View(await blogs);*/
 
+            var user = await _userManager.GetUserAsync(User);
+
+            if(text != null && _signInManager.IsSignedIn(User))
+            {
+                if(text == "foryou" && user.MyTags != null)
+                {
+                    List<Post> selectedPosts = new List<Post>();
+                    bool flag = false;
+                    int counter = 0;
+                    List<int> postsIds = new List<int>();
+
+                    foreach(var post in _context.Posts.Where(p => p.Tags.Count() > 0).Include(t => t.Tags))
+                    {
+                        foreach(var userTag in user.MyTags)
+                        {
+                            var postTags = post.Tags.Select(t => t.Text);
+
+                            foreach (var item in postTags)
+                            {
+                                if (item == userTag)
+                                {
+                                    counter++;
+                                    break;
+                                }
+                            }
+
+                            if (counter >= 2)
+                            {
+                                counter = 0;
+                                flag = false;
+
+                                foreach (var pId in postsIds)
+                                {
+                                    if (pId == post.Id)
+                                    {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                                if (flag == false)
+                                {
+                                    postsIds.Add(post.Id);
+                                    selectedPosts.Add(post);
+                                }
+                            }
+                        }
+                    }
+
+                    return View(selectedPosts.OrderByDescending(p => p.Created));
+                }
+
+                else if(text == "useful" && user.MyTags != null)
+                {
+                    var selectedPosts = await _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                        .Where(p => p.UsefulCodes != null)
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.UsefulCodes).ToList()
+                        .ToListAsync();
+
+                    return View(selectedPosts);
+                }
+
+                else if(text == "top" && user.MyTags != null)
+                {
+                    var selectedPosts = await _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                        .Where(p => p.Views != null)
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.Views.Value)
+                        .ToListAsync();
+
+                    return View(selectedPosts);
+                }
+            }
+
             var posts = await _context.Posts
                 .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                 .Include(p => p.Tags)
                 .OrderByDescending(p => p.Created)
                 .ToListAsync();
-
-
+            
+            
             return View(posts);
 
 
-
         }
+
 
         public IActionResult About()
         {

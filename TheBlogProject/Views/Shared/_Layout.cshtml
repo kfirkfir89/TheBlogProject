@@ -51,12 +51,13 @@
         {
             imagePath = "'/assets/img/home-bg.jpg'";
         }
+        var user = await UserManager.GetUserAsync(User);
     }
 
     <!-- Page Header-->
     <header>
         <!-- NAV-->
-        <nav class="navbar navbar-expand-md mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1">
+        <nav class="navbar navbar-expand-md navbar-dark mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="container-xxl row p-0 m-0">
                     <div class="col-md-4 d-flex d-inline-block pt-md-0">
@@ -70,66 +71,148 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-4 col-6 d-flex justify-content-md-center">
+                    <div class="col-md-4 col-6 d-flex" style="padding:0px 55px;">
                         <a class="p-0 m-0 ps-md-5 ms-md-4" asp-controller="Home" asp-action="Index">
                             <i class="">
                                 <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
                             </i>
                         </a>
                     </div>
-                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end align-items-center">
-
-                            <partial name="_LogoutPartial" />
-                            <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-@*                        <div class="btn-group d-flex justify-content-end">
-                            <button class="btn btn-primary logoutButton">
-                                <a class="" asp-controller="Home" asp-action="About" title="Manage">
-                                    <i class="fa-solid fa-circle-exclamation fa-xl align-self-center pe-1"></i>
-                                </a>
-                            </button>
-                            <button class="btn btn-primary">
-                                <a class="" asp-controller="Home" asp-action="Contact" title="Manage">
-                                    <i class="fa-regular fa-id-card fa-xl align-self-center"></i>
-                                </a>
-                            </button>
-                            <div class="d-flex justify-content-end d-none d-md-block shadow-sm">
-                                <partial name="_LoginPartial" />
-                            </div>
-                            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                        </div>*@
+                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end pe-lg-5 align-items-center">
+                        <partial name="_LogoutPartial" />
+                        <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
                     </div>
                 </div>
             </div>
         </nav>
 
         <!--CANVAS NAV-->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasExampleLabel">Offcanvas</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <div class="offcanvas offcanvas-start bg-offcanvas" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="row-cols-1">
+                <div class="col d-inline-flex p-1">
+                    <h5 class="offcanvas-title" id="offcanvasExampleLabel">NAV</h5>
+                    <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="col d-flex justify-content-center">
+                    <a class="btn btn-primary logoutButton border-1 px-4 pt-2 shadow-none" style="width:264px;" asp-controller="Posts" asp-action="Create">
+                        <span class="aTextStyle">CREATE POST</span>
+                    </a>
+                </div>
+                <div class="col d-flex justify-content-center my-1">
+                    <form class="d-flex shadow-sm" style="height: 40px;" asp-action="SearchIndex" asp-controller="Posts">
+                        <div class="input-group d-flex flex-nowrap">
+                            <div class="form-floating d-flex flex-nowrap">
+                                <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0"  style="width: 200px;"  name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                                <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
+                                <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px;"><i class="fa fa-search fa-lg"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="offcanvas-body">
-                <div>
-                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                <div class="row-cols-1 h-100">
+                    <div class="col">
+                        <div class="btn-group-vertical d-flex flex-nowrap">
+
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+
+
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                    <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+                                    <span class=" align-self-center ps-1">@blogUser.FullName</span>
+                                </a>
+
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Likes">
+                                    <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar ps-2"></i>
+                                    <span class="align-self-center ps-2">Likes</span>
+                                </a>
+
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Useful Codes">
+                                    <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar ps-1  ms-1"></i>
+                                    <span class="align-self-center ps-2 ms-1">Useful Codes</span>
+                                </a>
+
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Comments">
+                                    <i class="fa-regular fa-comment fa-xl align-self-center commentsIconSideBar ps-2"></i>
+                                    <span class="align-self-center ps-2">Comments</span>
+                                </a>
+
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="UserTags" title="User Tags">
+                                    <i class="fa-solid fa-tag fa-xl align-self-center tagsIconSideBar ps-2 ms-1"></i>
+                                    <span class=" align-self-center ps-2">Tags</span>
+                                </a>
+
+                            }
+                            else
+                            {
+                                <partial name="_LoginPartial" />
+
+
+                            }
+
+                            <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="About" title="About">
+                                <i class="fa-solid fa-circle-exclamation fa-xl align-self-center tagsIconSideBar ps-1  ms-1"></i>
+                                <span class=" align-self-center ps-2">About</span>
+                            </a>
+
+                            <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="Contact" title="Contact">
+                                <i class="fa-regular fa-id-card fa-lg align-self-center tagsIconSideBar ps-1 ms-1"></i>
+                                <span class=" align-self-center ps-2">Contact</span>
+                            </a>
+
+                            @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
+                            {
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="Index" title="Comments Controler">
+                                    <i class="fa-regular fa-comments fa-xl align-self-center commentsManIconSideBar ps-1"></i>
+                                    <span class="ms-1 align-self-center ps-1">Comments Management</span>
+                                </a>
+
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="TagManagement" title="Tag Management">
+                                    <i class="fa-solid fa-tags fa-xl align-self-center tagsManIconSideBar ps-2"></i>
+                                    <span class="ms-1 align-self-center ps-1">Tags Management</span>
+                                </a>
+                            }
+
+                        </div>
+
+                    </div>
+                    <div class="col mt-4">
+                        <div class="h6 border-top border-bottom border-1 py-2">My Tags</div>
+                        <div class="btn-group-vertical note-btn-block">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                if (user.MyTags != null)
+                                {
+                                    <div class=""></div>
+                                    foreach (var tag in user.MyTags)
+                                    {
+                                        foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
+                                        {
+                                            if (tag == tagText)
+                                            {
+                                                <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag">
+                                                    <i class="align-self-center likeIconSideBar">#</i>
+                                                    <span class="align-self-center">@tag</span>
+                                                </a>
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        </div>
+                    </div>
+                    <div class="col border-top border-1 py-2 mt-2 d-flex justify-content-center">
+                        <form class="" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button type="submit" class="btn btn-primary logoutButton border-1 px-4 shadow-none">LOGOUT</button>
+                        </form>
+                    </div>
                 </div>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Active</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled">Disabled</a>
-                    </li>
-                </ul>
             </div>
         </div>
     </header>
@@ -137,12 +220,11 @@
     <!-- Main Content-->
     <main class="d-flex flex-column h-100 mt-2">
         <div class="container-xxl">
-            <div class="row row-cols-1">
+            <div class="row row-cols-1 d-flex justify-content-center">
 
-                @{ var user = await UserManager.GetUserAsync(User); }
 
                 <!--SIDEBAR NAV-->
-                <div class="col-3 text-center d-none d-md-block">
+                <div class="col-3 col-3-left text-center d-none d-md-block me-2">
                     <div class="row-cols-1 h-100">
                         <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">
@@ -152,27 +234,27 @@
                                     BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
 
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                                         <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
                                         <span class=" align-self-center ps-1">@blogUser.FullName</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Comments" asp-action="Index" title="User Likes">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Likes">
                                         <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar ps-2"></i>
                                         <span class="align-self-center ps-2">Likes</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Comments" asp-action="Index" title="User Useful Codes">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Useful Codes">
                                         <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar ps-1  ms-1"></i>
                                         <span class="align-self-center ps-2 ms-1">Useful Codes</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Comments" asp-action="Index" title="User Comments">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Comments">
                                         <i class="fa-regular fa-comment fa-xl align-self-center commentsIconSideBar ps-2"></i>
                                         <span class="align-self-center ps-2">Comments</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Home" asp-action="UserTags" title="User Tags">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="UserTags" title="User Tags">
                                         <i class="fa-solid fa-tag fa-xl align-self-center tagsIconSideBar ps-2 ms-1"></i>
                                         <span class=" align-self-center ps-2">Tags</span>
                                     </a>
@@ -185,24 +267,24 @@
 
                                 }
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Home" asp-action="About" title="About">
-                                        <i class="fa-solid fa-circle-exclamation fa-xl align-self-center tagsIconSideBar ps-1  ms-1"></i>
-                                        <span class=" align-self-center ps-2">About</span>
-                                    </a>
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="About" title="About">
+                                    <i class="fa-solid fa-circle-exclamation fa-xl align-self-center tagsIconSideBar ps-1  ms-1"></i>
+                                    <span class=" align-self-center ps-2">About</span>
+                                </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn" asp-controller="Home" asp-action="Contact" title="Contact">
-                                        <i class="fa-regular fa-id-card fa-lg align-self-center tagsIconSideBar ps-1 ms-1"></i>
-                                        <span class=" align-self-center ps-2">Contact</span>
-                                    </a>
+                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="Contact" title="Contact">
+                                    <i class="fa-regular fa-id-card fa-lg align-self-center tagsIconSideBar ps-1 ms-1"></i>
+                                    <span class=" align-self-center ps-2">Contact</span>
+                                </a>
 
                                 @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
                                 {
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2" asp-controller="Comments" asp-action="Index" title="Comments Controler">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="Index" title="Comments Controler">
                                         <i class="fa-regular fa-comments fa-xl align-self-center commentsManIconSideBar ps-1"></i>
                                         <span class="ms-1 align-self-center ps-1">Comments Management</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn " asp-controller="Home" asp-action="TagManagement" title="Tag Management">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="TagManagement" title="Tag Management">
                                         <i class="fa-solid fa-tags fa-xl align-self-center tagsManIconSideBar ps-2"></i>
                                         <span class="ms-1 align-self-center ps-1">Tags Management</span>
                                     </a>
@@ -213,7 +295,7 @@
                         </div>
                         <div class="col mt-4">
 
-                            <div class="h6 border-top border-bottom border-1 py-2">My Tags</div>
+                            <div class="h6 border-top border-bottom border-1 py-2 pe-3">My Tags</div>
 
                             <div class="btn-group-vertical note-btn-block">
                                 @if (SignInManager.IsSignedIn(User))
@@ -244,30 +326,26 @@
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-md-9 col-lg-7 d-flex flex-column h-100">
+                <div class="col-md-9 col-lg-6 d-flex flex-column h-100">
                     <div class="row btn-group d-flex flex-nowrap">
-                        <button class="btn btn-primary leftButtonMenu" id="leftButtonMenu">
-                            <a class="d-flex flex-nowrap container-fluid justify-content-center leftButtonMenu" asp-controller="Home" asp-action="Index" title="Relevant">
-                                <h6 class="pt-2">latest</h6>
-                            </a>
-                        </button>
-                        <button class="btn btn-primary middleButtonMenu" id="middleButtonMenu">
-                            <a class="d-flex flex-nowrap justify-content-center ps-1 container-fluid middleButtonMenu" asp-controller="Home" asp-action="Index" title="Home Page">
-                                <i class="fa-solid fa-house-user fa-xl align-self-center" style="color: var(--hoverLightBlue-color); "></i>
-                            </a>
-                        </button>
-                        <button class="btn btn-primary rightButtonMenu" id="rightButtonMenu">
-                            <a class="d-flex flex-nowrapcontainer-fluid justify-content-center rightButtonMenu" asp-controller="Home" asp-action="About" title="Top View">
-                                <h6 class="pt-2">TOP VIEW</h6>
-                            </a>
-                        </button>
+                        @{ string[] arr = { "foryou", "useful", "top" }; }
+                        <a class="btn btn-primary d-flex flex-nowrap container-fluid justify-content-center leftButtonMenu" asp-controller="Home" asp-action="Index" asp-route-text="@arr[0]" title="For you">
+                            <span class="pt-2 bigFont pb-1">FOR YOU</span>
+                        </a>
+                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 container-fluid middleButtonMenu" asp-controller="Home" asp-action="Index" asp-route-text="@arr[1]" title="Useful">
+                            <span class="pt-2 bigFont pb-1">USEFUL</span>
+                        </a>
+                        <a class="btn btn-primary d-flex flex-nowrapcontainer-fluid justify-content-center rightButtonMenu" asp-controller="Home" asp-action="Index" asp-route-text="@arr[2]" title="Top View">
+                            <span class="pt-2 bigFont pb-1">TOP</span>
+                        </a>
+
                     </div>
 
                     @RenderBody()
                 </div>
 
-                <!--TAGS LEFT SIDEBAR-->
-                <div class="col-2 d-none d-lg-block">
+                <!--TAGS RIGHT SIDEBAR-->
+                <div class="col-3 col-3-right d-none d-lg-block ms-2">
                     <div class="row-cols-1 d-flex flex-column h-100">
                         <div class="col">
                             @if (SignInManager.IsSignedIn(User))
@@ -275,54 +353,64 @@
                                 if (user.MyTags != null)
                                 {
                                     Post selectedPost = new Post();
+                                    bool flag = false;
                                     int postCounter = 0;
                                     int counter = 0;
-                                    foreach (var userTag in user.MyTags)
+                                    int[] postsIds = new int[3];
+
+                                    foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
                                     {
-                                        foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
+                                        foreach (var userTag in user.MyTags)
                                         {
                                             var postTags = post.Tags.Select(t => t.Text);
-                                            if (counter >= 2)
-                                            {
-                                                selectedPost = post;
-                                                counter = 0;
-                                                postCounter++;
 
-                                                <div class="row-cols-1">
-                                                    <div class="col d-flex d-inline-block">
-                                                        <h5 class="">@selectedPost.Title</h5>
-                                                        <p class="">@selectedPost.Abstract</p>
-                                                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug" class="btn btn-primary" style="height:20px;">Read More</a>
-                                                    </div>
-                                                </div>
-
-                                                break;
-                                            }
                                             foreach (var item in postTags)
                                             {
                                                 if (item == userTag)
                                                 {
                                                     counter++;
-                                                }
-                                                if (counter >= 2)
-                                                {
-                                                    selectedPost = post;
-                                                    counter = 0;
-                                                    postCounter++;
-                                                    <div class="col my-1">
-                                                        <div class="card cardPostSM rounded rounded-2 shadow-sm">
-                                                            <div class="card-title d-flex flex-wrap h6 p-1 pb-0 m-0">@selectedPost.Title</div>
-                                                            <p class="card-text px-1 m-0 d-flex flex-wrap">@selectedPost.Abstract</p>
-                                                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center tagViewA sideBarBtn readBtn" asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug">
-                                                                <span class="align-self-center likeIconSideBar">Read</span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-
                                                     break;
                                                 }
                                             }
+
+                                            if (counter >= 2)
+                                            {
+                                                counter = 0;
+
+                                                foreach (var pId in postsIds)
+                                                {
+                                                    if (pId == post.Id)
+                                                    {
+                                                        flag = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (flag == false)
+                                                {
+                                                    postsIds[postCounter] = post.Id;
+                                                    postCounter++;
+                                                    selectedPost = post;
+
+                                                    <a class="card cardPostSM p-1 " asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug">
+                                                        <div class="card-title d-flex flex-wrap p-1 pb-1 m-0 border-1 border-bottom">@selectedPost.Title</div>
+                                                        <i class="fa-regular fa-eye fa-xs text-muted py-2 mt-1 ms-auto">
+                                                            @{ var zero = 0; }
+                                                            @if (post.Views != null)
+                                                            {
+                                                                @selectedPost.Views
+                                                            }
+                                                            else
+                                                            {
+                                                                @zero
+                                                            }
+                                                            Views
+                                                        </i>
+                                                    </a>
+
+                                                }
+                                            }
                                         }
+
                                         if (postCounter == 3)
                                         {
                                             break;
@@ -334,7 +422,7 @@
                         </div>
 
                         <div class="col">
-                           
+
                             <div class="btn-group-vertical note-btn-block">
 
                                 @foreach (var tag in _context.Tags.Select(t => t.Text))
@@ -394,6 +482,11 @@
     <script src="~/js/summernote-lite.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+         let forYou = '@ViewData["ForYou"]';
+
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

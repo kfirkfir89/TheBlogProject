@@ -271,38 +271,38 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 /*-----------------menu buttons subjects and all posts---------------*/
 .rightButtonMenu {
     border-radius: 0px 5px 0px 0px;
-    height: 35px;
+    height: 30px;
+    color:GrayText;
 }
 
     .rightButtonMenu:hover {
         border-radius: 0px 5px 0px 0px;
-        border-bottom: 2px solid var(--hoverLightBlue-color);
         background-color: white;
-        color: var(--hoverLightBlue-color);
+        color: var(--customBlack-color);
     }
 
 .leftButtonMenu {
     border-radius: 5px 0px 0px 0px;
-    height: 35px;
+    height: 30px;
+    color: GrayText;
 }
 
     .leftButtonMenu:hover {
         border-radius: 5px 0px 0px 0px;
-        border-bottom: 2px solid var(--hoverLightBlue-color);
         background-color: white;
-        color: var(--hoverLightBlue-color);
+        color: var(--customBlack-color);
     }
 
 .middleButtonMenu {
     border-radius: 0px 0px 0px 0px;
-    height: 35px;
+    height: 30px;
+    color: GrayText;
 }
 
     .middleButtonMenu:hover {
         border-radius: 0px 0px 0px 0px;
-        border-bottom: 2px solid var(--hoverLightBlue-color);
         background-color: white;
-        color: var(--hoverLightBlue-color);
+        color: var(--customBlack-color);
     }
 
 /*
@@ -311,6 +311,7 @@ div > button > a h6 {
 }
 */
 /*-----------------tags---------------*/
+
 .tagViewA {
     font-size: 1rem;
     font-weight: 400;
@@ -356,8 +357,10 @@ div > button > a h6 {
     border-radius: 3px 3px 3px 3px;
     color: white;
     font-weight: 600;
-    border:3px solid white;
-    background-color:var(--customBlack-color);
+    border: 3px solid white;
+    background-color: var(--customBlack-color);
+    padding: 0;
+    margin:0;
 }
     .logoutButton:hover {
         border: 3px solid white;
@@ -427,7 +430,10 @@ iframe, object, embed {
     font-size: 0.9rem;
     font-weight: 600;
 }
-
+.bigFont {
+    font-size: 1rem;
+    font-weight: 600;
+}
 
 
 
@@ -447,6 +453,9 @@ button > a {
 .bg-example {
     background-color: var(--customBlack-color);
     
+}
+.bg-offcanvas{
+    background-color:var(--backgroundGray-color);
 }
 
 
@@ -520,11 +529,26 @@ button > a {
         border-radius: 0px 0px 5px 0px;
     }
 
-.cardPostSM{
-    font-size: 0.9rem;
-    color:var(--customBlack-color);
+.cardPostSM {
+    font-size: 1rem;
+    color: GrayText;
+    font-weight:600;
+    padding:0;
+    margin:0;
 }
+    .cardPostSM:hover {
+        color: var(--customBlack-color);
+    }
 
 .readBtn{
     height:28px;
 }
+
+.col-3-left {
+    width: 22%;
+}
+
+.col-3-right{
+    width:22%;
+}
+

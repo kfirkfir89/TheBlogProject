@@ -143,11 +143,12 @@
                 }
                 else if(comment.Moderated is not null)
                 {
-                    @comment.ModeratedBody
+                    <div class="d-flex flex-wrap">@comment.Body</div>
                 }
                 else if(comment.Deleted is null)
                 {
-                    @comment.Body
+                    <div class="d-flex flex-wrap">@comment.Body</div>
+
                 }
 
 
