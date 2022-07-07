@@ -466,6 +466,7 @@ button > a {
     font-weight: 600;
     padding: 3px;
     font-style: normal;
+    width: 240px;
 }
 
 .sideBarBtn{
@@ -474,6 +475,7 @@ button > a {
     .sideBarBtn:hover {
         background-color: white;
         color: var(--customBlack-color);
+        width:100%;
     }
         .sideBarBtn:hover .likeIconSideBar {
             color: var(--hoverLightBlue-color);

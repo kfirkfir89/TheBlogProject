@@ -55,9 +55,9 @@
     }
 
     <!-- Page Header-->
-    <header>
+    <header style="padding-bottom:70px;">
         <!-- NAV-->
-        <nav class="navbar navbar-expand-md navbar-dark mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1">
+        <nav class="navbar navbar-expand-md navbar-dark mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1 fixed-top">
             <div class="container-fluid d-flex justify-content-center">
                 <div class="container-xxl row p-0 m-0">
                     <div class="col-md-4 d-flex d-inline-block pt-md-0">
@@ -225,8 +225,8 @@
 
                 <!--SIDEBAR NAV-->
                 <div class="col-3 col-3-left text-center d-none d-md-block me-2">
-                    <div class="row-cols-1 h-100">
-                        <div class="col">
+                    <div class="row-cols-1 h-100 position-fixed" style="width:256.39px;">
+                        <div class="col" >
                             <div class="btn-group-vertical d-flex flex-nowrap">
 
                                 @if (SignInManager.IsSignedIn(User))
@@ -292,10 +292,7 @@
 
                             </div>
 
-                        </div>
-                        <div class="col mt-4">
-
-                            <div class="h6 border-top border-bottom border-1 py-2 pe-3">My Tags</div>
+                            <div class="h6 border-top border-bottom border-1 py-2 pe-3 mt-4">My Tags</div>
 
                             <div class="btn-group-vertical note-btn-block">
                                 @if (SignInManager.IsSignedIn(User))
@@ -320,6 +317,7 @@
                                     }
                                 }
                             </div>
+
                         </div>
                     </div>
 
