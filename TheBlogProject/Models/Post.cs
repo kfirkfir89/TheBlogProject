@@ -9,8 +9,6 @@ namespace TheBlogProject.Models
     {
         public int Id { get; set; }
 
-        [Display(Name ="Blog Name")]
-        public int BlogId { get; set; }
         public string? BlogUserId { get; set; }
 
         [Required]
@@ -49,7 +47,6 @@ namespace TheBlogProject.Models
         public  IFormFile? Image { get; set; }
 
         //navigation property
-        public virtual Blog? Blog { get; set; }
         public virtual BlogUser? BlogUser { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();

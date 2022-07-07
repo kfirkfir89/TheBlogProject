@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace TheBlogProject.Data.Migrations
+namespace TheBlogProject.Migrations
 {
     public partial class _001 : Migration
     {
@@ -31,10 +32,12 @@ namespace TheBlogProject.Data.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    DisplayName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     ImageData = table.Column<byte[]>(type: "bytea", nullable: true),
                     ContentType = table.Column<string>(type: "text", nullable: true),
                     FacebookUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     TwitterUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    MyTags = table.Column<string[]>(type: "text[]", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -162,36 +165,11 @@ namespace TheBlogProject.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Blogs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BlogUserId = table.Column<string>(type: "text", nullable: true),
-                    Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ImageData = table.Column<byte[]>(type: "bytea", nullable: true),
-                    ContentType = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Blogs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Blogs_AspNetUsers_BlogUserId",
-                        column: x => x.BlogUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BlogId = table.Column<int>(type: "integer", nullable: false),
                     BlogUserId = table.Column<string>(type: "text", nullable: true),
                     Title = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
                     Abstract = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
@@ -201,7 +179,10 @@ namespace TheBlogProject.Data.Migrations
                     ReadyStatus = table.Column<int>(type: "integer", nullable: false),
                     Slug = table.Column<string>(type: "text", nullable: true),
                     ImageData = table.Column<byte[]>(type: "bytea", nullable: true),
-                    ContentType = table.Column<string>(type: "text", nullable: true)
+                    ContentType = table.Column<string>(type: "text", nullable: true),
+                    Likes = table.Column<List<string>>(type: "text[]", nullable: true),
+                    UsefulCodes = table.Column<List<string>>(type: "text[]", nullable: true),
+                    Views = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -211,12 +192,6 @@ namespace TheBlogProject.Data.Migrations
                         column: x => x.BlogUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Posts_Blogs_BlogId",
-                        column: x => x.BlogId,
-                        principalTable: "Blogs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -279,8 +254,7 @@ namespace TheBlogProject.Data.Migrations
                         name: "FK_Tags_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -321,11 +295,6 @@ namespace TheBlogProject.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_BlogUserId",
-                table: "Blogs",
-                column: "BlogUserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Comments_BlogUserId",
                 table: "Comments",
                 column: "BlogUserId");
@@ -339,11 +308,6 @@ namespace TheBlogProject.Data.Migrations
                 name: "IX_Comments_PostId",
                 table: "Comments",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Posts_BlogId",
-                table: "Posts",
-                column: "BlogId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_BlogUserId",
@@ -389,9 +353,6 @@ namespace TheBlogProject.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Posts");
-
-            migrationBuilder.DropTable(
-                name: "Blogs");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

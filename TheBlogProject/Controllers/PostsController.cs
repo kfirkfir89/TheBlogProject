@@ -49,7 +49,7 @@ namespace TheBlogProject.Controllers
         // GET: Posts
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Blog).Include(p => p.BlogUser);
+            var applicationDbContext = _context.Posts.Include(p => p.BlogUser);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -147,7 +147,6 @@ namespace TheBlogProject.Controllers
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
@@ -155,7 +154,7 @@ namespace TheBlogProject.Controllers
         // POST: Posts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ReadyStatus,Image")] Post post, List<string> tagValues)
+        public async Task<IActionResult> Create([Bind("Title,Abstract,Content,ReadyStatus,Image")] Post post, List<string> tagValues)
         {
             if (ModelState.IsValid)
             {
@@ -212,7 +211,6 @@ namespace TheBlogProject.Controllers
 
                 if (validationError)
                 {
-                    ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
                     ViewData["TagValues"] = string.Join("," , tagValues);
                     return View(post);
                 }
@@ -237,7 +235,6 @@ namespace TheBlogProject.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             
             return View(post);
         }
@@ -256,7 +253,6 @@ namespace TheBlogProject.Controllers
                 return NotFound();
             }
 
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
             ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
 
             return View(post);
@@ -265,7 +261,7 @@ namespace TheBlogProject.Controllers
         // POST: Posts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage, List<string> tagValues)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -336,7 +332,6 @@ namespace TheBlogProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
             return View(post);
         }
@@ -350,7 +345,6 @@ namespace TheBlogProject.Controllers
             }
 
             var post = await _context.Posts
-                .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)
