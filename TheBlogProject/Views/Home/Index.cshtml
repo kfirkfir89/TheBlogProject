@@ -131,6 +131,15 @@
                                        document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
+                        else if (width >= 700 && height >= 300)
+                        {
+                            <script>
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+
+                        }
                     }
 
                     @*-------------   Post footer buttons   ------------*@
@@ -370,6 +379,15 @@
                                document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
+                        else if (width >= 700 && height >= 300)
+                        {
+                            <script>
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+
+                        }
                     }
 
                     @*-------------   Post footer buttons   ------------*@
@@ -445,8 +463,8 @@
                                     {
 
                                         @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
-                                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
-                                            </a>*@
+                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
+                            </a>*@
 
                                         <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
