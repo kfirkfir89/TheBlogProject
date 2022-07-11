@@ -317,7 +317,7 @@ namespace TheBlogProject.Controllers
             var user = await _userManager.GetUserAsync(User);
             var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
 
-            user.Tags.Clear();
+            _context.Tags.RemoveRange(userTags);
 
             foreach (var item in tagValues)
             {

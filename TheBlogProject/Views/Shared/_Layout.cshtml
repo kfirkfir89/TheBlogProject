@@ -297,22 +297,14 @@
                             <div class="btn-group-vertical note-btn-block">
                                 @if (SignInManager.IsSignedIn(User))
                                 {
-                                    if (user.MyTags != null)
+                                    if (_context.Tags.Where(t => t.BlogUserId == user.Id) != null)
                                     {
-                                        <div class=""></div>
-                                        foreach (var tag in user.MyTags)
+                                        foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                         {
-                                            foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
-                                            {
-                                                if (tag == tagText)
-                                                {
-                                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
-                                                        <i class="align-self-center likeIconSideBar">#</i>
-                                                        <span class="align-self-center">@tag</span>
-                                                    </a>
-                                                    break;
-                                                }
-                                            }
+                                            <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                                <i class="align-self-center likeIconSideBar">#</i>
+                                                <span class="align-self-center">@tag</span>
+                                            </a>
                                         }
                                     }
                                 }
@@ -409,7 +401,7 @@
 
                             <div class="btn-group-vertical note-btn-block">
 
-                                @foreach (var tag in _context.Tags.Select(t => t.Text))
+                                @foreach (var tag in _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text))
                                 {
                                     <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
                                         <i class="align-self-center likeIconSideBar">#</i>
