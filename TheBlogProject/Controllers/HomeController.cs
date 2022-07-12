@@ -251,14 +251,26 @@ namespace TheBlogProject.Controllers
         public async Task<IActionResult> TagManagement(List<string> tagValues)
         {
 
-            _context.Tags.RemoveRange(_context.Tags);
-
+            var db = _context.Tags.Where(t => t.BlogUserId == null && t.PostId == null);
+            bool exists = false;
             foreach (var tag in tagValues)
             {
-                _context.Add(new Tag()
+                exists = false;
+                foreach (var dbTag in db)
                 {
-                    Text = tag
-                });
+                    if(dbTag.Text == tag)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists == false)
+                {
+                    _context.Tags.Add(new Tag()
+                    {
+                        Text = tag
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();
