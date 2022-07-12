@@ -35,10 +35,8 @@
         if (counter == 0)
         {
             <div class="col" style="padding:0px;">
-
                 @*-------------   Post card   ------------*@
                 <div class="card bg-transparent mb-3 shadow-sm rounded-bottom border-0" style="padding:0px;">
-
                     <div class="card-header border-0" style="padding:0px; margin:0px;">
 
                         <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
@@ -65,7 +63,9 @@
                         }
 
                         <div class="d-flex d-inline-block px-2 pt-1">
-
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                            }
                             <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
                             <div class="d-flex flex-column m-1 flex-grow-1">
                                 <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
@@ -84,7 +84,7 @@
                                 <div class="d-flex justify-content-end">
                                     <button class="btn btn-primary logoutButton bg-white">
                                         <a class="justify-content-center" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
-                                            <i class="fa-regular fa-pen-to-square fa-xl px-2"></i>
+                                            <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
                                         </a>
                                     </button>
                                 </div>
@@ -93,12 +93,12 @@
 
                         @*-------------   Title   ------------*@
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
-                            <div class="card-title px-4 h1 d-flex flex-wrap">@post.Title</div>
-                            <p class="card-text ms-1 px-4 m-0">@post.Abstract</p>
+                            <div class="card-title ps-3 h1 d-flex flex-wrap">@post.Title</div>
+                            <p class="card-text ps-3 m-0">@post.Abstract</p>
                         </a>
 
                         @*-------------   TAGS   ------------*@
-                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap px-4">
+                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
                             @foreach (var tag in post.Tags.ToList())
                             {
                                 <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
@@ -134,8 +134,8 @@
                         else if (width >= 700 && height >= 300)
                         {
                             <script>
-                                       console.log("katannn m800");
-                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                               console.log("katannn m800");
+                                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
 
@@ -143,10 +143,10 @@
                     }
 
                     @*-------------   Post footer buttons   ------------*@
-                    <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom">
+                    <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
                         <div class="d-flex bd-highlight px-3 border-bottom border-top border-1">
                             @{ var zero = 0;}
-                            <div class="bd-highlight">
+                            <div class="bd-highlight" id="@($"likeCount{counter}")">
                                 <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2">
                                     @if (post.Likes != null)
                                     {
@@ -158,7 +158,7 @@
                                     }
                                 </i>
                             </div>
-                            <div class="bd-highlight">
+                            <div class="bd-highlight usefulCount" id="@($"usefulCount{counter}")">
                                 <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
                                     @if (post.UsefulCodes != null)
                                     {
@@ -197,7 +197,7 @@
                             </div>
                         </div>
 
-                        <div class="btn-group d-flex flex-nowrap">
+                        <div class="btn-group d-flex flex-nowrap" id="ze div">
 
                             @if (User.Identity.IsAuthenticated)
                             {

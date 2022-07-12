@@ -64,9 +64,11 @@ namespace TheBlogProject.Controllers
 
             var user = await _userManager.GetUserAsync(User);
 
+            var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+
             if(text != null && _signInManager.IsSignedIn(User))
             {
-                if(text == "foryou" && user.MyTags != null)
+                if(text == "foryou" && userTags != null && userTags.Count() > 0)
                 {
                     List<Post> selectedPosts = new List<Post>();
                     bool flag = false;
@@ -75,13 +77,13 @@ namespace TheBlogProject.Controllers
 
                     foreach(var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(t => t.Tags))
                     {
-                        foreach(var userTag in user.MyTags)
+                        foreach(var userTag in userTags)
                         {
                             var postTags = post.Tags.Select(t => t.Text);
 
                             foreach (var item in postTags)
                             {
-                                if (item == userTag)
+                                if (item == userTag.Text)
                                 {
                                     counter++;
                                     break;
@@ -113,7 +115,7 @@ namespace TheBlogProject.Controllers
                     return View(selectedPosts.OrderByDescending(p => p.Created));
                 }
 
-                else if(text == "useful" && user.MyTags != null)
+                else if(text == "useful" && userTags != null)
                 {
                     var selectedPosts = await _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
@@ -125,7 +127,7 @@ namespace TheBlogProject.Controllers
                     return View(selectedPosts);
                 }
 
-                else if(text == "top" && user.MyTags != null)
+                else if(text == "top" && userTags != null)
                 {
                     var selectedPosts = await _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)

@@ -186,22 +186,14 @@
                         <div class="btn-group-vertical note-btn-block">
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                if (user.MyTags != null)
+                                if (_context.Tags.Where(t => t.BlogUserId == user.Id) != null)
                                 {
-                                    <div class=""></div>
-                                    foreach (var tag in user.MyTags)
+                                    foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                     {
-                                        foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
-                                        {
-                                            if (tag == tagText)
-                                            {
-                                                <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn offcanvasBtn py-1" asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag">
-                                                    <i class="align-self-center likeIconSideBar">#</i>
-                                                    <span class="align-self-center">@tag</span>
-                                                </a>
-                                                break;
-                                            }
-                                        }
+                                        <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                            <i class="align-self-center likeIconSideBar">#</i>
+                                            <span class="align-self-center">@tag</span>
+                                        </a>
                                     }
                                 }
                             }
@@ -226,7 +218,7 @@
                 <!--SIDEBAR NAV-->
                 <div class="col-3 col-3-left text-center d-none d-md-block me-2">
                     <div class="row-cols-1 h-100 position-fixed hoverWidthSideBar" >
-                        <div class="col" >
+                        <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">
 
                                 @if (SignInManager.IsSignedIn(User))
@@ -297,22 +289,14 @@
                             <div class="btn-group-vertical note-btn-block">
                                 @if (SignInManager.IsSignedIn(User))
                                 {
-                                    if (user.MyTags != null)
+                                    if (_context.Tags.Where(t => t.BlogUserId == user.Id) != null)
                                     {
-                                        <div class=""></div>
-                                        foreach (var tag in user.MyTags)
+                                        foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                         {
-                                            foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
-                                            {
-                                                if (tag == tagText)
-                                                {
-                                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag">
-                                                        <i class="align-self-center likeIconSideBar">#</i>
-                                                        <span class="align-self-center">@tag</span>
-                                                    </a>
-                                                    break;
-                                                }
-                                            }
+                                            <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                                <i class="align-self-center likeIconSideBar">#</i>
+                                                <span class="align-self-center">@tag</span>
+                                            </a>
                                         }
                                     }
                                 }
