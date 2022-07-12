@@ -131,6 +131,15 @@
                                        document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
+                        else if (width >= 700 && height >= 300)
+                        {
+                            <script>
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+
+                        }
                     }
 
                     @*-------------   Post footer buttons   ------------*@
@@ -370,14 +379,23 @@
                                document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
+                        else if (width >= 700 && height >= 300)
+                        {
+                            <script>
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+
+                        }
                     }
 
                     @*-------------   Post footer buttons   ------------*@
-                    <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom">
+                    <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
                         <div class="d-flex bd-highlight px-3 border-bottom border-top border-1">
                             @{ var zero = 0;}
-                            <div class="bd-highlight">
-                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2">
+                            <div class="bd-highlight" id="@($"likeCount{counter}")">
+                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2" >
                                     @if (post.Likes != null)
                                     {
                                         @post.Likes.Count()
@@ -388,8 +406,8 @@
                                     }
                                 </i>
                             </div>
-                            <div class="bd-highlight">
-                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
+                            <div class="bd-highlight usefulCount" id="@($"usefulCount{counter}")">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2" >
                                     @if (post.UsefulCodes != null)
                                     {
                                         @post.UsefulCodes.Count()
@@ -427,7 +445,7 @@
                             </div>
                         </div>
 
-                        <div class="btn-group d-flex flex-nowrap">
+                        <div class="btn-group d-flex flex-nowrap" id="ze div">
 
                             @if (User.Identity.IsAuthenticated)
                             {
@@ -445,8 +463,8 @@
                                     {
 
                                         @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
-                                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
-                                            </a>*@
+                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
+                            </a>*@
 
                                         <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
@@ -591,6 +609,14 @@
                              icon.classList.remove("fa-solid");
                              icon.classList.add("fa-regular");
                          }
+
+                         var e = $el.parents("#viewUpdate").children().children();
+                         var elId = e.attr('id');
+
+                         console.log(elId);
+
+                         $("#" + elId).load(" #" + elId + "> *");
+
                      },
                     error: function (req, status, error) {
                         console.log(status)
@@ -625,6 +651,14 @@
                             icon.classList.remove("fa-solid");
                             icon.classList.add("fa-regular");
                         }
+
+                        var e = $el.parents("#viewUpdate").children().children(".usefulCount");
+                        var elId = e.attr('id');
+
+                        console.log(elId);
+
+                        $("#" + elId).load(" #" + elId + "> *");
+
                     },
                     error: function (req, status, error) {
                         console.log(status)

@@ -39,6 +39,7 @@ namespace TheBlogProject.Models
             get { return $"{FirstName} {LastName}"; }
         }
 
+        public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
         public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
     }
 }

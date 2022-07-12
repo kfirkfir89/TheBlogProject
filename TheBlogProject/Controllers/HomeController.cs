@@ -236,8 +236,10 @@ namespace TheBlogProject.Controllers
                             Text = x.Text.ToString()
                         }).ToList();
             */
-            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
-            ViewData["TagValues"] = string.Join(",", _context.Tags.Select(t => t.Text));
+            /*            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();*/
+
+
+            ViewData["TagValues"] = string.Join(",", _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text));
 
 
             return View();
@@ -265,29 +267,32 @@ namespace TheBlogProject.Controllers
         public async Task<IActionResult> UserTags()
         {
             var user = await _userManager.GetUserAsync(User);
-            List<string> tags = new List<string>();
-            tags = _context.Tags.Select(t => t.Text).ToList();
+            List<string> tagsDb = new List<string>();
+            tagsDb = _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text).ToList();
+            var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
 
 
-            if (user.MyTags != null && user.MyTags.Length > 0)
+            if (userTags != null && userTags.Count() > 0)
             {
-                foreach (var tag in user.MyTags)
+                foreach (var tag in userTags)
                 {
-                    foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
+                    foreach (var tagText in _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text).ToList())
                     {
-                        if (tag == tagText)
+                        if (tag.Text == tagText)
                         {
-                            tags.Remove(tagText);
+                            tagsDb.Remove(tagText);
                         }
                     }
                 }
 
-                this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+                this.ViewData["DatabaseTagValues"] = tagsDb.Select(x => new SelectListItem
                 {
                     Text = x.ToString()
                 }).ToList();
 
-                ViewData["TagValues"] = string.Join(",", user.MyTags);
+                ViewData["TagValues"] = string.Join(",", userTags.Select(t => t.Text));
+
+                //sidebar suggestions
                 ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
 
                 return View();
@@ -295,7 +300,7 @@ namespace TheBlogProject.Controllers
 
             else
             {
-                this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+                this.ViewData["DatabaseTagValues"] = tagsDb.Select(x => new SelectListItem
                 {
                     Text = x.ToString()
                 }).ToList();
@@ -310,8 +315,18 @@ namespace TheBlogProject.Controllers
         {
 
             var user = await _userManager.GetUserAsync(User);
-            string[] array = tagValues.ToArray();
-            user.MyTags = array;
+            var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+
+            _context.Tags.RemoveRange(userTags);
+
+            foreach (var item in tagValues)
+            {
+                user.Tags.Add(new Tag()
+                {
+                    Text = item
+                });
+            }
+
             await _context.SaveChangesAsync();
 
 

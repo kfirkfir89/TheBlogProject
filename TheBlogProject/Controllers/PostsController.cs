@@ -145,8 +145,17 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+
+            List<string> tags = new List<string>();
+            tags = _context.Tags.Select(t => t.Text).ToList();
+
+            this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+            {
+                Text = x.ToString()
+            }).ToList();
+
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
@@ -215,45 +224,98 @@ namespace TheBlogProject.Controllers
                     return View(post);
                 }
 
-                post.Slug = slug;
-
-                _context.Add(post);
-                await _context.SaveChangesAsync();
 
                 //how do i loop over the incoming list of string?
+
+                List<Tag> postTags = new List<Tag>();
+
                 foreach (var tag in tagValues)
                 {
-                    _context.Add(new Tag()
+                    postTags.Add(new Tag()
                     {
-                        PostId = post.Id,
-                        BlogUserId = authorId,
                         Text = tag
                     });
                 }
+
+                post.Tags = postTags;
+                post.Slug = slug;
+
+                _context.Add(post);
 
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
             }
-            
+
+            var user = await _userManager.GetUserAsync(User);
+            List<string> tags = new List<string>();
+            tags = _context.Tags.Select(t => t.Text).ToList();
+
+            this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+            {
+                Text = x.ToString()
+            }).ToList();
+
+            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
+
             return View(post);
         }
 
         // GET: Posts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+
+            List<string> tags = new List<string>();
+            tags = _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text).ToList();
+
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
             if (post == null)
             {
                 return NotFound();
             }
 
-            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
+            if (post.Tags != null && post.Tags.Count() > 0)
+            {
+                foreach (var postTag in post.Tags)
+                {
+                    foreach (var tagText in _context.Tags.Select(t => t.Text).ToList())
+                    {
+                        if (postTag.Text == tagText)
+                        {
+                            tags.Remove(tagText);
+                        }
+                    }
+
+                }
+
+                this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+                {
+                    Text = x.ToString()
+                }).ToList();
+
+                ViewData["TagValues"] = string.Join(",", post.Tags.Where(t => t.PostId == post.Id).Select(t => t.Text).ToList());
+
+                return View(post);
+            }
+
+            else
+            {
+
+                this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
+                {
+                    Text = x.ToString()
+                }).ToList();
+
+                return View(post);
+            }
+
+            ViewData["TagValues"] = string.Join(",", post.Tags.Where(t => t.PostId == post.Id).Select(t => t.Text).ToList());
 
             return View(post);
         }
@@ -261,9 +323,9 @@ namespace TheBlogProject.Controllers
         // POST: Posts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage, List<string> tagValues)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Abstract,Content,ReadyStatus")] Post post,List<Tag> postTags, IFormFile newImage, List<string> tagValues)
         {
-            if (id != post.Id)
+            if(id != post.Id)
             {
                 return NotFound();
             }
@@ -273,7 +335,7 @@ namespace TheBlogProject.Controllers
                 try
                 {
                     //the original Post
-                    var newPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
+                    var newPost = await _context.Posts.Where(p => p.Id == post.Id).Include(p => p.Tags).FirstOrDefaultAsync();
 
                     newPost.Updated = DateTime.UtcNow;
                     newPost.Title = post.Title;
@@ -282,7 +344,7 @@ namespace TheBlogProject.Controllers
                     newPost.ReadyStatus = post.ReadyStatus;
 
                     var newSlug = _slugService.UrlFriendly(post.Title);
-                    if(newSlug != newPost.Slug)
+                    if (newSlug != newPost.Slug)
                     {
                         if (_slugService.IsUnique(newSlug))
                         {
@@ -297,27 +359,29 @@ namespace TheBlogProject.Controllers
                         }
                     }
 
-                    if(newImage is not null)
+                    if (newImage is not null)
                     {
                         newPost.ImageData = await _imageService.EncodeImageAsync(newImage);
                         newPost.ContentType = _imageService.ContentType(newImage);
                     }
 
                     //remove all Tage previously assicuated with this post
-                    _context.Tags.RemoveRange(newPost.Tags);
+
+                    _context.RemoveRange(newPost.Tags);
 
                     //add in the new Tags from edit form
-                    foreach(var tagText in tagValues)
+
+
+                    foreach (var tag in tagValues)
                     {
-                        _context.Add(new Tag()
+                        newPost.Tags.Add(new Tag()
                         {
-                            PostId = post.Id,
-                            BlogUserId = newPost.BlogUserId,
-                            Text = tagText,
+                            Text = tag
                         });
                     }
-
                     await _context.SaveChangesAsync();
+
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -330,8 +394,11 @@ namespace TheBlogProject.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
+
+
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", post.BlogUserId);
             return View(post);
         }
