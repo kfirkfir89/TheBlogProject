@@ -326,7 +326,8 @@
                         <div class="col">
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                if (user.MyTags != null)
+                                var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+                                if (userTags != null)
                                 {
                                     Post selectedPost = new Post();
                                     bool flag = false;
@@ -336,13 +337,13 @@
 
                                     foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
                                     {
-                                        foreach (var userTag in user.MyTags)
+                                        foreach (var userTag in userTags)
                                         {
                                             var postTags = post.Tags.Select(t => t.Text);
 
                                             foreach (var item in postTags)
                                             {
-                                                if (item == userTag)
+                                                if (item == userTag.Text)
                                                 {
                                                     counter++;
                                                     break;
