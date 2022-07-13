@@ -33,18 +33,6 @@ namespace TheBlogProject.Controllers
 
 
 
-
-        /*        public async Task<IActionResult> Index()
-                {
-                    var posts = await _context.Posts
-                                .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
-                                .Include(p => p.Tags)
-                                .OrderByDescending(p => p.Created)
-                                .ToListAsync();
-
-                    return View(posts);
-                }*/
-
         public async Task<IActionResult> Index(int? page , string? text, string? tag)
         {
             /*            var pageNumber = page ?? 1;
@@ -64,7 +52,20 @@ namespace TheBlogProject.Controllers
 
             var user = await _userManager.GetUserAsync(User);
 
+            if (user == null)
+            {
+                var guestPosts = await _context.Posts
+                    .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Created)
+                    .ToListAsync();
+
+
+                return View(guestPosts);
+            }
+
             var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+
 
             if(text != null && _signInManager.IsSignedIn(User))
             {
@@ -197,7 +198,6 @@ namespace TheBlogProject.Controllers
 
         }
 
-
         public IActionResult About()
         {
             return View();
@@ -220,14 +220,11 @@ namespace TheBlogProject.Controllers
             return RedirectToAction("Index");
         }
 
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
 
         public async Task<IActionResult> TagManagement()
         {
@@ -276,7 +273,6 @@ namespace TheBlogProject.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(TagManagement));
         }
-
 
         public async Task<IActionResult> UserTags()
         {

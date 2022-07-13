@@ -15,6 +15,8 @@ using X.PagedList;
 using TheBlogProject.ViewModels;
 using System.Drawing;
 
+
+
 namespace TheBlogProject.Controllers
 {
     public class PostsController : Controller
@@ -92,15 +94,19 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Posts/Details/5
-        public async Task<IActionResult> Details(string slug)
+        public async Task<IActionResult> Details(string? slug)
         {
             ViewData["Title"] = "Post Details Page";
-
-            if (string.IsNullOrEmpty(slug))
+/*
+            if (string.IsNullOrEmpty(slug) && postCreated.Slug != null)
+            {
+                slug = postCreated.Slug;
+            }
+            else
             {
                 return NotFound();
             }
-
+*/
             var post = await _context.Posts
                 .Include(p => p.BlogUser)
                 .Include(p => p.Tags)
@@ -149,7 +155,7 @@ namespace TheBlogProject.Controllers
         {
 
             List<string> tags = new List<string>();
-            tags = _context.Tags.Select(t => t.Text).ToList();
+            tags = _context.Tags.Where(t => t.BlogUserId == null && t.PostId == null).Select(t => t.Text).ToList();
 
             this.ViewData["DatabaseTagValues"] = tags.Select(x => new SelectListItem
             {
@@ -211,13 +217,13 @@ namespace TheBlogProject.Controllers
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
                 }
 
-                else if (slug.Contains("test")) 
+/*                else if (slug.Contains("test")) 
                 {
                     validationError = true;
                     ModelState.AddModelError("", "Uh-oh are you testing again??");
                     ModelState.AddModelError("Title", "The Title cannot contain the word test.");
                 }
-
+*/
                 if (validationError)
                 {
                     ViewData["TagValues"] = string.Join("," , tagValues);
@@ -244,7 +250,8 @@ namespace TheBlogProject.Controllers
 
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction(nameof(Details), "Posts" ,post);
             }
 
             var user = await _userManager.GetUserAsync(User);

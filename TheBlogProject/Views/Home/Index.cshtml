@@ -82,26 +82,24 @@
                             @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
                             {
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary logoutButton bg-white">
-                                        <a class="justify-content-center" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
-                                            <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
-                                        </a>
-                                    </button>
+                                    <a class="btn btn-primary logoutButton bg-white justify-content-center" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
+                                        <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
+                                    </a>
                                 </div>
                             }
                         </div>
 
                         @*-------------   Title   ------------*@
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
-                            <div class="card-title px-3 h2 d-flex flex-wrap">@post.Title</div>
-                            <p class="card-text px-3 m-0">@post.Abstract</p>
+                            <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
+                            <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
                         </a>
 
                         @*-------------   TAGS   ------------*@
                         <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
                             @foreach (var tag in post.Tags.ToList())
                             {
-                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
+                                <a asp-controller="Home" asp-action="Index" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
                             }
                         </div>
                     </div>
@@ -330,11 +328,9 @@
                             @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
                             {
                                 <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary logoutButton bg-white">
-                                        <a class="justify-content-center" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
-                                            <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
-                                        </a>
-                                    </button>
+                                    <a class="btn btn-primary logoutButton bg-white justify-content-center shadow-none" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
+                                        <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
+                                    </a>
                                 </div>
                             }
                         </div>
@@ -349,7 +345,7 @@
                         <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
                             @foreach (var tag in post.Tags.ToList())
                             {
-                                <a asp-controller="Posts" asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
+                                <a asp-controller="Home" asp-action="Index" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
                             }
                         </div>
                     </div>
