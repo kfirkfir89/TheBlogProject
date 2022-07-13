@@ -35,30 +35,30 @@ namespace TheBlogProject.Controllers
 
         public async Task<IActionResult> Index(int? page , string? text, string? tag)
         {
-            /*            var pageNumber = page ?? 1;
-                        var pageSize = 5;
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
 
-                        var blogs = _context.Blogs.Where(
-                            b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
-                            .OrderByDescending(b => b.Created)
-                            .ToPagedListAsync(pageNumber, pageSize);
+/*            var blogs = _context.Blogs.Where(
+                b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
 
-                        var blogs = _context.Blogs
-                            .Include(b => b.BlogUser)
-                            .OrderByDescending(b => b.Created)
-                            .ToPagedListAsync(pageNumber, pageSize);
+            var blogs = _context.Blogs
+                .Include(b => b.BlogUser)
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
 
-                        return View(await blogs);*/
+            return View(await blogs);*/
 
             var user = await _userManager.GetUserAsync(User);
 
             if (user == null)
             {
-                var guestPosts = await _context.Posts
-                    .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                var guestPosts = _context.Posts
+
                     .Include(p => p.Tags)
                     .OrderByDescending(p => p.Created)
-                    .ToListAsync();
+                    .ToPagedList(pageNumber, pageSize);
 
 
                 return View(guestPosts);
@@ -113,29 +113,33 @@ namespace TheBlogProject.Controllers
                         }
                     }
 
-                    return View(selectedPosts.OrderByDescending(p => p.Created));
+
+                    var pagedList = selectedPosts.ToPagedList(pageNumber, pageSize);
+                    return View(pagedList);
                 }
 
                 else if(text == "useful" && userTags != null)
                 {
-                    var selectedPosts = await _context.Posts
+                    var selectedPosts = _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Where(p => p.UsefulCodes != null)
                         .Include(p => p.Tags)
                         .OrderByDescending(p => p.UsefulCodes).ToList()
-                        .ToListAsync();
+                        .ToPagedList(pageNumber, pageSize);
+
+
 
                     return View(selectedPosts);
                 }
 
                 else if(text == "top" && userTags != null)
                 {
-                    var selectedPosts = await _context.Posts
+                    var selectedPosts = _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Where(p => p.Views != null)
                         .Include(p => p.Tags)
                         .OrderByDescending(p => p.Views.Value)
-                        .ToListAsync();
+                        .ToPagedList(pageNumber, pageSize);
 
                     return View(selectedPosts);
                 }
@@ -183,16 +187,18 @@ namespace TheBlogProject.Controllers
 
                 }
 
-                return View(selectedPosts.OrderByDescending(p => p.Created));
+                var pagedList = selectedPosts.ToPagedList(pageNumber, pageSize);
+                return View(pagedList);
+
             }
 
-            var posts = await _context.Posts
+            var posts = _context.Posts
                 .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                 .Include(p => p.Tags)
                 .OrderByDescending(p => p.Created)
-                .ToListAsync();
-            
-            
+                .ToPagedList(pageNumber, pageSize);
+
+
             return View(posts);
 
 

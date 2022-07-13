@@ -1,21 +1,19 @@
-﻿@using TheBlogProject.Models
+﻿@using Microsoft.AspNetCore.Identity
+@using TheBlogProject.Models
 @using TheBlogProject.Services
-@using TheBlogProject.Enums
-@using TheBlogProject.Data
-@using Microsoft.AspNetCore.Identity;
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
+@using TheBlogProject.Enums
+@using TheBlogProject.Data
 @using System.Drawing
-
-
 
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
 @inject ApplicationDbContext _context
 
-@model IEnumerable<TheBlogProject.Models.Post>
 
+@model IPagedList<Post>
 
 <div class="row row-cols-1">
 
@@ -213,8 +211,8 @@
                                     {
 
                                         @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
-                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
-                            </a>*@
+                                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
+                                            </a>*@
 
                                         <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
@@ -391,7 +389,7 @@
                         <div class="d-flex bd-highlight px-3 border-bottom border-top border-1">
                             @{ var zero = 0;}
                             <div class="bd-highlight" id="@($"likeCount{counter}")">
-                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2" >
+                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2">
                                     @if (post.Likes != null)
                                     {
                                         @post.Likes.Count()
@@ -403,7 +401,7 @@
                                 </i>
                             </div>
                             <div class="bd-highlight usefulCount" id="@($"usefulCount{counter}")">
-                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2" >
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
                                     @if (post.UsefulCodes != null)
                                     {
                                         @post.UsefulCodes.Count()
@@ -457,10 +455,6 @@
                                     }
                                     if (contain is true)
                                     {
-
-                                        @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
-                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
-                            </a>*@
 
                                         <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
@@ -548,29 +542,24 @@
 </div>
 
 <hr />
-@*
 
-    <div class="row">
-        <div class="col h3">
-            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-        </div>
+<hr />
+
+<div class="row">
+    <div class="col h3">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     </div>
-
-    <!--    Page List Core    -->
-    <div class="row">
-        <div class="col">
-            @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }),
-                new PagedListRenderOptions
-                {
-                    LiElementClasses = new string[] { "page-item" },
-                    PageClasses = new string[] { "page-link" }
-                })
-        </div>
+</div>
+<div class="row">
+    <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
     </div>
-*@
-
-
-
+</div>
 
 @section Scripts {
 
@@ -589,7 +578,7 @@
                  $.ajax({
 
                     type: "POST",
-                    url: "@Url.Action("Like")",
+                    url: "@Url.ActionLink("Like","Home")",
                      data: { slug: slug },
                     dataType: "json",
                      success: function (result) {
@@ -632,7 +621,7 @@
                  $.ajax({
 
                     type: "POST",
-                    url: "@Url.Action("UsefulCode")",
+                    url: "@Url.ActionLink("UsefulCode", "Home")",
                      data: { slug: slug },
                     dataType: "json",
                     success: function (result) {
@@ -667,4 +656,3 @@
 
     </script>
 }
-
