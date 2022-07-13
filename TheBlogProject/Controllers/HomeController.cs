@@ -33,40 +33,43 @@ namespace TheBlogProject.Controllers
 
 
 
-
-        /*        public async Task<IActionResult> Index()
-                {
-                    var posts = await _context.Posts
-                                .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
-                                .Include(p => p.Tags)
-                                .OrderByDescending(p => p.Created)
-                                .ToListAsync();
-
-                    return View(posts);
-                }*/
-
         public async Task<IActionResult> Index(int? page , string? text, string? tag)
         {
-            /*            var pageNumber = page ?? 1;
-                        var pageSize = 5;
+            var pageNumber = page ?? 1;
+            var pageSize = 5;
 
-                        var blogs = _context.Blogs.Where(
-                            b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
-                            .OrderByDescending(b => b.Created)
-                            .ToPagedListAsync(pageNumber, pageSize);
+/*            var blogs = _context.Blogs.Where(
+                b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
 
-                        var blogs = _context.Blogs
-                            .Include(b => b.BlogUser)
-                            .OrderByDescending(b => b.Created)
-                            .ToPagedListAsync(pageNumber, pageSize);
+            var blogs = _context.Blogs
+                .Include(b => b.BlogUser)
+                .OrderByDescending(b => b.Created)
+                .ToPagedListAsync(pageNumber, pageSize);
 
-                        return View(await blogs);*/
+            return View(await blogs);*/
 
             var user = await _userManager.GetUserAsync(User);
 
+            if (user == null)
+            {
+                var guestPosts = _context.Posts
+
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Created)
+                    .ToPagedList(pageNumber, pageSize);
+
+
+                return View(guestPosts);
+            }
+
+            var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+
+
             if(text != null && _signInManager.IsSignedIn(User))
             {
-                if(text == "foryou" && user.MyTags != null)
+                if(text == "foryou" && userTags != null && userTags.Count() > 0)
                 {
                     List<Post> selectedPosts = new List<Post>();
                     bool flag = false;
@@ -75,13 +78,13 @@ namespace TheBlogProject.Controllers
 
                     foreach(var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(t => t.Tags))
                     {
-                        foreach(var userTag in user.MyTags)
+                        foreach(var userTag in userTags)
                         {
                             var postTags = post.Tags.Select(t => t.Text);
 
                             foreach (var item in postTags)
                             {
-                                if (item == userTag)
+                                if (item == userTag.Text)
                                 {
                                     counter++;
                                     break;
@@ -110,29 +113,33 @@ namespace TheBlogProject.Controllers
                         }
                     }
 
-                    return View(selectedPosts.OrderByDescending(p => p.Created));
+
+                    var pagedList = selectedPosts.ToPagedList(pageNumber, pageSize);
+                    return View(pagedList);
                 }
 
-                else if(text == "useful" && user.MyTags != null)
+                else if(text == "useful" && userTags != null)
                 {
-                    var selectedPosts = await _context.Posts
+                    var selectedPosts = _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Where(p => p.UsefulCodes != null)
                         .Include(p => p.Tags)
                         .OrderByDescending(p => p.UsefulCodes).ToList()
-                        .ToListAsync();
+                        .ToPagedList(pageNumber, pageSize);
+
+
 
                     return View(selectedPosts);
                 }
 
-                else if(text == "top" && user.MyTags != null)
+                else if(text == "top" && userTags != null)
                 {
-                    var selectedPosts = await _context.Posts
+                    var selectedPosts = _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Where(p => p.Views != null)
                         .Include(p => p.Tags)
                         .OrderByDescending(p => p.Views.Value)
-                        .ToListAsync();
+                        .ToPagedList(pageNumber, pageSize);
 
                     return View(selectedPosts);
                 }
@@ -180,21 +187,22 @@ namespace TheBlogProject.Controllers
 
                 }
 
-                return View(selectedPosts.OrderByDescending(p => p.Created));
+                var pagedList = selectedPosts.ToPagedList(pageNumber, pageSize);
+                return View(pagedList);
+
             }
 
-            var posts = await _context.Posts
+            var posts = _context.Posts
                 .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                 .Include(p => p.Tags)
                 .OrderByDescending(p => p.Created)
-                .ToListAsync();
-            
-            
+                .ToPagedList(pageNumber, pageSize);
+
+
             return View(posts);
 
 
         }
-
 
         public IActionResult About()
         {
@@ -218,14 +226,11 @@ namespace TheBlogProject.Controllers
             return RedirectToAction("Index");
         }
 
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-
 
         public async Task<IActionResult> TagManagement()
         {
@@ -249,20 +254,31 @@ namespace TheBlogProject.Controllers
         public async Task<IActionResult> TagManagement(List<string> tagValues)
         {
 
-            _context.Tags.RemoveRange(_context.Tags);
-
+            var db = _context.Tags.Where(t => t.BlogUserId == null && t.PostId == null);
+            bool exists = false;
             foreach (var tag in tagValues)
             {
-                _context.Add(new Tag()
+                exists = false;
+                foreach (var dbTag in db)
                 {
-                    Text = tag
-                });
+                    if(dbTag.Text == tag)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if(exists == false)
+                {
+                    _context.Tags.Add(new Tag()
+                    {
+                        Text = tag
+                    });
+                }
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(TagManagement));
         }
-
 
         public async Task<IActionResult> UserTags()
         {

@@ -15,7 +15,6 @@ namespace TheBlogProject.Models
         [StringLength(75, ErrorMessage ="The {0} must be at least {2} and no more then {1}", MinimumLength = 2)]
         public string? Title { get; set; }
         
-        [Required]
         [StringLength(200, ErrorMessage = "The {0} must be at least {2} and no more then {1}", MinimumLength = 2)]
         public string? Abstract { get; set; }
         

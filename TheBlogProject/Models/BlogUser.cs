@@ -30,9 +30,6 @@ namespace TheBlogProject.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and no more then {1} characters", MinimumLength = 2)]
         public string? TwitterUrl { get; set; }
 
-        [Display(Name = "My Tags")]
-        public string[]? MyTags { get; set; } = new string[] { };
-
         [NotMapped]
         public string FullName 
         {
