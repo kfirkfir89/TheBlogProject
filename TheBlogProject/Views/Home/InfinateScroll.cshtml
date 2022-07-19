@@ -1,12 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogProject.Models
 @using TheBlogProject.Services
-@using X.PagedList
-@using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common
-@using TheBlogProject.Enums
 @using TheBlogProject.Data
-@using System.Drawing
+
+
 
 @inject ViewDataDictionary vdd
 @inject SignInManager<BlogUser> SignInManager
@@ -14,40 +11,18 @@
 @inject IImageService imageService
 @inject ApplicationDbContext _context
 
-
 @{
-    Layout = "~/Views/Shared/_Layout2Col.cshtml";
+    Layout = "~/Views/Shared/_Layout1Col.cshtml";
 }
 @model IEnumerable<Post>
 
 
-<div id="container" class="row-cols-1 pt-5 mt-5">
-    <div class="col" id="hiddenContainer">
-        @Html.Partial("_postPartial", Model)
-    </div>
-    <script>console.log(@Model);</script>
+
+<div class="col" id="hiddenContainer">
+    @Html.Partial("_postPartial", Model)
 </div>
-
-<button onclick="GetData()">get data</button>
-
-<div id="progress">
-    loading
-</div>
-
-
 
 @section Scripts {
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Core theme JS-->
-    <script src="~/js/scripts.js"></script>
-    <!-- Jquery JS(needed for summernote)-->
-    <script src="~/js/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Summernote JS-->
-    <script src="~/js/summernote-lite.min.js"></script>
-    <!-- SweetAlert2 -->
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script type="text/javascript">
 
@@ -59,15 +34,22 @@
 
 
             $(".likeBtn").click(function () {
-                
+
                  var $el = $(this);
                  var slug = $el.data('slug');
-                 let modalId = $(this).attr('id');
+                var postLikesCount = $(this).attr('postLikesCount');
 
+                var e = $el.parents("#viewUpdate").children().children();
+                var elId = e.attr('id');
+                var pageCount = $("#" + elId).children().html();
+                postLikesCount = pageCount;
+
+                 let modalId = $(this).attr('id');
+                 
                  console.log($el.data('slug'));
                  console.log("ziki zuki `` ose string"+``);
                  $.ajax({
-
+                    
                     type: "POST",
                     url: "@Url.ActionLink("Like","Home")",
                      data: { slug: slug },
@@ -81,29 +63,40 @@
                          if (icon.classList.contains("fa-regular")) {
                              icon.classList.remove("fa-regular");
                              icon.classList.add("fa-solid");
+
+                             postLikesCount++;
+
                          } else if (icon.classList.contains("fa-solid")) {
                              icon.classList.remove("fa-solid");
                              icon.classList.add("fa-regular");
+
+                             postLikesCount--;
                          }
 
                          var e = $el.parents("#viewUpdate").children().children();
                          var elId = e.attr('id');
-
                          console.log(elId);
-
-                         $("#" + elId).load(" #" + elId + "> *");
+                         $("#" + elId).children().html(" " + postLikesCount);
 
                      },
                     error: function (req, status, error) {
                         console.log(status)
                     }
-                });
-             });
+                 });
+            });
+
 
             $(".usefulBtn").click(function () {
 
                  var $el = $(this);
-                 var slug = $el.data('slug');
+                var slug = $el.data('slug');
+                var postUsefulCount = $(this).attr('postUsefulCount');
+
+                var e = $el.parents("#viewUpdate").children().children(".usefulCount");
+                var elId = e.attr('id');
+                var pageCount = $("#" + elId).children(".usefulCount").html();
+                postUsefulCount = pageCount;
+
                  let modalId = $(this).attr('id');
 
                  console.log($el.data('slug'));
@@ -113,7 +106,7 @@
 
                     type: "POST",
                     url: "@Url.ActionLink("UsefulCode", "Home")",
-                     data: { slug: slug },
+                     data: { slug: slug, postUsefulCount: postUsefulCount},
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
@@ -123,17 +116,22 @@
                         if (icon.classList.contains("fa-regular")) {
                             icon.classList.remove("fa-regular");
                             icon.classList.add("fa-solid");
+
+                            postUsefulCount++;
+
                         } else if (icon.classList.contains("fa-solid")) {
                             icon.classList.remove("fa-solid");
                             icon.classList.add("fa-regular");
+
+                            postUsefulCount--;
                         }
 
                         var e = $el.parents("#viewUpdate").children().children(".usefulCount");
                         var elId = e.attr('id');
 
                         console.log(elId);
+                        $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
 
-                        $("#" + elId).load(" #" + elId + "> *");
 
                     },
                     error: function (req, status, error) {
@@ -146,35 +144,6 @@
 
 
         });
-
-        function GetData() {
-            $.ajax({
-                type: 'POST',
-                url: "@Url.ActionLink("InfinateScroll", "Home")",
-                data: { "BlockNumber": BlockNumber },
-                dataType: 'HTML',
-                success: function (data) {
-                    console.log(data);
-
-                    if (data != null) {
-                        $(" #container > *").append(data);
-                        console.log(data[7].elId);
-                        BlockNumber++;
-                    }
-                },
-                beforeSend: function () {
-                    $("#progress").show();
-                    console.log("rdy");
-                },
-                complete: function () {
-                    $("#progress").hide();
-                },
-                error: function () {
-                    alert("Error while retrieving data!");
-                }
-            });
-        }
-
 
     </script>
 }

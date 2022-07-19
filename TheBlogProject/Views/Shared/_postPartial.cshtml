@@ -13,11 +13,12 @@
 @inject ApplicationDbContext _context
 
 
-@model IPagedList<Post>
+@model IEnumerable<Post>
 
 <div class="row row-cols-1">
 
-    @{ var counter = 0;
+    @{ var first = Model.FirstOrDefault();
+        var counter = first.Id;
 
     }
 
@@ -25,6 +26,18 @@
     {
         //Is the logged in user the Author of this post??
         var isAuthor = false;
+        int postLikesCount = 0;
+        int postUsefulCount = 0;
+
+        if (post.Likes != null)
+        {
+            postLikesCount = post.Likes.Count();
+        }
+
+        if (post.UsefulCodes != null)
+        {
+            postUsefulCount = post.UsefulCodes.Count();
+        }
 
         if (User.Identity.IsAuthenticated)
         {
@@ -402,7 +415,7 @@
                                 </i>
                             </div>
                             <div class="bd-highlight usefulCount" id="@($"usefulCount{counter}")">
-                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2 usefulCount">
                                     @if (post.UsefulCodes != null)
                                     {
                                         @post.UsefulCodes.Count()
@@ -457,7 +470,7 @@
                                     if (contain is true)
                                     {
 
-                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                         </a>
 
@@ -465,7 +478,7 @@
                                     else
                                     {
 
-                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                         </a>
 
@@ -474,7 +487,7 @@
                                 else
                                 {
 
-                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color);">
                                         <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                     </a>
                                 }
@@ -492,21 +505,21 @@
                                     if (contain is true)
                                     {
 
-                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE;">
                                             <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                         </a>
 
                                     }
                                     else
                                     {
-                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE;">
                                             <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                         </a>
                                     }
                                 }
                                 else
                                 {
-                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE;">
                                         <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                     </a>
                                 }
@@ -538,122 +551,7 @@
             </div>
         }
 
-        counter++;
+        counter--;
     }
 </div>
 
-<hr />
-
-<hr />
-
-<div class="row">
-    <div class="col h3">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
-            new PagedListRenderOptions
-            {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
-    </div>
-</div>
-
-@section Scripts {
-    
-    <script>
-
-        $(document).ready(function () {
-            console.log("rdy");
-
-             $(".likeBtn").click(function () {
-
-                 var $el = $(this);
-                 var slug = $el.data('slug');
-                 let modalId = $(this).attr('id');
-
-                 console.log($el.data('slug'));
-                 console.log("ziki zuki `` ose string"+`@counter`);
-                 $.ajax({
-
-                    type: "POST",
-                    url: "@Url.ActionLink("Like","Home")",
-                     data: { slug: slug },
-                    dataType: "json",
-                     success: function (result) {
-                         console.log(result);
-
-                         var modalAnchor = document.getElementById(modalId);
-                         var icon = modalAnchor.firstElementChild;
-
-                         if (icon.classList.contains("fa-regular")) {
-                             icon.classList.remove("fa-regular");
-                             icon.classList.add("fa-solid");
-                         } else if (icon.classList.contains("fa-solid")) {
-                             icon.classList.remove("fa-solid");
-                             icon.classList.add("fa-regular");
-                         }
-
-                         var e = $el.parents("#viewUpdate").children().children();
-                         var elId = e.attr('id');
-
-                         console.log(elId);
-
-                         $("#" + elId).load(" #" + elId + "> *");
-
-                     },
-                    error: function (req, status, error) {
-                        console.log(status)
-                    }
-                });
-             });
-
-             $(".usefulBtn").click(function () {
-
-                 var $el = $(this);
-                 var slug = $el.data('slug');
-                 let modalId = $(this).attr('id');
-
-                 console.log($el.data('slug'));
-                 console.log("ziki zuki `` ose string"+`@counter`);
-
-                 $.ajax({
-
-                    type: "POST",
-                    url: "@Url.ActionLink("UsefulCode", "Home")",
-                     data: { slug: slug },
-                    dataType: "json",
-                    success: function (result) {
-                        console.log(result);
-                        var modalAnchor = document.getElementById(modalId);
-                        var icon = modalAnchor.firstElementChild;
-
-                        if (icon.classList.contains("fa-regular")) {
-                            icon.classList.remove("fa-regular");
-                            icon.classList.add("fa-solid");
-                        } else if (icon.classList.contains("fa-solid")) {
-                            icon.classList.remove("fa-solid");
-                            icon.classList.add("fa-regular");
-                        }
-
-                        var e = $el.parents("#viewUpdate").children().children(".usefulCount");
-                        var elId = e.attr('id');
-
-                        console.log(elId);
-
-                        $("#" + elId).load(" #" + elId + "> *");
-
-                    },
-                    error: function (req, status, error) {
-                        console.log(status)
-                    }
-                });
-             });
-
-         })
-
-    </script>
-}

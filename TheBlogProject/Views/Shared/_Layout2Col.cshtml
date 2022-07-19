@@ -55,41 +55,40 @@
     }
 
     <!-- Page Header-->
-    <header style="padding-bottom:70px;">
-        <!-- NAV-->
-        <nav class="navbar navbar-expand-md navbar-dark mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1 fixed-top">
-            <div class="container-fluid d-flex justify-content-center">
-                <div class="container-xxl row p-0 m-0">
-                    <div class="col-md-4 d-flex d-inline-block pt-md-0">
-                        <form class="d-flex d-none d-md-block shadow-sm" style="height:40px;" asp-action="SearchIndex" asp-controller="Posts">
-                            <div class="input-group d-flex flex-nowrap">
-                                <div class="form-floating d-flex flex-nowrap">
-                                    <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
-                                    <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
-                                    <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
-                                </div>
+    <!--<header style="padding-bottom:70px;">-->
+    <!-- NAV-->
+    <!--<nav class="navbar navbar-expand-md navbar-dark mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1 fixed-top">
+        <div class="container-fluid d-flex justify-content-center">
+            <div class="container-xxl row p-0 m-0">
+                <div class="col-md-4 d-flex d-inline-block pt-md-0">
+                    <form class="d-flex d-none d-md-block shadow-sm" style="height:40px;" asp-action="SearchIndex" asp-controller="Posts">
+                        <div class="input-group d-flex flex-nowrap">
+                            <div class="form-floating d-flex flex-nowrap">
+                                <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                                <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
+                                <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
                             </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4 col-6 d-flex" style="padding:0px 55px;">
-                        <a class="p-0 m-0 ps-md-5 ms-md-4" asp-controller="Home" asp-action="Index">
-                            <i class="">
-                                <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
-                            </i>
-                        </a>
-                    </div>
-                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end pe-lg-5 align-items-center">
-                        <partial name="_LogoutPartial" />
-                        <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 col-6 d-flex" style="padding:0px 55px;">
+                    <a class="p-0 m-0 ps-md-5 ms-md-4" asp-controller="Home" asp-action="Index">
+                        <i class="">
+                            <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
+                        </i>
+                    </a>
+                </div>
+                <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end pe-lg-5 align-items-center">
+                    <partial name="_LogoutPartial" />
+                    <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
                 </div>
             </div>
-        </nav>
-
-        <!--CANVAS NAV-->
-        <div class="offcanvas offcanvas-start bg-offcanvas" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        </div>
+    </nav>-->
+    <!--CANVAS NAV-->
+    <!--<div class="offcanvas offcanvas-start bg-offcanvas" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
             <div class="row-cols-1">
                 <div class="col d-inline-flex p-1">
                     <h5 class="offcanvas-title" id="offcanvasExampleLabel">NAV</h5>
@@ -207,8 +206,7 @@
                 </div>
             </div>
         </div>
-    </header>
-
+    </header>-->
     <!-- Main Content-->
     <main class="d-flex flex-column h-100 mt-2">
         <div class="container-xxl">
@@ -217,7 +215,7 @@
 
                 <!--SIDEBAR NAV-->
                 <div class="col-3 col-3-left text-center d-none d-md-block me-2">
-                    <div class="row-cols-1 h-100 position-fixed hoverWidthSideBar" >
+                    <div class="row-cols-1 h-100 position-fixed hoverWidthSideBar">
                         <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">
 
@@ -329,25 +327,25 @@
                                     <a><img class="card-img-top" style="background-image: url(@imagePath)"></a>*@
 
     <!-- Footer-->
-    <footer class="footer mt-auto py-2 fixed-bottom">
-        <div class="container-fluid bg-gradient">
-            <div class="row row-cols-1 row-cols-lg-3 gy-2">
-                <div class="col text-light d-flex align-items-center order-last order-lg-first">
-                    <div class="smallfont"><span>&copy;2022</span>  Kfir Avraham | Kfirkfir89@gmail.com</div>
-                </div>
-                <div class="col d-flex align-items-center justify-content-center">
-                    <img src="/img/White logo - no background.svg" alt="Kfir Avraham Logo" height="43">
-                </div>
-                <div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
-                    <div class="row p-1">
-                        <div class="col social"><a href="https://www.linkedin.com/in/kfir-avraham-91637b123/" target="__blank"><i class="fab fa-linkedin fa-2x"></i></a></div>
-                        <div class="col social"><a href="https://github.com/kfirkfir89" target="__blank"><i class="fab fa-github fa-2x"></i></a></div>
-                        <div class="col social"><a href="https://twitter.com/kfir_avraham" target="__blank"><i class="fab fa-twitter fa-2x"></i></a></div>
+    @*    <footer class="footer mt-auto py-2 fixed-bottom">
+            <div class="container-fluid bg-gradient">
+                <div class="row row-cols-1 row-cols-lg-3 gy-2">
+                    <div class="col text-light d-flex align-items-center order-last order-lg-first">
+                        <div class="smallfont"><span>&copy;2022</span>  Kfir Avraham | Kfirkfir89@gmail.com</div>
+                    </div>
+                    <div class="col d-flex align-items-center justify-content-center">
+                        <img src="/img/White logo - no background.svg" alt="Kfir Avraham Logo" height="43">
+                    </div>
+                    <div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
+                        <div class="row p-1">
+                            <div class="col social"><a href="https://www.linkedin.com/in/kfir-avraham-91637b123/" target="__blank"><i class="fab fa-linkedin fa-2x"></i></a></div>
+                            <div class="col social"><a href="https://github.com/kfirkfir89" target="__blank"><i class="fab fa-github fa-2x"></i></a></div>
+                            <div class="col social"><a href="https://twitter.com/kfir_avraham" target="__blank"><i class="fab fa-twitter fa-2x"></i></a></div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>*@
 
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -355,6 +353,7 @@
     <script src="~/js/scripts.js"></script>
     <!-- Jquery JS(needed for summernote)-->
     <script src="~/js/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Summernote JS-->
     <script src="~/js/summernote-lite.min.js"></script>
     <!-- SweetAlert2 -->

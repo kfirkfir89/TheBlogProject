@@ -8,16 +8,23 @@
 @using TheBlogProject.Data
 @using System.Drawing
 
+@inject ViewDataDictionary vdd
+@inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
 @inject ApplicationDbContext _context
 
 
-@model IPagedList<Post>
+@{
+    Layout = null;
+}
+@model IEnumerable<Post>
+
 
 <div class="row row-cols-1">
 
-    @{ var counter = 0;
+    @{ var first = Model.FirstOrDefault();
+        var counter = first.Id;
 
     }
 
@@ -538,122 +545,6 @@
             </div>
         }
 
-        counter++;
+        counter--;
     }
 </div>
-
-<hr />
-
-<hr />
-
-<div class="row">
-    <div class="col h3">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-    </div>
-</div>
-<div class="row">
-    <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
-            new PagedListRenderOptions
-            {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
-    </div>
-</div>
-
-@section Scripts {
-    
-    <script>
-
-        $(document).ready(function () {
-            console.log("rdy");
-
-             $(".likeBtn").click(function () {
-
-                 var $el = $(this);
-                 var slug = $el.data('slug');
-                 let modalId = $(this).attr('id');
-
-                 console.log($el.data('slug'));
-                 console.log("ziki zuki `` ose string"+`@counter`);
-                 $.ajax({
-
-                    type: "POST",
-                    url: "@Url.ActionLink("Like","Home")",
-                     data: { slug: slug },
-                    dataType: "json",
-                     success: function (result) {
-                         console.log(result);
-
-                         var modalAnchor = document.getElementById(modalId);
-                         var icon = modalAnchor.firstElementChild;
-
-                         if (icon.classList.contains("fa-regular")) {
-                             icon.classList.remove("fa-regular");
-                             icon.classList.add("fa-solid");
-                         } else if (icon.classList.contains("fa-solid")) {
-                             icon.classList.remove("fa-solid");
-                             icon.classList.add("fa-regular");
-                         }
-
-                         var e = $el.parents("#viewUpdate").children().children();
-                         var elId = e.attr('id');
-
-                         console.log(elId);
-
-                         $("#" + elId).load(" #" + elId + "> *");
-
-                     },
-                    error: function (req, status, error) {
-                        console.log(status)
-                    }
-                });
-             });
-
-             $(".usefulBtn").click(function () {
-
-                 var $el = $(this);
-                 var slug = $el.data('slug');
-                 let modalId = $(this).attr('id');
-
-                 console.log($el.data('slug'));
-                 console.log("ziki zuki `` ose string"+`@counter`);
-
-                 $.ajax({
-
-                    type: "POST",
-                    url: "@Url.ActionLink("UsefulCode", "Home")",
-                     data: { slug: slug },
-                    dataType: "json",
-                    success: function (result) {
-                        console.log(result);
-                        var modalAnchor = document.getElementById(modalId);
-                        var icon = modalAnchor.firstElementChild;
-
-                        if (icon.classList.contains("fa-regular")) {
-                            icon.classList.remove("fa-regular");
-                            icon.classList.add("fa-solid");
-                        } else if (icon.classList.contains("fa-solid")) {
-                            icon.classList.remove("fa-solid");
-                            icon.classList.add("fa-regular");
-                        }
-
-                        var e = $el.parents("#viewUpdate").children().children(".usefulCount");
-                        var elId = e.attr('id');
-
-                        console.log(elId);
-
-                        $("#" + elId).load(" #" + elId + "> *");
-
-                    },
-                    error: function (req, status, error) {
-                        console.log(status)
-                    }
-                });
-             });
-
-         })
-
-    </script>
-}

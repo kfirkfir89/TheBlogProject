@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TheBlogProject.Data;
@@ -9,6 +10,7 @@ using TheBlogProject.Models;
 using TheBlogProject.Services;
 using TheBlogProject.ViewModels;
 using X.PagedList;
+
 
 namespace TheBlogProject.Controllers
 {
@@ -20,8 +22,9 @@ namespace TheBlogProject.Controllers
         private readonly UserManager<BlogUser> _userManager;
         private readonly ISlugService _slugService;
         private readonly SignInManager<BlogUser> _signInManager;
+        private readonly ICompositeViewEngine ViewEngine;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService, SignInManager<BlogUser> signInManager = null)
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService, SignInManager<BlogUser> signInManager = null, ICompositeViewEngine viewEngine = null)
         {
             _logger = logger;
             _emailSender = emailSender;
@@ -29,7 +32,55 @@ namespace TheBlogProject.Controllers
             _userManager = userManager;
             _slugService = slugService;
             _signInManager = signInManager;
+            ViewEngine = viewEngine;
         }
+
+
+        public List<Post> GetPosts(int BlockNumber, int BlockSize)
+        {
+            var query = _context.Posts
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Created)
+                    .ToPagedList(BlockNumber, BlockSize).ToList();
+
+            return query;
+        }
+
+        public IActionResult PostList(List<Post> posts)
+        {
+            return PartialView("_postPartial", posts);
+        }
+
+
+
+        [HttpPost]
+        public IActionResult InfinateScroll(int BlockNumber)
+        {
+            //////////////// THis line of code only for demo. Needs to be removed ////
+            System.Threading.Thread.Sleep(1000);
+            //////////////////////////////////////////////////////////////////////////
+            int BlockSize = 8;
+            var posts = GetPosts(BlockNumber, BlockSize);
+
+            return PartialView(posts);
+        }
+
+
+        public async Task<IActionResult> About()
+        {
+            int BlockSize = 8;
+            var posts = GetPosts(1, BlockSize);
+            return View(posts);
+
+        }
+
+
+
+
+
+
+
+
 
 
 
@@ -204,10 +255,6 @@ namespace TheBlogProject.Controllers
 
         }
 
-        public IActionResult About()
-        {
-            return View();
-        }
 
         public async Task<IActionResult> Contact()
         {
