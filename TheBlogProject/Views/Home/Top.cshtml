@@ -4,37 +4,25 @@
 @using TheBlogProject.Data
 
 
-
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
 @inject ApplicationDbContext _context
 
+
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 
-@model IEnumerable<Post>
-
-
-
-
-<div class="part">
-
-
-</div>
-<div class="container2">
-
-    @foreach(var post in Model)
-            {
-
-            @Html.Partial("_postPartial2", post)
-            }
-    <!-- Or you can call from a ajax or other way... -->
+<div id="@ViewBag.Text" class="postPartialContainer row-cols-1">
 
 </div>
 
-@section Scripts{ 
+<div class="d-flex justify-content-center pt-2 mb-3">
+    <i id="progress" class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
+</div>
+@section Scripts{
+    <script src="~/js/partialScripts.js"></script>
 
 }

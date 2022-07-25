@@ -21,8 +21,11 @@
 
 }
 
-<div class="partBlock" id="@ViewBag.BlockNumber">
-    @*<script src="~/js/partialScripts.js" id="@ViewBag.BlockNumber" class="partScript"></script>*@
+
+
+
+
+<div class="partBlock">
 
     <div class="part">
         <script type="text/javascript">
@@ -33,21 +36,15 @@
             });
         </script>
     </div>
-    @**@
-    @{ var first = Model.FirstOrDefault();
+
+    @{
+        var first = Model.FirstOrDefault();
         var counter = first.Id;
-        @*    if (first.Id == _context.Posts.OrderByDescending(p => p.Created).Take(1).Select(p => p.Id).FirstOrDefault())
-            {
-                @Html.Partial("_Scripts")
-            }*@
-
-        @*        <div class="scriptREM">
-
-                <script type="text/javascript">
-                    $(function () { myPartialView_Load(); });
-                </script>
-            </div>*@
-
+        var firstOfAll = 0;
+        if (ViewBag.BlockNumber == 1)
+        {
+            firstOfAll = Model.FirstOrDefault().Id;
+        }
 
     }
 
@@ -73,7 +70,7 @@
             isAuthor = (post.BlogUserId == userManager.GetUserId(User));
         }
 
-        if (counter == 0)
+        if (counter == firstOfAll)
         {
             <div class="col" style="padding:0px;">
                 @*-------------   Post card   ------------*@
@@ -89,13 +86,12 @@
                             <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[1]" title="Useful">
                                 <span class="pt-2 smallFont pb-2">USEFUL</span>
                             </a>
-                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[2]" title="Top View">
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="Top" asp-route-text="@arr[2]" title="Top View">
                                 <span class="pt-2 smallFont pb-2">TOP</span>
                             </a>
 
                         </div>
                     </div>
-
                     <div class="card-body bg-white" style="margin-top: 1px; padding: 5px;">
                         @*-------------   User info   ------------*@
                         @{
@@ -123,7 +119,7 @@
                             @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
                             {
                                 <div class="d-flex justify-content-end">
-                                    <a class="btn btn-primary logoutButton bg-white justify-content-center" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
+                                    <a class="btn btn-primary logoutButton bg-white justify-content-center shadow-none" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
                                         <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
                                     </a>
                                 </div>
@@ -159,22 +155,22 @@
                         if (width < 744)
                         {
                             <script>
-                                               console.log("katannn m800");
-                                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                                   console.log("katannn m800");
+                                                   document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
                         }
                         else if (width >= 1024 && height >= 768)
                         {
                             <script>
-                                               document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
+                                                   document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
                         else if (width >= 700 && height >= 300)
                         {
                             <script>
-                                                       console.log("katannn m800");
-                                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                                           console.log("katannn m800");
+                                                           document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
 
@@ -198,7 +194,7 @@
                                 </i>
                             </div>
                             <div class="bd-highlight usefulCount" id="@($"usefulCount{counter}")">
-                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2 usefulCount">
                                     @if (post.UsefulCodes != null)
                                     {
                                         @post.UsefulCodes.Count()
@@ -236,7 +232,7 @@
                             </div>
                         </div>
 
-                        <div class="btn-group d-flex flex-nowrap" id="ze div">
+                        <div class="btn-group d-flex flex-nowrap">
 
                             @if (User.Identity.IsAuthenticated)
                             {
@@ -253,11 +249,7 @@
                                     if (contain is true)
                                     {
 
-                                        @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
-                                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
-                                            </a>*@
-
-                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                         </a>
 
@@ -265,7 +257,7 @@
                                     else
                                     {
 
-                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color);">
                                             <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                         </a>
 
@@ -274,7 +266,7 @@
                                 else
                                 {
 
-                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color);">
                                         <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                     </a>
                                 }
@@ -292,21 +284,21 @@
                                     if (contain is true)
                                     {
 
-                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE;">
                                             <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                         </a>
 
                                     }
                                     else
                                     {
-                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE;">
                                             <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                         </a>
                                     }
                                 }
                                 else
                                 {
-                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE;">
                                         <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                     </a>
                                 }
@@ -336,6 +328,7 @@
                     </div>
                 </div>
             </div>
+            
         }
         else
         {
@@ -482,7 +475,7 @@
                             </div>
                         </div>
 
-                        <div class="btn-group d-flex flex-nowrap" id="ze div">
+                        <div class="btn-group d-flex flex-nowrap">
 
                             @if (User.Identity.IsAuthenticated)
                             {
@@ -586,5 +579,4 @@
 
 
 </div>
-
 

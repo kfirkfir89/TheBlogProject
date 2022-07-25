@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TheBlogProject.Data;
@@ -22,9 +21,9 @@ namespace TheBlogProject.Controllers
         private readonly UserManager<BlogUser> _userManager;
         private readonly ISlugService _slugService;
         private readonly SignInManager<BlogUser> _signInManager;
-        private readonly ICompositeViewEngine ViewEngine;
 
-        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService, SignInManager<BlogUser> signInManager = null, ICompositeViewEngine viewEngine = null)
+
+        public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService, SignInManager<BlogUser> signInManager = null)
         {
             _logger = logger;
             _emailSender = emailSender;
@@ -32,12 +31,44 @@ namespace TheBlogProject.Controllers
             _userManager = userManager;
             _slugService = slugService;
             _signInManager = signInManager;
-            ViewEngine = viewEngine;
+
         }
 
-
-        public List<Post> GetPosts(int BlockNumber, int BlockSize)
+        public async Task<BlogUser> MyAsyncMethod()
         {
+            var user = await _userManager.GetUserAsync(User);
+            return user;
+        }
+
+        public List<Post> GetPosts2(int BlockNumber, string? text)
+        {
+            int BlockSize = 5;
+            var user = MyAsyncMethod();
+            var userTags = _context.Tags.Where(t => t.BlogUserId == user.Result.Id).ToList();
+
+
+            if (user == null)
+            {
+                var queryGuest = _context.Posts
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.Created)
+                        .ToPagedList(BlockNumber, BlockSize).ToList();
+                return queryGuest;
+            }
+
+            if (text == "top" && userTags != null)
+            {
+                var selectedPosts = _context.Posts
+                    .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                    .Where(p => p.Views != null)
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Views.Value)
+                    .ToPagedList(BlockNumber, BlockSize)
+                    .ToList();
+
+                return selectedPosts;
+            }
+
             var query = _context.Posts
                     .Include(p => p.Tags)
                     .OrderByDescending(p => p.Created)
@@ -46,14 +77,39 @@ namespace TheBlogProject.Controllers
             return query;
         }
 
+        public List<Post> GetPosts(int BlockNumber)
+        {
+            int BlockSize = 5;
+            var query = _context.Posts
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Created)
+                    .ToPagedList(BlockNumber, BlockSize).ToList();
+            
+
+            return query;
+        }
+
 
 
         [HttpPost]
-        public IActionResult InfinateScroll(int BlockNumber)
+        public IActionResult InfinateScroll(int BlockNumber, string? text, string? tag)
         {
-            int BlockSize = 5;
-            var posts = GetPosts(BlockNumber, BlockSize);
+            
+            List<Post> posts = new List<Post>();
+            if(text != null)
+            {
+                posts = GetPosts2(BlockNumber,text);
+            }
+            else
+            {
+                posts = GetPosts(BlockNumber);
+            }
 
+            if(posts.Count == 0)
+            {
+                var noMoreData = true;
+                return Json(noMoreData);
+            }
             //////////////// THis line of code only for demo. Needs to be removed ////
             System.Threading.Thread.Sleep(01);
             //////////////////////////////////////////////////////////////////////////
@@ -61,53 +117,16 @@ namespace TheBlogProject.Controllers
             return PartialView("_postPartial",posts);
         }
 
-        [HttpPost]
-        public IActionResult _postPartial(int BlockNumber)
-        {
-            int BlockSize = 5;
-            BlockNumber--;
-            var posts = GetPosts(BlockNumber, BlockSize);
-
-            //////////////// THis line of code only for demo. Needs to be removed ////
-            System.Threading.Thread.Sleep(01);
-            //////////////////////////////////////////////////////////////////////////
-            ViewBag.BlockNumber = BlockNumber;
-            return PartialView(posts);
-        }
-
-        [HttpPost]
-        public IActionResult _postPartial3(int BlockNumber)
-        {
-            int BlockSize = 5;
-            BlockNumber--;
-            var posts = GetPosts(BlockNumber, BlockSize);
-
-            //////////////// THis line of code only for demo. Needs to be removed ////
-            System.Threading.Thread.Sleep(01);
-            //////////////////////////////////////////////////////////////////////////
-            ViewBag.BlockNumber = BlockNumber;
-            return PartialView(posts);
-        }
-
-        [HttpPost]
-        public IActionResult _postPartial2(int BlockNumber)
-        {
-            int BlockSize = 5;
-            BlockNumber--;
-            var posts = GetPosts(BlockNumber, BlockSize);
-
-            //////////////// THis line of code only for demo. Needs to be removed ////
-            System.Threading.Thread.Sleep(01);
-            //////////////////////////////////////////////////////////////////////////
-
-            return View(posts);
-        }
-
 
         public async Task<IActionResult> About()
         {
-/*            int BlockSize = 5;
-            var posts = GetPosts(1, BlockSize);*/
+            return View();
+
+        }
+        public async Task<IActionResult> Top(string? text)
+        {
+
+            ViewBag.Text = text;
             return View();
 
         }

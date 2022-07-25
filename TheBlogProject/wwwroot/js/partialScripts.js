@@ -1,41 +1,89 @@
-﻿console.log("work");
-console.log("work");
-console.log("work");
-
-var NoMoreData = false;
-var inProgress = false;
+﻿var BlockNumber = 1;
+var noMoreData = false;
+var text = $(".postPartialContainer").attr('id');
 
 
-$(document).ready(function () {
 
-    console.log("rdy");
+$(window).ready(function () {
+    console.log("doc rdy");
+    $("#progress").hide();
 
-    $(".likeBtn").click(function () {
+    console.log(text);
 
-        var blockId = $(this).parents(".partBlock").attr('id');
-        var scriptId = $(this).parents(".partBlock").children(".partScript").attr('id');
-        var lastCon = $(this).parents(".lastGetContainer");
-        var lastConBlockId = lastCon.children(".partBlock").attr('id');
-        var lastConScriptId = lastCon.children(".partBlock").children(".partScript").attr('id');
+    GetData();
 
-        console.log(lastCon.attr('id'));
-        console.log("Conblock:" + lastConBlockId);
-        console.log("block:" + blockId);
-        console.log("script:" + lastConScriptId);
+});
 
-        if (lastCon != undefined) {
-            console.log("ze ze");
-            
-        } else {
-            console.log("ze lo ze");
-            return;
+$(window).on("scroll", function () {
+    var docHeight = $(document).height();
+    var winScrolled = $(window).height() + $(window).scrollTop();
+    if ((docHeight - winScrolled) < 1 && !noMoreData) {
+        console.log("module scrolled to bottom");
+        console.log(noMoreData);
+        GetData();
+    }
+})
+
+
+function GetData() {
+
+
+    console.log("getting data");
+
+    console.log("nomore:" + noMoreData);
+    if (noMoreData == true) {
+        return;
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: '/Home/InfinateScroll',
+        data: { "BlockNumber": BlockNumber, "text": text},
+        dataType: 'HTML',
+        success: function (data) {
+            console.log(data);
+
+            if (data == "true") {
+                noMoreData = true;
+                console.log(noMoreData);
+                $("#progress").hide();
+                return;
+            }
+
+            if (data != null) {
+
+                $(".postPartialContainer").append(data);
+
+                console.log(data);
+                BlockNumber++;
+
+            }
+        },
+        beforeSend: function () {
+            $("#progress").show();
+            console.log("rdy");
+            console.log(noMoreData);
+
+        },
+        complete: function () {
+
+            $("#progress").hide();
+
+        },
+        error: function () {
+            alert("Error while retrieving data!");
         }
+    });
+}
 
 
+function myPartialView_Load() {
+
+
+    $(".likeBtn").off("click").on('click', function () {
         var $el = $(this);
         var slug = $el.data('slug');
         var postLikesCount = $(this).attr('postLikesCount');
-
 
         var e = $el.parents("#viewUpdate").children().children();
         var elId = e.attr('id');
@@ -54,7 +102,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (result) {
                 console.log(result);
-
+                trigger = false;
                 var modalAnchor = document.getElementById(modalId);
                 var icon = modalAnchor.firstElementChild;
 
@@ -84,7 +132,7 @@ $(document).ready(function () {
     });
 
 
-    $(".usefulBtn").click(function () {
+    $(".usefulBtn").off("click").on('click', function () {
 
         var $el = $(this);
         var slug = $el.data('slug');
@@ -138,7 +186,4 @@ $(document).ready(function () {
         });
     });
 
-    console.log("rdy");
-
-
-});
+}
