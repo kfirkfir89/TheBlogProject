@@ -46,35 +46,71 @@ namespace TheBlogProject.Controllers
             return query;
         }
 
-        public IActionResult PostList(List<Post> posts)
-        {
-            return PartialView("_postPartial", posts);
-        }
-
 
 
         [HttpPost]
         public IActionResult InfinateScroll(int BlockNumber)
         {
-            //////////////// THis line of code only for demo. Needs to be removed ////
-            System.Threading.Thread.Sleep(1000);
-            //////////////////////////////////////////////////////////////////////////
-            int BlockSize = 8;
+            int BlockSize = 5;
             var posts = GetPosts(BlockNumber, BlockSize);
 
+            //////////////// THis line of code only for demo. Needs to be removed ////
+            System.Threading.Thread.Sleep(01);
+            //////////////////////////////////////////////////////////////////////////
+            ViewBag.BlockNumber = BlockNumber;
+            return PartialView("_postPartial",posts);
+        }
+
+        [HttpPost]
+        public IActionResult _postPartial(int BlockNumber)
+        {
+            int BlockSize = 5;
+            BlockNumber--;
+            var posts = GetPosts(BlockNumber, BlockSize);
+
+            //////////////// THis line of code only for demo. Needs to be removed ////
+            System.Threading.Thread.Sleep(01);
+            //////////////////////////////////////////////////////////////////////////
+            ViewBag.BlockNumber = BlockNumber;
             return PartialView(posts);
+        }
+
+        [HttpPost]
+        public IActionResult _postPartial3(int BlockNumber)
+        {
+            int BlockSize = 5;
+            BlockNumber--;
+            var posts = GetPosts(BlockNumber, BlockSize);
+
+            //////////////// THis line of code only for demo. Needs to be removed ////
+            System.Threading.Thread.Sleep(01);
+            //////////////////////////////////////////////////////////////////////////
+            ViewBag.BlockNumber = BlockNumber;
+            return PartialView(posts);
+        }
+
+        [HttpPost]
+        public IActionResult _postPartial2(int BlockNumber)
+        {
+            int BlockSize = 5;
+            BlockNumber--;
+            var posts = GetPosts(BlockNumber, BlockSize);
+
+            //////////////// THis line of code only for demo. Needs to be removed ////
+            System.Threading.Thread.Sleep(01);
+            //////////////////////////////////////////////////////////////////////////
+
+            return View(posts);
         }
 
 
         public async Task<IActionResult> About()
         {
-            int BlockSize = 8;
-            var posts = GetPosts(1, BlockSize);
-            return View(posts);
+/*            int BlockSize = 5;
+            var posts = GetPosts(1, BlockSize);*/
+            return View();
 
         }
-
-
 
 
 

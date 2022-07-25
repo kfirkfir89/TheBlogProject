@@ -44,23 +44,14 @@
 
 </head>
 <body class="d-flex flex-column h-100">
-    <!-- Navigation-->
-
-    @{ var imagePath = @ViewData["HeaderImage"];
-        if (imagePath == null)
-        {
-            imagePath = "'/assets/img/home-bg.jpg'";
-        }
-        var user = await UserManager.GetUserAsync(User);
-    }
 
     <!-- Main Content-->
     <main class="d-flex flex-column h-100 mt-2">
 
 
-                <div class="col d-flex flex-column h-100">
-                    @RenderBody()
-                </div>
+        <div class="col d-flex flex-column h-100">
+            @RenderBody()
+        </div>
 
     </main>
 
@@ -81,6 +72,8 @@
          let forYou = '@ViewData["ForYou"]';
 
     </script>
+
+    @Html.Partial("_Scripts")
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

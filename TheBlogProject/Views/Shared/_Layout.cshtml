@@ -309,7 +309,7 @@
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-md-9 col-lg-6 d-flex flex-column h-100">
+                <div id="inContainer" class="col-md-9 col-lg-6 d-flex flex-column h-100">
                     @RenderBody()
                 </div>
 
@@ -448,11 +448,15 @@
     <script src="~/js/scripts.js"></script>
     <!-- Jquery JS(needed for summernote)-->
     <script src="~/js/jquery-3.5.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajax-unobtrusive/3.2.6/jquery.unobtrusive-ajax.min.js" integrity="sha512-DedNBWPF0hLGUPNbCYfj8qjlEnNE92Fqn7xd3Sscfu7ipy7Zu33unHdugqRD3c4Vj7/yLv+slqZhMls/4Oc7Zg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+
+
     <!-- Summernote JS-->
     <script src="~/js/summernote-lite.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
     <script>
 
          let forYou = '@ViewData["ForYou"]';

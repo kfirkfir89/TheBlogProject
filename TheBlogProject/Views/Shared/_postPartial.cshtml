@@ -15,10 +15,39 @@
 
 @model IEnumerable<Post>
 
-<div class="row row-cols-1">
 
+@{
+    Layout = null;
+
+}
+
+<div class="partBlock" id="@ViewBag.BlockNumber">
+    @*<script src="~/js/partialScripts.js" id="@ViewBag.BlockNumber" class="partScript"></script>*@
+
+    <div class="part">
+        <script type="text/javascript">
+
+            $(function () {
+
+                myPartialView_Load();
+            });
+        </script>
+    </div>
+    @**@
     @{ var first = Model.FirstOrDefault();
         var counter = first.Id;
+        @*    if (first.Id == _context.Posts.OrderByDescending(p => p.Created).Take(1).Select(p => p.Id).FirstOrDefault())
+            {
+                @Html.Partial("_Scripts")
+            }*@
+
+        @*        <div class="scriptREM">
+
+                <script type="text/javascript">
+                    $(function () { myPartialView_Load(); });
+                </script>
+            </div>*@
+
 
     }
 
@@ -130,22 +159,22 @@
                         if (width < 744)
                         {
                             <script>
-                                       console.log("katannn m800");
-                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                               console.log("katannn m800");
+                                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
                         }
                         else if (width >= 1024 && height >= 768)
                         {
                             <script>
-                                       document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
+                                               document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
                         else if (width >= 700 && height >= 300)
                         {
                             <script>
-                                               console.log("katannn m800");
-                                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                                       console.log("katannn m800");
+                                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
 
@@ -376,22 +405,22 @@
                         if (width < 744)
                         {
                             <script>
-                               console.log("katannn m800");
-                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
                         }
                         else if (width >= 1024 && height >= 768)
                         {
                             <script>
-                               document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
                         else if (width >= 700 && height >= 300)
                         {
                             <script>
-                                       console.log("katannn m800");
-                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                               console.log("katannn m800");
+                                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
 
@@ -552,6 +581,10 @@
         }
 
         counter--;
+
     }
+
+
 </div>
+
 
