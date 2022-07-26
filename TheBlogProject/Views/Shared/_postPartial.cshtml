@@ -38,18 +38,14 @@
     </div>
 
     @{
-        var first = Model.FirstOrDefault();
-        var counter = first.Id;
-        var firstOfAll = 0;
-        if (ViewBag.BlockNumber == 1)
-        {
-            firstOfAll = Model.FirstOrDefault().Id;
-        }
+
+        var counter = (ViewBag.BlockNumber * 3) - 3;
 
     }
 
     @foreach (var post in Model)
     {
+
         //Is the logged in user the Author of this post??
         var isAuthor = false;
         int postLikesCount = 0;
@@ -70,7 +66,7 @@
             isAuthor = (post.BlogUserId == userManager.GetUserId(User));
         }
 
-        if (counter == firstOfAll)
+        if (counter == 0)
         {
             <div class="col" style="padding:0px;">
                 @*-------------   Post card   ------------*@
@@ -80,13 +76,13 @@
                         <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
 
                             @{ string[] arr = { "foryou", "useful", "top" }; }
-                            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[0]" title="For you">
+                            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="@arr[0]" title="For you">
                                 <span class="pt-2 smallFont pb-2">FOR YOU</span>
                             </a>
-                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[1]" title="Useful">
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="@arr[1]" title="Useful">
                                 <span class="pt-2 smallFont pb-2">USEFUL</span>
                             </a>
-                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="Top" asp-route-text="@arr[2]" title="Top View">
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="@arr[2]" title="Top View">
                                 <span class="pt-2 smallFont pb-2">TOP</span>
                             </a>
 
@@ -573,10 +569,10 @@
             </div>
         }
 
-        counter--;
+        counter++;
 
     }
 
-
+    
 </div>
 

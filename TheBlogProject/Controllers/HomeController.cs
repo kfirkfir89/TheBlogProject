@@ -40,16 +40,16 @@ namespace TheBlogProject.Controllers
             return user;
         }
 
-        public List<Post> GetPosts2(int BlockNumber, string? text)
+        public List<Post> GetPosts(int BlockNumber, string? text)
         {
-            int BlockSize = 5;
+            int BlockSize = 3;
             var user = MyAsyncMethod();
             var userTags = _context.Tags.Where(t => t.BlogUserId == user.Result.Id).ToList();
-
 
             if (user == null)
             {
                 var queryGuest = _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Include(p => p.Tags)
                         .OrderByDescending(p => p.Created)
                         .ToPagedList(BlockNumber, BlockSize).ToList();
@@ -77,17 +77,6 @@ namespace TheBlogProject.Controllers
             return query;
         }
 
-        public List<Post> GetPosts(int BlockNumber)
-        {
-            int BlockSize = 5;
-            var query = _context.Posts
-                    .Include(p => p.Tags)
-                    .OrderByDescending(p => p.Created)
-                    .ToPagedList(BlockNumber, BlockSize).ToList();
-            
-
-            return query;
-        }
 
 
 
@@ -96,14 +85,10 @@ namespace TheBlogProject.Controllers
         {
             
             List<Post> posts = new List<Post>();
-            if(text != null)
-            {
-                posts = GetPosts2(BlockNumber,text);
-            }
-            else
-            {
-                posts = GetPosts(BlockNumber);
-            }
+
+            posts = GetPosts(BlockNumber,text);
+
+
 
             if(posts.Count == 0)
             {
@@ -123,7 +108,7 @@ namespace TheBlogProject.Controllers
             return View();
 
         }
-        public async Task<IActionResult> Top(string? text)
+        public async Task<IActionResult> SortBy(string? text)
         {
 
             ViewBag.Text = text;

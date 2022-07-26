@@ -1,6 +1,7 @@
 ﻿var BlockNumber = 1;
 var noMoreData = false;
 var text = $(".postPartialContainer").attr('id');
+var inProgress = false;
 
 
 
@@ -10,7 +11,41 @@ $(window).ready(function () {
 
     console.log(text);
 
-    GetData();
+    $.ajax({
+        type: 'POST',
+        url: '/Home/InfinateScroll',
+        data: { "BlockNumber": BlockNumber, "text": text },
+        dataType: 'HTML',
+        success: function (data) {
+
+            if (data == "true") {
+
+                noMoreData = true;
+                $("#progress").hide();
+                inProgress = false;
+                return;
+            }
+
+            if (data != null) {
+
+                $(".postPartialContainer").append(data);
+                BlockNumber++;
+                inProgress = false;
+
+            }
+            GetData();
+        },
+        beforeSend: function () {
+            $("#progress").show();
+        },
+        complete: function () {
+            $("#progress").hide();
+        },
+        error: function () {
+            alert("Error while retrieving data!");
+        }
+    });
+    
 
 });
 
@@ -26,11 +61,15 @@ $(window).on("scroll", function () {
 
 
 function GetData() {
-
-
-    console.log("getting data");
-
+    console.log("---------------------------");
+    console.log("proIN:" + inProgress);
+    if (inProgress == true) {
+        return;
+    }
+    inProgress = true;
+    console.log("pro:" + inProgress);
     console.log("nomore:" + noMoreData);
+    console.log("block:" + BlockNumber);
     if (noMoreData == true) {
         return;
     }
@@ -41,34 +80,28 @@ function GetData() {
         data: { "BlockNumber": BlockNumber, "text": text},
         dataType: 'HTML',
         success: function (data) {
-            console.log(data);
 
             if (data == "true") {
+
                 noMoreData = true;
-                console.log(noMoreData);
                 $("#progress").hide();
+                inProgress = false;
                 return;
             }
 
             if (data != null) {
 
                 $(".postPartialContainer").append(data);
-
-                console.log(data);
                 BlockNumber++;
+                inProgress = false;
 
             }
         },
         beforeSend: function () {
             $("#progress").show();
-            console.log("rdy");
-            console.log(noMoreData);
-
         },
         complete: function () {
-
             $("#progress").hide();
-
         },
         error: function () {
             alert("Error while retrieving data!");
