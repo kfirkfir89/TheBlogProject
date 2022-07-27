@@ -1,6 +1,7 @@
 ﻿var BlockNumber = 1;
 var noMoreData = false;
 var text = $(".postPartialContainer").attr('id');
+var tag = $(".postPartialContainer").attr('alt');
 var inProgress = false;
 
 
@@ -8,13 +9,13 @@ var inProgress = false;
 $(window).ready(function () {
     console.log("doc rdy");
     $("#progress").hide();
-
+    console.log(tag);
     console.log(text);
 
     $.ajax({
         type: 'POST',
         url: '/Home/InfinateScroll',
-        data: { "BlockNumber": BlockNumber, "text": text },
+        data: { "BlockNumber": BlockNumber, "text": text, "tag": tag},
         dataType: 'HTML',
         success: function (data) {
 

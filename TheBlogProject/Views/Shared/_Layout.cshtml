@@ -191,7 +191,7 @@
                                 {
                                     foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                     {
-                                        <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                        <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
                                             <i class="align-self-center likeIconSideBar">#</i>
                                             <span class="align-self-center">@tag</span>
                                         </a>
@@ -294,7 +294,7 @@
                                     {
                                         foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                         {
-                                            <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                            <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
                                                 <i class="align-self-center likeIconSideBar">#</i>
                                                 <span class="align-self-center">@tag</span>
                                             </a>
@@ -397,7 +397,7 @@
 
                                 @foreach (var tag in _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text))
                                 {
-                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
                                         <i class="align-self-center likeIconSideBar">#</i>
                                         <span class="align-self-center">@tag</span>
                                     </a>
