@@ -80,7 +80,7 @@ namespace TheBlogProject.Controllers
                             bool flag = false;
                             int counter = 0;
                             List<int> postsIds = new List<int>();
-
+                            
                             foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(t => t.Tags))
                             {
                                 foreach (var userTag in userTags)
@@ -176,8 +176,9 @@ namespace TheBlogProject.Controllers
             return PartialView("_postPartial",posts);
         }
 
-        public async Task<IActionResult> About()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
             return View();
 
         }
@@ -204,7 +205,7 @@ namespace TheBlogProject.Controllers
 
 
 
-        public async Task<IActionResult> Index(int? page , string? text, string? tag)
+        public async Task<IActionResult> About(int? page , string? text, string? tag)
         {
             var pageNumber = page ?? 1;
             var pageSize = 5;

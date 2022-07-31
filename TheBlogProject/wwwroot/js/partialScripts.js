@@ -51,7 +51,7 @@ $(window).ready(function () {
 });
 
 $(window).on("scroll", function () {
-    var docHeight = $(document).height();
+    var docHeight = $(document).height()-500;
     var winScrolled = $(window).height() + $(window).scrollTop();
     if ((docHeight - winScrolled) < 1 && !noMoreData) {
         console.log("module scrolled to bottom");

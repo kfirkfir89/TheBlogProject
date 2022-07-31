@@ -1,30 +1,659 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogProject.Models
 @using TheBlogProject.Services
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@using TheBlogProject.Enums
 @using TheBlogProject.Data
+@using System.Drawing
 
-
-@inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
 @inject ApplicationDbContext _context
 
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+@model IPagedList<Post>
 
-@model IEnumerable<Post>
+<div class="row row-cols-1">
 
+    @{ var counter = 0;
 
-    <div class="postPartialContainer row-cols-1">
+    }
 
+    @foreach (var post in Model)
+    {
+        //Is the logged in user the Author of this post??
+        var isAuthor = false;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            isAuthor = (post.BlogUserId == userManager.GetUserId(User));
+        }
+
+        if (counter == 0)
+        {
+            <div class="col" style="padding:0px;">
+                @*-------------   Post card   ------------*@
+                <div class="card bg-transparent mb-3 shadow-sm rounded-bottom border-0" style="padding:0px;">
+                    <div class="card-header border-0" style="padding:0px; margin:0px;">
+
+                        <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
+
+                            @{ string[] arr = { "foryou", "useful", "top" }; }
+                            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[0]" title="For you">
+                                <span class="pt-2 smallFont pb-2">FOR YOU</span>
+                            </a>
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[1]" title="Useful">
+                                <span class="pt-2 smallFont pb-2">USEFUL</span>
+                            </a>
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="Index" asp-route-text="@arr[2]" title="Top View">
+                                <span class="pt-2 smallFont pb-2">TOP</span>
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <div class="card-body bg-white" style="margin-top: 1px; padding: 5px;">
+                        @*-------------   User info   ------------*@
+                        @{
+                            var blogUser = await userManager.FindByIdAsync(post.BlogUserId);
+                            var user = await userManager.FindByIdAsync(userManager.GetUserId(User));
+                        }
+
+                        <div class="d-flex d-inline-block px-2 pt-1">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                            }
+                            <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
+                            <div class="d-flex flex-column m-1 flex-grow-1">
+                                <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
+
+                                @if (post.Updated is not null)
+                                {
+                                    <span class="smallFont text-muted fw-lighter fst-italic">Updated : @post.Updated?.ToString("MMM dd, yyyy")</span>
+                                }
+                                else
+                                {
+                                    <span class="smallFont text-muted fw-lighter fst-italic">@post.Created.ToString("MMM dd, yyyy")</span>
+                                }
+                            </div>
+                            @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                            {
+                                <div class="d-flex justify-content-end">
+                                    <a class="btn btn-primary logoutButton bg-white justify-content-center" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
+                                        <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+
+                        @*-------------   Title   ------------*@
+                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
+                            <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
+                            <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
+                        </a>
+
+                        @*-------------   TAGS   ------------*@
+                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
+                            @foreach (var tag in post.Tags.ToList())
+                            {
+                                <a asp-controller="Home" asp-action="Index" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
+                            }
+                        </div>
+                    </div>
+
+                    @*-------------   Post Image   ------------*@
+                    @if (post.ImageData != null)
+                    {
+                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                            <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0" alt="image">
+                        </a>
+                        MemoryStream imageStream = new MemoryStream(post.ImageData);
+                        Bitmap image = new Bitmap(imageStream);
+                        int width = image.Width;
+                        int height = image.Height;
+
+                        if (width < 744)
+                        {
+                            <script>
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+                        }
+                        else if (width >= 1024 && height >= 768)
+                        {
+                            <script>
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
+                            </script>
+                        }
+                        else if (width >= 700 && height >= 300)
+                        {
+                            <script>
+                                               console.log("katannn m800");
+                                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+
+                        }
+                    }
+
+                    @*-------------   Post footer buttons   ------------*@
+                    <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
+                        <div class="d-flex bd-highlight px-3 border-bottom border-top border-1">
+                            @{ var zero = 0;}
+                            <div class="bd-highlight" id="@($"likeCount{counter}")">
+                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2">
+                                    @if (post.Likes != null)
+                                    {
+                                        @post.Likes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="bd-highlight usefulCount" id="@($"usefulCount{counter}")">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
+                                    @if (post.UsefulCodes != null)
+                                    {
+                                        @post.UsefulCodes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="bd-highlight">
+                                <i class="fa-regular fa-comments fa-2xs text-muted pe-2">
+                                    @if (post.Comments != null)
+                                    {
+                                        @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="ms-auto bd-highlight">
+                                <i class="fa-regular fa-eye fa-2xs text-muted">
+                                    @if (post.Views != null)
+                                    {
+                                        @post.Views
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                    Views
+                                </i>
+                            </div>
+                        </div>
+
+                        <div class="btn-group d-flex flex-nowrap" id="ze div">
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                if (post.Likes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.Likes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        @*                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary postButtonRight shadow-none postLUCBtn d-flex flex-nowrap justify-content-center" data-slug="@post.Slug" title="Like">
+                                                <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconPost"></i>
+                                            </a>*@
+
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                            <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                }
+                                else
+                                {
+
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                        <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                    </a>
+                                }
+
+                                if (post.UsefulCodes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.UsefulCodes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                            <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                            <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                    </a>
+                                }
+
+                                <a asp-controller="Posts" asp-action="Details" asp-fragment="commentSection" asp-route-slug="@post.Slug" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" data-slug="@post.Slug" title="Commentse">
+                                    <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
+                                </a>
+
+                            }
+                            else
+                            {
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" title="Like" style="color: var(--hoverLightBlue-color);">
+                                    <i class="fa-regular fa-thumbs-up fa-xl align-self-center likesIconSideBar"></i>
+                                </a>
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" title="Like" style="color: #8A1EAE;">
+                                    <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                </a>
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" title="Like" style="color: var(--customBlack-color)">
+                                    <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="col" style="padding:0px;">
+                @*-------------   Post card   ------------*@
+                <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
+                    <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
+                        @*-------------   User info   ------------*@
+                        @{
+                            var blogUser = await userManager.FindByIdAsync(post.BlogUserId);
+                            var user = await userManager.FindByIdAsync(userManager.GetUserId(User));
+                        }
+
+                        <div class="d-flex d-inline-block px-2 pt-1">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                            }
+                            <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
+                            <div class="d-flex flex-column m-1 flex-grow-1">
+                                <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
+
+                                @if (post.Updated is not null)
+                                {
+                                    <span class="smallFont text-muted fw-lighter fst-italic">Updated : @post.Updated?.ToString("MMM dd, yyyy")</span>
+                                }
+                                else
+                                {
+                                    <span class="smallFont text-muted fw-lighter fst-italic">@post.Created.ToString("MMM dd, yyyy")</span>
+                                }
+                            </div>
+                            @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                            {
+                                <div class="d-flex justify-content-end">
+                                    <a class="btn btn-primary logoutButton bg-white justify-content-center shadow-none" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
+                                        <i class="fa-regular fa-pen-to-square fa-2x px-2"></i>
+                                    </a>
+                                </div>
+                            }
+                        </div>
+
+                        @*-------------   Title   ------------*@
+                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
+                            <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
+                            <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
+                        </a>
+
+                        @*-------------   TAGS   ------------*@
+                        <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
+                            @foreach (var tag in post.Tags.ToList())
+                            {
+                                <a asp-controller="Home" asp-action="Index" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
+                            }
+                        </div>
+                    </div>
+
+                    @*-------------   Post Image   ------------*@
+                    @if (post.ImageData != null)
+                    {
+                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                            <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0" alt="image">
+                        </a>
+                        MemoryStream imageStream = new MemoryStream(post.ImageData);
+                        Bitmap image = new Bitmap(imageStream);
+                        int width = image.Width;
+                        int height = image.Height;
+
+                        if (width < 744)
+                        {
+                            <script>
+                               console.log("katannn m800");
+                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+                        }
+                        else if (width >= 1024 && height >= 768)
+                        {
+                            <script>
+                               document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
+                            </script>
+                        }
+                        else if (width >= 700 && height >= 300)
+                        {
+                            <script>
+                                       console.log("katannn m800");
+                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+
+                            </script>
+
+                        }
+                    }
+
+                    @*-------------   Post footer buttons   ------------*@
+                    <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
+                        <div class="d-flex bd-highlight px-3 border-bottom border-top border-1">
+                            @{ var zero = 0;}
+                            <div class="bd-highlight" id="@($"likeCount{counter}")">
+                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted pe-2">
+                                    @if (post.Likes != null)
+                                    {
+                                        @post.Likes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="bd-highlight usefulCount" id="@($"usefulCount{counter}")">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted pe-2">
+                                    @if (post.UsefulCodes != null)
+                                    {
+                                        @post.UsefulCodes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="bd-highlight">
+                                <i class="fa-regular fa-comments fa-2xs text-muted pe-2">
+                                    @if (post.Comments != null)
+                                    {
+                                        @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="ms-auto bd-highlight">
+                                <i class="fa-regular fa-eye fa-2xs text-muted">
+                                    @if (post.Views != null)
+                                    {
+                                        @post.Views
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                    Views
+                                </i>
+                            </div>
+                        </div>
+
+                        <div class="btn-group d-flex flex-nowrap" id="ze div">
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                if (post.Likes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.Likes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                            <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                }
+                                else
+                                {
+
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color);">
+                                        <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                    </a>
+                                }
+
+                                if (post.UsefulCodes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.UsefulCodes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                            <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                            <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE;">
+                                        <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                    </a>
+                                }
+
+                                <a asp-controller="Posts" asp-action="Details" asp-fragment="commentSection" asp-route-slug="@post.Slug" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" data-slug="@post.Slug" title="Commentse">
+                                    <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
+                                </a>
+
+                            }
+                            else
+                            {
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" title="Like" style="color: var(--hoverLightBlue-color);">
+                                    <i class="fa-regular fa-thumbs-up fa-xl align-self-center likesIconSideBar"></i>
+                                </a>
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" title="Like" style="color: #8A1EAE;">
+                                    <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                </a>
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" title="Like" style="color: var(--customBlack-color)">
+                                    <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        counter++;
+    }
+</div>
+
+<hr />
+
+<hr />
+
+<div class="row">
+    <div class="col h3">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     </div>
-
-    <div class="d-flex justify-content-center pt-2 mb-3">
-        <i id="progress" class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
+</div>
+<div class="row">
+    <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
     </div>
-@section Scripts{
-    <script src="~/js/partialScripts.js"></script>
+</div>
 
+@section Scripts {
+    
+    <script>
+
+        $(document).ready(function () {
+            console.log("rdy");
+
+             $(".likeBtn").click(function () {
+
+                 var $el = $(this);
+                 var slug = $el.data('slug');
+                 let modalId = $(this).attr('id');
+
+                 console.log($el.data('slug'));
+                 console.log("ziki zuki `` ose string"+`@counter`);
+                 $.ajax({
+
+                    type: "POST",
+                    url: "@Url.ActionLink("Like","Home")",
+                     data: { slug: slug },
+                    dataType: "json",
+                     success: function (result) {
+                         console.log(result);
+
+                         var modalAnchor = document.getElementById(modalId);
+                         var icon = modalAnchor.firstElementChild;
+
+                         if (icon.classList.contains("fa-regular")) {
+                             icon.classList.remove("fa-regular");
+                             icon.classList.add("fa-solid");
+                         } else if (icon.classList.contains("fa-solid")) {
+                             icon.classList.remove("fa-solid");
+                             icon.classList.add("fa-regular");
+                         }
+
+                         var e = $el.parents("#viewUpdate").children().children();
+                         var elId = e.attr('id');
+
+                         console.log(elId);
+
+                         $("#" + elId).load(" #" + elId + "> *");
+
+                     },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+             });
+
+             $(".usefulBtn").click(function () {
+
+                 var $el = $(this);
+                 var slug = $el.data('slug');
+                 let modalId = $(this).attr('id');
+
+                 console.log($el.data('slug'));
+                 console.log("ziki zuki `` ose string"+`@counter`);
+
+                 $.ajax({
+
+                    type: "POST",
+                    url: "@Url.ActionLink("UsefulCode", "Home")",
+                     data: { slug: slug },
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        var modalAnchor = document.getElementById(modalId);
+                        var icon = modalAnchor.firstElementChild;
+
+                        if (icon.classList.contains("fa-regular")) {
+                            icon.classList.remove("fa-regular");
+                            icon.classList.add("fa-solid");
+                        } else if (icon.classList.contains("fa-solid")) {
+                            icon.classList.remove("fa-solid");
+                            icon.classList.add("fa-regular");
+                        }
+
+                        var e = $el.parents("#viewUpdate").children().children(".usefulCount");
+                        var elId = e.attr('id');
+
+                        console.log(elId);
+
+                        $("#" + elId).load(" #" + elId + "> *");
+
+                    },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+             });
+
+         })
+
+    </script>
 }

@@ -204,7 +204,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 /*-----------------Search Inputtt style---------------*/
 #floatingInputSearch {
-    height: 40px;
+    height: 41px;
     width: 240px;
     padding: 0px;
     margin: 0px;
@@ -454,7 +454,7 @@ iframe, object, embed {
 
 .logoImg {
     max-width: 250px;
-    height: 33px;
+    height: 41px;
 }
 
 

@@ -3,6 +3,8 @@
 @using TheBlogProject.Models
 @using TheBlogProject.Data
 @using TheBlogProject.Enums
+@using Microsoft.EntityFrameworkCore;
+
 
 
 @inject SignInManager<BlogUser> SignInManager
@@ -67,15 +69,15 @@
                                 <div class="form-floating d-flex flex-nowrap">
                                     <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
                                     <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
-                                    <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
+                                    <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:41px"><i class="fa fa-search fa-lg"></i></button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-4 col-6 d-flex" style="padding:0px 55px;">
-                        <a class="p-0 m-0 ps-md-5 ms-md-4" asp-controller="Home" asp-action="Index">
-                            <i class="">
-                                <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
+                    <div class="col-md-4 col-6 d-flex">
+                        <a class="ms-lg-4" asp-controller="Home" asp-action="Index">
+                            <i class="ps-md-5 ms-md-5">
+                                <img class="logoImg" src="~/assets/img/navIcons/logonew.svg" />
                             </i>
                         </a>
                     </div>
@@ -319,16 +321,16 @@
                         <div class="col">
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
-                                if (userTags != null)
-                                {
-                                    Post selectedPost = new Post();
-                                    bool flag = false;
-                                    int postCounter = 0;
-                                    int counter = 0;
-                                    int[] postsIds = new int[3];
 
-                                    foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0))
+                                var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+                                if (userTags != null && userTags.Count() > 0)
+                                {
+                                    List<Post> selectedPosts = new List<Post>();
+                                    bool flag = false;
+                                    int counter = 0;
+                                    List<int> postsIds = new List<int>();
+
+                                    foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(p => p.Tags))
                                     {
                                         foreach (var userTag in userTags)
                                         {
@@ -346,6 +348,7 @@
                                             if (counter >= 2)
                                             {
                                                 counter = 0;
+                                                flag = false;
 
                                                 foreach (var pId in postsIds)
                                                 {
@@ -357,36 +360,35 @@
                                                 }
                                                 if (flag == false)
                                                 {
-                                                    postsIds[postCounter] = post.Id;
-                                                    postCounter++;
-                                                    selectedPost = post;
-
-                                                    <a class="card cardPostSM p-1 " asp-action="Details" asp-controller="Posts" asp-route-slug="@selectedPost.Slug">
-                                                        <div class="card-title d-flex flex-wrap p-1 pb-1 m-0 border-1 border-bottom">@selectedPost.Title</div>
-                                                        <i class="fa-regular fa-eye fa-xs text-muted py-2 mt-1 ms-auto">
-                                                            @{ var zero = 0; }
-                                                            @if (post.Views != null)
-                                                            {
-                                                                @selectedPost.Views
-                                                            }
-                                                            else
-                                                            {
-                                                                @zero
-                                                            }
-                                                            Views
-                                                        </i>
-                                                    </a>
+                                                    postsIds.Add(post.Id);
+                                                    selectedPosts.Add(post);
 
                                                 }
                                             }
                                         }
+                                    }
 
-                                        if (postCounter == 3)
-                                        {
-                                            break;
-                                        }
+                                    foreach (var post in selectedPosts)
+                                    {
+                                        <a class="card cardPostSM p-1 " asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                                            <div class="card-title d-flex flex-wrap p-1 pb-1 m-0 border-1 border-bottom">@post.Title</div>
+                                            <i class="fa-regular fa-eye fa-xs text-muted py-2 mt-1 ms-auto">
+                                                @{ var zero = 0; }
+                                                @if (post.Views != null)
+                                                {
+                                                    @post.Views
+                                                }
+                                                else
+                                                {
+                                                    @zero
+                                                }
+                                                Views
+                                            </i>
+                                        </a>
                                     }
                                 }
+
+
 
                             }
                         </div>
