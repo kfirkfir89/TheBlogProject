@@ -231,7 +231,7 @@
 
                                     <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                                         <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                        <span class=" align-self-center ps-1">@blogUser.FullName</span>
+                                        <span class=" align-self-center ps-1">@blogUser.DisplayName</span>
                                     </a>
 
                                     <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Likes">
@@ -368,7 +368,10 @@
                                         }
                                     }
 
-                                    foreach (var post in selectedPosts)
+                                    Random rnd = new Random();
+                                    var rnd3Posts = selectedPosts.OrderBy(p => Guid.NewGuid()).Take(3).ToList();
+
+                                    foreach (var post in rnd3Posts)
                                     {
                                         <a class="card cardPostSM p-1 " asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
                                             <div class="card-title d-flex flex-wrap p-1 pb-1 m-0 border-1 border-bottom">@post.Title</div>
