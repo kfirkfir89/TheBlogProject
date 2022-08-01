@@ -5,6 +5,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,8 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
 
         public string CurrentImage { get; set; }
 
+        public string? FacebookUrl { get; set; }
+
         [TempData]
         public string StatusMessage { get; set; }
 
@@ -48,6 +51,8 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
 
             public IFormFile ImageFile { get; set; }
+
+            public string? FacebookUrl { get; set; }
         }
 
         private async Task LoadAsync(BlogUser user)
@@ -57,10 +62,12 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
 
             Username = userName;
             CurrentImage = _imageService.DecodeImage(user.ImageData, user.ContentType);
+            FacebookUrl = user.FacebookUrl;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FacebookUrl = user.FacebookUrl
             };
         }
 
@@ -79,6 +86,9 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
         public async Task<IActionResult> OnPostAsync()
         {
             var user = await _userManager.GetUserAsync(User);
+            string pattern = @"^(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*?(\/)?([\w\-\.]{5,})+$";
+            Regex reg = new Regex(pattern);
+
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
@@ -99,6 +109,24 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+            var test = reg.IsMatch(Input.FacebookUrl);
+            Console.WriteLine(test);
+
+            if (test != false)
+            {
+                var facebookUrl = user.FacebookUrl;
+                if (Input.FacebookUrl != facebookUrl)
+                {
+                    user.FacebookUrl = Input.FacebookUrl;
+                    await _userManager.UpdateAsync(user);
+                    return RedirectToPage();
+                }
+            }
+            else
+            {
+                StatusMessage = "FaceBook is not Url link";
+                return RedirectToPage();
             }
 
             //if and only if the user selected a new image will i update their profile
