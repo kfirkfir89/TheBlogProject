@@ -28,6 +28,12 @@ namespace TheBlogProject.Models
         public string? FacebookUrl { get; set; }
 
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and no more then {1} characters", MinimumLength = 2)]
+        public string? GithubUrl { get; set; }
+
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and no more then {1} characters", MinimumLength = 2)]
+        public string? LinkedinUrl { get; set; }
+
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and no more then {1} characters", MinimumLength = 2)]
         public string? TwitterUrl { get; set; }
 
         [NotMapped]

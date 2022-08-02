@@ -8,40 +8,73 @@
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-12">
+        <img src="@Model.CurrentImage" class="img-fluid rounded-circle" width="50%" />
         <form id="profile-form" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-floating">
-                <input asp-for="Username" class="form-control" disabled />
-                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Input.DisplayName" class="form-control" />
+                <label asp-for="Input.DisplayName" class="form-label"></label>
+                <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
             </div>
-
             <div class="form-floating">
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                <input asp-for="Input.FirstName" class="form-control" />
+                <label asp-for="Input.FirstName" class="form-label"></label>
+                <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
             </div>
-
             <div class="form-floating">
-                <input asp-for="Input.FacebookUrl" class="form-control"/>
-                <label asp-for="Input.FacebookUrl" class="form-label"></label>
-                <span asp-validation-for="Input.FacebookUrl" class="text-danger"></span>
-                
-                <a href="@Model.FacebookUrl"><i class="fa-brands fa-facebook"></i></a>
+                <input asp-for="Input.LastName" class="form-control" />
+                <label asp-for="Input.LastName" class="form-label"></label>
+                <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
             </div>
-
             <div class="input-group custom-file-button">
                 <input type="file" id="inputGroupFile" asp-for="Input.ImageFile" class="form-control" autocomplete="image" aria-required="true" accept=".png, .jpg, .bmp, .tif" />
                 <label asp-for="Input.ImageFile" for="inputGroupFile" class="input-group-text">Browse</label>
                 <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
             </div>
 
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            <hr />
+            <div class="h6">links</div>
+            <div class="form-floating">
+                <input asp-for="Input.LinkedinUrl" class="form-control" />
+                <label asp-for="Input.LinkedinUrl" class="form-label"></label>
+                <span asp-validation-for="Input.LinkedinUrl" class="text-danger"></span>
+
+                <a href="@Model.LinkedinUrl" target="_blank"><i class="fa-brands fa-linkedin"></i></a>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.TwitterUrl" class="form-control" />
+                <label asp-for="Input.TwitterUrl" class="form-label"></label>
+                <span asp-validation-for="Input.TwitterUrl" class="text-danger"></span>
+
+                <a href="@Model.TwitterUrl" target="_blank"><i class="fa-brands fa-twitter"></i></a>
+            </div>
+
+            <div class="form-floating">
+                <input asp-for="Input.GithubUrl" class="form-control" />
+                <label asp-for="Input.GithubUrl" class="form-label"></label>
+                <span asp-validation-for="Input.GithubUrl" class="text-danger"></span>
+
+                <a href="@Model.GithubUrl" target="_blank"><i class="fa-brands fa-github"></i></a>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.FacebookUrl" class="form-control" />
+                <label asp-for="Input.FacebookUrl" class="form-label"></label>
+                <span asp-validation-for="Input.FacebookUrl" class="text-danger"></span>
+
+                <a href="@Model.FacebookUrl" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+            </div>
+
+            <hr />
+            <div class="h6">Email and Password</div>
+            <span>to applay email change you need to verifed the new one!</span>
+
+
+
+
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save Changes</button>
         </form>
-    </div>
-    <div class="col-md-6">
-        <img src="@Model.CurrentImage" class="img-fluid rounded-circle" width="50%"/>
     </div>
 </div>
 
