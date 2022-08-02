@@ -598,7 +598,7 @@ namespace TheBlogProject.Controllers
             }
             else if(Id == "user1")
             {
-                await _signInManager.PasswordSignInAsync("kfirAAA23@mailinator.com", "Abc&123!", false, lockoutOnFailure: false);
+                await _signInManager.PasswordSignInAsync("kfirAAA2334@mailinator.com", "Abc&123!33", false, lockoutOnFailure: false);
                 return RedirectToAction(nameof(Index));
             }
 
