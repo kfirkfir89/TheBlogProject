@@ -215,35 +215,30 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
             {
                 user.Location = Input.Location;
                 await _userManager.UpdateAsync(user);
-                return RedirectToPage();
             }
 
             if (Input.AboutMe != user.AboutMe)
             {
                 user.AboutMe = Input.AboutMe;
                 await _userManager.UpdateAsync(user);
-                return RedirectToPage();
             }
 
             if (Input.DisplayName != user.DisplayName)
             {
                 user.DisplayName = Input.DisplayName;
-                await _userManager.UpdateAsync(user);
-                return RedirectToPage();                
+                await _userManager.UpdateAsync(user);             
             }
 
             if (Input.FirstName != user.FirstName)
             {
                 user.FirstName = Input.FirstName;
                 await _userManager.UpdateAsync(user);
-                return RedirectToPage();
             }
 
             if (Input.LastName != user.LastName)
             {
                 user.LastName = Input.LastName;
                 await _userManager.UpdateAsync(user);
-                return RedirectToPage();
             }
 
             if (Input.LinkedinUrl != user.LinkedinUrl)
@@ -255,7 +250,6 @@ namespace TheBlogProject.Areas.Identity.Pages.Account.Manage
                 {
                     user.LinkedinUrl = Input.LinkedinUrl;
                     await _userManager.UpdateAsync(user);
-                    return RedirectToPage();
                 }
                 else
                 {

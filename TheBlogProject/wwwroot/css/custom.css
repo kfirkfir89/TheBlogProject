@@ -372,10 +372,6 @@ div > button > a h6 {
     width: 200px;
 }
 
-.offcanvasBtn {
-
-}
-
 @media screen and (max-width:992px) {
 
 /*    #floatingInputSearch {
@@ -581,3 +577,65 @@ button > a {
     width:22%;
 }
 
+.form-floating > input.floaingCustom {
+    height: 50px;
+
+
+}
+
+.form-labelFloating {
+    font-weight: 100;
+    letter-spacing: 0px;
+    opacity: 0.8;
+    font-family: 'Segoe UI Emoji';
+    line-height: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+.uploadButton {
+    border-radius: 3px 3px 3px 3px;
+    color: var(--customBlack-color);
+    font-weight: 600;
+    border: 3px solid white;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+}
+
+    .uploadButton:hover {
+        border: 3px solid white;
+        color: var(--hoverLightBlue-color);
+        background-color: var(--backgroundGray-color);
+    }
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    height:auto;
+}
+
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        opacity: 0;
+        background: red;
+        cursor: inherit;
+        display: block;
+    }
+
+.file-input-label {
+    display: table-cell;
+}

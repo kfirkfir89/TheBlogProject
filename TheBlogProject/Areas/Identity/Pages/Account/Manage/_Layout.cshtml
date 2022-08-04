@@ -9,15 +9,11 @@
     }
 }
 
-<div>
-    <h2>Account Settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-12">
-            @RenderBody()
-        </div>
-    </div>
+
+<div class="row-cols-1">
+        @RenderBody()
 </div>
+
 
 @section Scripts {
     @RenderSection("Scripts", required: false)
