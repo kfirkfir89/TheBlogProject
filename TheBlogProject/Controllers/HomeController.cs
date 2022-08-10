@@ -34,6 +34,12 @@ namespace TheBlogProject.Controllers
 
         }
 
+        public IActionResult getPostD(string slug)
+        {
+            var post = _context.Posts.Where(p => p.Slug == slug).Include(p => p.Tags).Include(p => p.Comments).FirstOrDefault();
+            return PartialView("_PostDetailViewModel", post);
+        }
+
         public List<Post> GetPosts(int BlockNumber, string? text)
         {
             int BlockSize = 3;
@@ -147,9 +153,15 @@ namespace TheBlogProject.Controllers
                     return selectedPosts.ToPagedList(BlockNumber, BlockSize).ToList();
                 }
             }
-                
+
+
             var query = _context.Posts
+                    .Include(p => p.BlogUser)
                     .Include(p => p.Tags)
+                    .Include(p => p.Comments)
+                    .ThenInclude(p => p.BlogUser)
+                    .Include(p => p.Comments)
+                    .ThenInclude(c => c.Moderator)
                     .OrderByDescending(p => p.Created)
                     .ToPagedList(BlockNumber, BlockSize).ToList();
 
@@ -604,6 +616,7 @@ namespace TheBlogProject.Controllers
 
             return View();
         }
+
 
     }
 }

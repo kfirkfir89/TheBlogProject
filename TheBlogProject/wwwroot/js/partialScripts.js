@@ -61,6 +61,7 @@ $(window).on("scroll", function () {
 })
 
 
+
 function GetData() {
     console.log("---------------------------");
     console.log("proIN:" + inProgress);
@@ -113,6 +114,30 @@ function GetData() {
 
 function myPartialView_Load() {
 
+
+
+
+    $(".detailsBtn").on("click", function () {
+        console.log("----------postD-----------------");
+        var $el = $(this);
+        var slug = $el.data('slug');
+        console.log(slug);
+
+        $.ajax({
+            type: 'POST',
+            url: '/Home/getPostD',
+            data: { "slug": slug },
+            dataType: 'HTML',
+            success: function (data) {
+                console.log(data);
+                $(".modal-body").html(data);
+            },
+
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    })
 
     $(".likeBtn").off("click").on('click', function () {
         var $el = $(this);

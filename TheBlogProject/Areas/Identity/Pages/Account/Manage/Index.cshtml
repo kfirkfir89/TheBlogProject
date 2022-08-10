@@ -4,155 +4,160 @@
 
 }
 
-<h3>@ViewData["Title"]</h3>
+
 <partial name="_StatusMessage" for="StatusMessage" />
 
-<div class="col bg-white rounded rounded-3 p-3">
-    <div class="row-cols-1 pb-2">
-        <div class="col d-flex justify-content-center pb-2">
-            <img src="@Model.CurrentImage" class="img-fluid rounded-circle w-25" />
-        </div>
-        <div class="col">
-            <div class="input-group">
-                <label class="btn btn-primary note-btn-block shadow-none uploadButton btn-file p-2" for="multiple_input_group p-2">
-                    <input id="multiple_input_group" type="file">
-                    <i class="fa-solid fa-upload fa-2xl"></i>
-                    <span class="file-input-label"></span>
-                </label>
-            </div>
-        </div>
-    </div>
+<div class="col bg-transparent rounded">
     <form id="profile-form row p-3" method="post" enctype="multipart/form-data">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.FirstName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="FirstName">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">First Name</label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.LastName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="LastName">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">Last Name</label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.DisplayName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="DisplayName">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">Display Name</label>
-                <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Location" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="Location">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">Location</label>
-                <span asp-validation-for="Input.Location" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.AboutMe" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="AboutMe">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">About Me</label>
-                <span asp-validation-for="Input.AboutMe" class="text-danger"></span>
-            </div>
-        </div>
-
-        <hr hidden />
-
-        <div class="h6 pt-5 ps-1">Links</div>
-
-        <div class="input-group mb-3">
-            <a href="@Model.LinkedinUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-linkedin fa-lg"></i></a>
-            <input type="text" asp-for="Input.LinkedinUrl" class="form-control rounded-end shadow-none" placeholder="https://www.linkedin.com/..." aria-label="LinkedinUrl" aria-describedby="basic-addon1">
-            <span asp-validation-for="Input.LinkedinUrl" class="text-danger"></span>
-        </div>
-
-        <div class="input-group mb-3">
-            <a href="@Model.TwitterUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-twitter fa-lg"></i></a>
-            <input type="text" asp-for="Input.TwitterUrl" class="form-control rounded-end shadow-none" placeholder="https://twitter.com/..." aria-label="TwitterUrl" aria-describedby="basic-addon1">
-            <span asp-validation-for="Input.TwitterUrl" class="text-danger"></span>
-        </div>
-
-        <div class="input-group mb-3">
-            <a href="@Model.GithubUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-github fa-lg"></i></a>
-            <input type="text" asp-for="Input.GithubUrl" class="form-control rounded-end shadow-none" placeholder="https://github.com/..." aria-label="GithubUrl" aria-describedby="basic-addon1">
-            <span asp-validation-for="Input.GithubUrl" class="text-danger"></span>
-        </div>
-
-        <div class="input-group mb-3">
-            <a href="@Model.FacebookUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-facebook fa-lg"></i></a>
-            <input type="text" asp-for="Input.FacebookUrl" class="form-control rounded-end shadow-none" placeholder="https://www.facebook.com/..." aria-label="FacebookUrl" aria-describedby="basic-addon1">
-            <span asp-validation-for="Input.FacebookUrl" class="text-danger"></span>
-        </div>
-
-        <hr hidden />
-
-        <div class="h6 pt-5 ps-1">Email</div>
-        <span>to applay email change you need to verifed the new one!</span>
-
-        @if (Model.IsEmailConfirmed)
-        {
-            <div class="col">
-                <div class="form-floating mb-3 input-group">
-                    <input asp-for="Email" class="form-control ps-2 floaingCustom" disabled style="padding-top: 25px;" id="floatingInputGrid" placeholder="Email">
-                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Email</label>
-                    <div class="input-group-append">
-                        <span class="h-100 input-group-text text-success font-weight-bold border-0 border-bottom">✓</span>
+        <div class="bg-white rounded p-3 shadow-sm">
+            <div class="row-cols-1 py-2">
+                <div class="col d-flex justify-content-center pb-2">
+                    <img src="@Model.CurrentImage" class="rounded-circle img-thumbnail" style="width:150px; height:150px;" />
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label asp-for="Input.ImageFile" class="btn btn-primary note-btn-block shadow-none uploadButton btn-file p-2" for="multiple_input_group p-2" placeholder="ImageFile">
+                            <input asp-for="Input.ImageFile" id="multiple_input_group" type="file">
+                            <i class="fa-solid fa-upload fa-2xl"></i>
+                            <span class="file-input-label"></span>
+                            <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+                        </label>
                     </div>
+                </div>
+            </div>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.FirstName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="FirstName">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">First Name</label>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.LastName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="LastName">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Last Name</label>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.DisplayName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="DisplayName">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Display Name</label>
+                    <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Location" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="Location">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Location</label>
+                    <span asp-validation-for="Input.Location" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.AboutMe" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="AboutMe">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">About Me</label>
                     <span asp-validation-for="Input.AboutMe" class="text-danger"></span>
                 </div>
             </div>
-        }
-        else
-        {
-            <div class="form-floating">
-                <input asp-for="Email" class="form-control" disabled />
-                <label asp-for="Email" class="form-label"></label>
-                <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+        </div>
+
+        <!--Links-->
+        <div class="bg-white rounded p-3 mt-2 shadow-sm">
+            <div class="h6 pt-2 ps-1">Links</div>
+
+            <div class="input-group mb-3">
+                <a href="@Model.LinkedinUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-linkedin fa-lg"></i></a>
+                <input type="text" asp-for="Input.LinkedinUrl" class="form-control rounded-end shadow-none" placeholder="https://www.linkedin.com/..." aria-label="LinkedinUrl" aria-describedby="basic-addon1">
+                <span asp-validation-for="Input.LinkedinUrl" class="text-danger"></span>
             </div>
-        }
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.NewEmail" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="NewEmail">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">New Email</label>
-                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+
+            <div class="input-group mb-3">
+                <a href="@Model.TwitterUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-twitter fa-lg"></i></a>
+                <input type="text" asp-for="Input.TwitterUrl" class="form-control rounded-end shadow-none" placeholder="https://twitter.com/..." aria-label="TwitterUrl" aria-describedby="basic-addon1">
+                <span asp-validation-for="Input.TwitterUrl" class="text-danger"></span>
+            </div>
+
+            <div class="input-group mb-3">
+                <a href="@Model.GithubUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-github fa-lg"></i></a>
+                <input type="text" asp-for="Input.GithubUrl" class="form-control rounded-end shadow-none" placeholder="https://github.com/..." aria-label="GithubUrl" aria-describedby="basic-addon1">
+                <span asp-validation-for="Input.GithubUrl" class="text-danger"></span>
+            </div>
+
+            <div class="input-group mb-3">
+                <a href="@Model.FacebookUrl" target="_blank" id="basic-addon1" class="input-group-text rounded-start"><i class="fa-brands fa-facebook fa-lg"></i></a>
+                <input type="text" asp-for="Input.FacebookUrl" class="form-control rounded-end shadow-none" placeholder="https://www.facebook.com/..." aria-label="FacebookUrl" aria-describedby="basic-addon1">
+                <span asp-validation-for="Input.FacebookUrl" class="text-danger"></span>
             </div>
         </div>
 
-        <hr hidden/>
-
-        <div class="h6 pt-5 ps-1">Password</div>
-
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.OldPassword" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="OldPassword" autocomplete="current-password" aria-required="true">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">Password</label>
-                <span asp-validation-for="Input.OldPassword" class="text-danger"></span>
+        <!--Email-->
+        <div class="bg-white rounded p-3 mt-2 shadow-sm">
+            <div class="h6 pt-2 ps-1">Email</div>
+            @if (Model.IsEmailConfirmed)
+            {
+                <div class="col">
+                    <div class="form-floating mb-3 input-group">
+                        <input asp-for="Email" class="form-control ps-2 floaingCustom" disabled style="padding-top: 25px;" id="floatingInputGrid" placeholder="Email">
+                        <label class="form-labelFloating ps-2" for="floatingInputGrid">Email</label>
+                        <div class="input-group-append">
+                            <span class="h-100 input-group-text text-success font-weight-bold border-0 border-bottom">✓</span>
+                        </div>
+                        <span asp-validation-for="Input.AboutMe" class="text-danger"></span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="form-floating">
+                    <input asp-for="Email" class="form-control" disabled />
+                    <label asp-for="Email" class="form-label"></label>
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                </div>
+            }
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.NewEmail" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="NewEmail">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">New Email</label>
+                    <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.NewPassword" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="NewPassword" autocomplete="new-password" aria-required="true">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">NewPassword</label>
-                <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
+
+        <!--Password-->
+        <div class="bg-white rounded p-3 mt-2 shadow-sm">
+            <div class="h6 pt-2 ps-1">Change Password</div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.OldPassword" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="OldPassword" autocomplete="current-password" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Password</label>
+                    <span asp-validation-for="Input.OldPassword" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="ConfirmPassword" autocomplete="new-password" aria-required="true">
-                <label class="form-labelFloating ps-2" for="floatingInputGrid">ConfirmPassword</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.NewPassword" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="NewPassword" autocomplete="new-password" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">NewPassword</label>
+                    <span asp-validation-for="Input.NewPassword" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="ConfirmPassword" autocomplete="new-password" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">ConfirmPassword</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
             </div>
         </div>
 
-        <hr hidden/>
-
-        <button id="update-profile-button" type="submit" class="w-100 btn btn-primary logoutButton border-1 px-2 shadow-none">Save Changes</button>
-        <hr />
-        <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger logoutButton border-1 px-2 shadow-none">Delete Account</a>
+        <!--btn-->
+        <div>
+            <hr />
+            <button id="update-profile-button" type="submit" class="w-100 btn btn-primary logoutButton border-1 px-2 shadow-none">Save Changes</button>
+            <hr />
+            <a id="delete" asp-page="DeletePersonalData" class="w-100 d-flex justify-content-center btn btn-primary logoutButton border-1 px-2 shadow-none delBtn">Delete Account</a>
+        </div>
     </form>
 </div>
 

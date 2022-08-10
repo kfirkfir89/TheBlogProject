@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogProject.Models
+@using TheBlogProject.ViewModels
 @using TheBlogProject.Services
 @using X.PagedList
 @using X.PagedList.Mvc.Core
@@ -130,6 +131,10 @@
                         </div>
 
                         @*-------------   Title   ------------*@
+                        <a data-bs-toggle="modal" data-bs-target="@($"#detailsModal{counter}")" data-slug="@post.Slug" style="color: var(--customBlack-color);">
+                            <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
+                            <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
+                        </a>
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
                             <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
                             <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
@@ -331,7 +336,7 @@
                     </div>
                 </div>
             </div>
-            
+
         }
         else
         {
@@ -373,6 +378,11 @@
                         </div>
 
                         @*-------------   Title   ------------*@
+                        <a data-bs-toggle="modal" data-bs-target="@($"#detailsModal{counter}")" data-slug="@post.Slug" style="color: var(--customBlack-color);">
+                            <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
+                            <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
+                        </a>
+
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
                             <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
                             <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
@@ -576,10 +586,34 @@
             </div>
         }
 
+        <!-- Modal -->
+        <div class="modal fade" id="@($"detailsModal{counter}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@post.Title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container-fluid">
+                        @{ var postdm = new PostDetailViewModel()
+                            {
+                                    Post = post,
+                                    Tags = post.Tags.Select(t => t.Text).ToList()
+                            };
+                        }
+                        @Html.Partial("_postDetails", postdm)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         counter++;
 
     }
 
-    
-</div>
 
+</div>

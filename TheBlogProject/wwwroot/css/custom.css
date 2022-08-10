@@ -365,6 +365,7 @@ div > button > a h6 {
 }
     .logoutButton:hover {
         border: 3px solid white;
+        border-radius: 3px 3px 3px 3px;
     }
 
 
@@ -639,3 +640,9 @@ button > a {
 .file-input-label {
     display: table-cell;
 }
+
+
+.delBtn:hover{
+    background-color:red;
+}
+
