@@ -588,17 +588,19 @@
 
         <!-- Modal -->
         <div class="modal fade" id="@($"detailsModal{counter}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-fullscreen">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">@post.Title</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body container-fluid">
+                    <div class="modal-body">
+                        <!-- Button trigger modal -->
+                        <p>This <a href="#" role="button" class="btn btn-secondary popover-test" title="Popover title" data-bs-content="Popover body content is set in this attribute.">button</a> triggers a popover on click.</p>
                         @{ var postdm = new PostDetailViewModel()
                             {
-                                    Post = post,
-                                    Tags = post.Tags.Select(t => t.Text).ToList()
+                                Post = post,
+                                Tags = post.Tags.Select(t => t.Text).ToList()
                             };
                         }
                         @Html.Partial("_postDetails", postdm)

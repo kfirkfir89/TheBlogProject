@@ -5,7 +5,6 @@ var tag = $(".postPartialContainer").attr('alt');
 var inProgress = false;
 
 
-
 $(window).ready(function () {
     console.log("doc rdy");
     $("#progress").hide();
@@ -117,7 +116,7 @@ function myPartialView_Load() {
 
 
 
-    $(".detailsBtn").on("click", function () {
+    $(".detailsBtn").off("click").on('click', function () {
         console.log("----------postD-----------------");
         var $el = $(this);
         var slug = $el.data('slug');
@@ -125,9 +124,8 @@ function myPartialView_Load() {
 
         $.ajax({
             type: 'POST',
-            url: '/Home/getPostD',
-            data: { "slug": slug },
-            dataType: 'HTML',
+            url: "/Identity/Account/Login",
+            dataType: 'json',
             success: function (data) {
                 console.log(data);
                 $(".modal-body").html(data);

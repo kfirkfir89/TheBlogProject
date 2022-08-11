@@ -34,6 +34,7 @@ namespace TheBlogProject.Controllers
 
         }
 
+
         public IActionResult getPostD(string slug)
         {
             var post = _context.Posts.Where(p => p.Slug == slug).Include(p => p.Tags).Include(p => p.Comments).FirstOrDefault();

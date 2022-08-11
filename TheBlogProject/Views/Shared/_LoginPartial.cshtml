@@ -2,6 +2,7 @@
 @using TheBlogProject.Services
 @using TheBlogProject.ViewModels
 
+
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> UserManager
 @inject IImageService _imageService
@@ -19,6 +20,19 @@
         <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="admin" id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">admin</a>
         <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="moderator" id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">moderator</a>
         <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="user1" id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">user1</a>
+        <a asp-area="Identity" asp-page="/Account/Login"> login anchor</a>
+
+
+
+
+        <!-- need to find url for razor page ajax -->
+        @Html.ActionLink("/Areas/Identity/Account/Login", "/Areas/Identity/Account/Login", new { area = "Identity" })
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Launch demo modal
+        </button>
+
 
     }
 
