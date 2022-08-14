@@ -2,88 +2,92 @@
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="row bg-transparent rounded d-flex justify-content-center">
 
-<div class="row g-2">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="firstname" aria-required="true" />
-                <label asp-for="Input.FirstName"></label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="lastname" aria-required="true" />
-                <label asp-for="Input.LastName"></label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.DisplayName" class="form-control" autocomplete="displayname" aria-required="true" />
-                <label asp-for="Input.DisplayName"></label>
-                <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
-            </div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+    <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="bg-white rounded p-3 mt-2 shadow-sm">
+            <div class="h6 pt-2 ps-1">Register</div>
+
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.FirstName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="FirstName" autocomplete="firstname" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">First Name</label>
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="input-group custom-file-button">
-                <input type="file" id="inputGroupFile" asp-for="Input.ImageFile" class="form-control" autocomplete="image" aria-required="true" accept=".png, .jpg, .bmp, .tif"/>
-                <label asp-for="Input.ImageFile" for="inputGroupFile" class="input-group-text">Browse</label>
-                <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.LastName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="LastName" autocomplete="lastname" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Last Name</label>
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
             </div>
 
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.DisplayName" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="DisplayName" autocomplete="displayname" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Display Name</label>
+                    <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Email" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="Email" autocomplete="email" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Email</label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
             </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
+
+            <div class="row-cols-1 py-2">
+                <span class="text-muted ps-2 opacity-75">Upload Image</span>
+                <div class="col">
+                    <div class="input-group">
+                        <label asp-for="Input.ImageFile" class="btn btn-primary note-btn-block shadow-none uploadButton btn-file p-2" for="multiple_input_group p-2" placeholder="ImageFile">
+                            <input asp-for="Input.ImageFile" id="multiple_input_group" type="file">
+                            <i class="fa-solid fa-upload fa-2xl"></i>
+                            <span class="file-input-label"></span>
+                            <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
+                        </label>
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.Password" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="Password" autocomplete="password" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Password</label>
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.ConfirmPassword" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="ConfirmPassword" autocomplete="confirmpassword" aria-required="true">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">ConfirmPassword</label>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+            </div>
+
+
+        </div>
+
+        <hr />
+        <button id="registerSubmit" type="submit" class="w-100 btn btn-primary logoutButton border-1 px-2 shadow-none">Register</button>
+
+    </form>
+
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/uploadImage.js"></script>
 }

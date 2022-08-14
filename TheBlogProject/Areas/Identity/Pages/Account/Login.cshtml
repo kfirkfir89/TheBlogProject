@@ -1,6 +1,11 @@
 ﻿@page
 @model LoginModel
 
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
+}
+
 <div class="row bg-transparent rounded d-flex justify-content-center">
     <form id="account" method="post">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>

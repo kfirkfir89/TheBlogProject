@@ -9,6 +9,7 @@ using TheBlogProject.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -41,6 +42,13 @@ var builder = WebApplication.CreateBuilder(args);
 
     //register the slug service
     builder.Services.AddScoped<ISlugService, BasicSlugService>();
+
+    builder.Services.AddRazorPages(options =>
+    {
+        options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "/Register");
+        options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/Login");
+    });
+
 }
                                                                                                                                                                                  
 var app = builder.Build();
@@ -70,14 +78,32 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "SlugRoute",
     pattern: "BlogPosts/UrlFreindly/{slug}",
     defaults: new { controller = "Posts", action = "Details"});
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+    name: "Register",
+    pattern: "register",
+    defaults: new { area = "Identity", controller = "Account", action = "Register" });
+
+    endpoints.MapControllerRoute(
+    name: "Login",
+    pattern: "login",
+    defaults: new { area = "Identity", controller = "Account", action = "Login" });
+
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapRazorPages(); // this one
+});
+
 app.MapRazorPages();
 
 app.Run();

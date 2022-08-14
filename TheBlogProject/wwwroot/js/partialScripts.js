@@ -120,11 +120,12 @@ function myPartialView_Load() {
         console.log("----------postD-----------------");
         var $el = $(this);
         var slug = $el.data('slug');
+        
         console.log(slug);
 
         $.ajax({
             type: 'POST',
-            url: "/Identity/Account/Login",
+            url: "/Account/Login",
             dataType: 'json',
             success: function (data) {
                 console.log(data);
