@@ -13,7 +13,7 @@
 
 @model IEnumerable<TheBlogProject.Models.Post>
 
-@{ var user = await userManager.FindByIdAsync(userManager.GetUserId(User)); }
+@{ var user = await userManager.FindByIdAsync(ViewBag.PostsUser); }
 
 <div class="row row-cols-1">
     <div>

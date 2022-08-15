@@ -172,6 +172,62 @@ namespace TheBlogProject.Controllers
 
 
 
+        public async Task<IActionResult> SortBy(string? text, string? tag)
+        {
+            if(text != null)
+            {
+                ViewBag.Text = text;
+            }
+            if (tag != null)
+            {
+                ViewBag.Tag = tag;
+            }        
+            return View();
+
+        }
+
+        public async Task<IActionResult> SortByPages(int? page, string? text, string? id)
+        {
+            var user = _userManager.GetUserAsync(User);
+
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
+
+            if (text == "myposts")
+            {
+                
+                var selectedPosts = _context.Posts
+                    .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                    .Where(p => p.BlogUserId == user.Result.Id)
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Created)
+                    .ToPagedList(pageNumber, pageSize);
+
+
+                return View(selectedPosts);
+
+            }
+            if(id != null)
+            {
+
+                var selectedPosts = _context.Posts
+                    .Where(p => p.BlogUserId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Created)
+                    .ToPagedList(pageNumber, pageSize);
+
+
+
+                ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
+                ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
+                ViewBag.PostsUser = id;
+
+                return View(selectedPosts);
+            }
+            return View();
+
+        }
+
         [HttpPost]
         public IActionResult InfinateScroll(int BlockNumber, string? text)
         {
@@ -196,19 +252,6 @@ namespace TheBlogProject.Controllers
 
         }
 
-        public async Task<IActionResult> SortBy(string? text, string? tag)
-        {
-            if(text != null)
-            {
-                ViewBag.Text = text;
-            }
-            if (tag != null)
-            {
-                ViewBag.Tag = tag;
-            }        
-            return View();
-
-        }
 
 
 

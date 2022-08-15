@@ -119,13 +119,14 @@ function myPartialView_Load() {
     $(".detailsBtn").off("click").on('click', function () {
         console.log("----------postD-----------------");
         var $el = $(this);
-        var slug = $el.data('slug');
-        
-        console.log(slug);
+        var route = $el.data('route');
+        var returnUrl = "~/"
+        console.log(route);
 
         $.ajax({
             type: 'POST',
-            url: "/Account/Login",
+            url: route,
+            data: { slug: returnUrl },
             dataType: 'json',
             success: function (data) {
                 console.log(data);

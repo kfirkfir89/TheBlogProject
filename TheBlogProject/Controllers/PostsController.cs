@@ -90,6 +90,8 @@ namespace TheBlogProject.Controllers
                 .OrderByDescending(p => p.Created)
                 .ToListAsync();
 
+            ViewBag.PostsUser = id;
+
             return View(posts);
         }
 

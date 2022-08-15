@@ -646,3 +646,37 @@ button > a {
     background-color:red;
 }
 
+.editdel {
+    background-color:var(--backgroundGray-color);
+}
+
+.sortByPageBtn {
+    border-radius: 3px 3px 3px 3px;
+    color: var(--customBlack-color);
+    background-color: white;
+}
+    .sortByPageBtn:hover {
+        border-radius: 3px 3px 3px 3px;
+        background-color: var(--backgroundGray-color);
+        color: var(--customBlack-color);
+    }
+
+
+
+.testimonial-card .card-up {
+    height: 105px;
+    overflow: hidden;
+}
+
+.aqua-gradient {
+    background: linear-gradient(40deg, #205CE9, #2F3337) !important;
+}
+
+.testimonial-card .avatar {
+    width: 120px;
+    padding-top: 10px;
+    margin-top: -60px;
+    margin-bottom: -60px;
+    overflow: hidden;
+    border-radius: 50%;
+}

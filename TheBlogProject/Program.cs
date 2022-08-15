@@ -12,9 +12,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 {
+
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<ApplicationDbContext>(options => 
-        options.UseNpgsql(connectionString), ServiceLifetime.Transient);
+        options.UseNpgsql(connectionString), 
+        ServiceLifetime.Transient);
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

@@ -1,0 +1,433 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TheBlogProject.Models
+@using TheBlogProject.Services
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@using TheBlogProject.Enums
+@using TheBlogProject.Data
+@using System.Drawing
+
+@inject UserManager<BlogUser> userManager
+@inject IImageService imageService
+@inject ApplicationDbContext _context
+
+@{
+    Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
+}
+
+@model IPagedList<Post>
+
+
+<div class="row-cols-1">
+    @{
+        var counter = 0;
+        var postsUser = await userManager.FindByIdAsync(ViewBag.PostsUser);
+    }
+
+    <div class="col">
+        <div class="card testimonial-card mt-2 mb-3 rounded shadow-sm">
+            <div class="card-up aqua-gradient row-cols-1 rounded-top">
+                <div class="col pt-5 mt-4 ps-3">
+                    <div class="row">
+                        <div class="col-2"></div>
+                        <div class="col">
+                            <h4 class="card-title font-weight-bold text-white">@postsUser.DisplayName</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="avatar ms-4 white">
+                <img src="@imageService.DecodeImage(postsUser.ImageData, postsUser.ContentType)" alt="@postsUser.FullName" class="rounded-circle img-thumbnail border-5 border-white" style="width:120px; height:120px;" />
+            </div>
+            <div class="row d-flex ps-2 pe-3 bg-transparent">
+                    <div class="col-2"></div>
+                    <div class="col">
+                        <div class="btn-group">
+                            @if (postsUser.LinkedinUrl != null)
+                            {
+                                <a href="@postsUser.LinkedinUrl" target="_blank" id="basic-addon1" class="input-group-text pe-1 bg-transparent border-0 ">
+                                    <i class="fa-brands fa-linkedin fa-lg"></i>
+                                </a>
+                            }
+                            @if (postsUser.TwitterUrl != null)
+                            {
+                                <a href="@postsUser.TwitterUrl" target="_blank" id="basic-addon1" class="input-group-text pe-1 bg-transparent border-0">
+                                    <i class="fa-brands fa-twitter fa-lg"></i>
+                                </a>
+                            }
+                            @if (postsUser.GithubUrl != null)
+                            {
+                                <a href="@postsUser.GithubUrl" target="_blank" id="basic-addon1" class="input-group-text pe-1 bg-transparent border-0">
+                                    <i class="fa-brands fa-github fa-lg"></i>
+                                </a>
+                            }
+                            @if (postsUser.FacebookUrl != null)
+                            {
+                                <a href="@postsUser.FacebookUrl" target="_blank" id="basic-addon1" class="input-group-text  pe-1 bg-transparent border-0">
+                                    <i class="fa-brands fa-facebook fa-lg"></i>
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="card-body text-center">
+                <p>
+                    Location:@postsUser.Location
+                </p>
+                <p>
+                    AboutMe:@postsUser.AboutMe
+                </p>
+                @if (ViewBag.PostsCount > 0)
+                {
+                    <p>
+                        posts published: @ViewBag.PostsCount
+                    </p>
+                }
+                @if (ViewBag.CommetnsCount > 0)
+                {
+                    <p>
+                        comments written: @ViewBag.CommetnsCount
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+
+    @foreach (var post in Model)
+    {
+        //Is the logged in user the Author of this post??
+        var isAuthor = false;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            isAuthor = (post.BlogUserId == userManager.GetUserId(User));
+        }
+
+        <div class="col" style="padding:0px;">
+            @*-------------   Post card   ------------*@
+            <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
+                <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
+                    @*-------------   User info   ------------*@
+                    @{
+                        var blogUser = await userManager.FindByIdAsync(post.BlogUserId);
+                        var user = await userManager.FindByIdAsync(userManager.GetUserId(User));
+                    }
+
+                    <div class="d-flex d-inline-block ms-1 px-2 pt-1">
+
+                        <div class="d-flex flex-column m-1 flex-grow-1">
+
+                            @if (post.Updated is not null)
+                            {
+                                <span class="smallFont text-muted fw-lighter fst-italic">Updated : @post.Updated?.ToString("MMM dd, yyyy")</span>
+                            }
+                            else
+                            {
+                                <span class="smallFont text-muted fw-lighter fst-italic">@post.Created.ToString("MMM dd, yyyy")</span>
+                            }
+                        </div>
+                        @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                        {
+                            <div class="d-flex justify-content-end">
+                                <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
+                                    <i class="fa-solid fa-trash-can fa-xl px-2"></i>
+                                    <span class="pb-1 pe-2">Edit</span>
+                                </a>
+                                <div class="px-1 text-muted">|</div>
+                                <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Delete" asp-controller="Posts" asp-route-id="@post.Id">
+                                    <i class="fa-solid fa-trash-can fa-xl px-2"></i>
+                                    <span class="pb-1 pe-2">Delete</span>
+                                </a>
+                            </div>
+                        }
+                    </div>
+
+                    @*-------------   Title   ------------*@
+                    <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
+                        <div class="card-title px-4 h3 d-flex flex-wrap">@post.Title</div>
+                        <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
+                    </a>
+
+                    @*-------------   TAGS   ------------*@
+                    <div class="card-header bg-white m-0 border-0 d-flex flex-wrap">
+                        @foreach (var tag in post.Tags.ToList())
+                        {
+                            <a asp-controller="Home" asp-action="Index" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
+                        }
+                    </div>
+                </div>
+
+
+
+                @*-------------   Post footer buttons   ------------*@
+                <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
+                    <div class="d-flex bd-highlight px-3 my-1">
+                        @{ var zero = 0;}
+                        <div class="btn-group d-flex flex-nowrap">
+
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                if (post.Likes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.Likes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+
+                                        <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                            <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                }
+                                else
+                                {
+
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                        <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                    </a>
+                                }
+
+                                if (post.UsefulCodes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.UsefulCodes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                            <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+                                        <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                            <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                        <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                    </a>
+                                }
+
+                            }
+                            else
+                            {
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" title="Like" style="color: var(--hoverLightBlue-color); height:30px;">
+                                    <i class="fa-regular fa-thumbs-up fa-lg align-self-center likesIconSideBar"></i>
+                                </a>
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" title="Like" style="color: #8A1EAE; height: 30px;">
+                                    <i class="fa-regular fa-file-code fa-lg align-self-center usefulIconSideBar"></i>
+                                </a>
+
+                            }
+
+                        </div>
+                        <div class="ms-auto likeCount" id="@($"likeCount{counter}")">
+                            <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
+                                @if (post.Likes != null)
+                                {
+                                    @post.Likes.Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </i>
+                        </div>
+                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
+                        <div class="usefulCount" id="@($"usefulCount{counter}")">
+                            <i class="fa-regular fa-file-code fa-2xs text-muted">
+                                @if (post.UsefulCodes != null)
+                                {
+                                    @post.UsefulCodes.Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </i>
+                        </div>
+                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
+                        <div class="">
+                            <i class="fa-regular fa-comments fa-2xs text-muted">
+                                @if (post.Comments != null)
+                                {
+                                    @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </i>
+                        </div>
+                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
+                        <div class="">
+                            <i class="fa-regular fa-eye fa-2xs text-muted">
+                                @if (post.Views != null)
+                                {
+                                    @post.Views
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                                Views
+                            </i>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+
+
+        counter++;
+    }
+</div>
+
+<hr />
+
+<hr />
+
+<div class="row">
+    <div class="col h3">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+            new PagedListRenderOptions
+            {
+                LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" }
+            })
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+            console.log("rdy");
+
+             $(".likeBtn").click(function () {
+
+                 var $el = $(this);
+                 var slug = $el.data('slug');
+                 let modalId = $(this).attr('id');
+
+                 console.log($el.data('slug'));
+                 console.log("ziki zuki `` ose string"+`@counter`);
+                 $.ajax({
+
+                    type: "POST",
+                    url: "@Url.ActionLink("Like","Home")",
+                     data: { slug: slug },
+                    dataType: "json",
+                     success: function (result) {
+                         console.log(result);
+
+                         var modalAnchor = document.getElementById(modalId);
+                         var icon = modalAnchor.firstElementChild;
+
+                         if (icon.classList.contains("fa-regular")) {
+                             icon.classList.remove("fa-regular");
+                             icon.classList.add("fa-solid");
+                         } else if (icon.classList.contains("fa-solid")) {
+                             icon.classList.remove("fa-solid");
+                             icon.classList.add("fa-regular");
+                         }
+
+                         var e = $el.parents("#viewUpdate").children().children(".likeCount");
+                         var elId = e.attr('id');
+
+                         console.log(elId);
+
+                         $("#" + elId).load(" #" + elId + "> *");
+
+                     },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+             });
+
+             $(".usefulBtn").click(function () {
+
+                 var $el = $(this);
+                 var slug = $el.data('slug');
+                 let modalId = $(this).attr('id');
+
+                 console.log($el.data('slug'));
+                 console.log("ziki zuki `` ose string"+`@counter`);
+
+                 $.ajax({
+
+                    type: "POST",
+                    url: "@Url.ActionLink("UsefulCode", "Home")",
+                     data: { slug: slug },
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        var modalAnchor = document.getElementById(modalId);
+                        var icon = modalAnchor.firstElementChild;
+
+                        if (icon.classList.contains("fa-regular")) {
+                            icon.classList.remove("fa-regular");
+                            icon.classList.add("fa-solid");
+                        } else if (icon.classList.contains("fa-solid")) {
+                            icon.classList.remove("fa-solid");
+                            icon.classList.add("fa-regular");
+                        }
+
+                        var e = $el.parents("#viewUpdate").children().children(".usefulCount");
+                        var elId = e.attr('id');
+
+                        console.log(elId);
+
+                        $("#" + elId).load(" #" + elId + "> *");
+
+                    },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+             });
+
+         })
+
+    </script>
+}

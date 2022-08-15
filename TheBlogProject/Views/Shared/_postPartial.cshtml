@@ -71,7 +71,7 @@
         {
             <div class="col" style="padding:0px;">
                 @*-------------   Post card   ------------*@
-                <div class="card bg-transparent mb-3 shadow-sm rounded-bottom border-0" style="padding:0px;">
+                <div class="card bg-transparent mb-3 border-0" style="padding:0px;">
                     <div class="card-header border-0" style="padding:0px; margin:0px;">
 
                         <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
@@ -98,7 +98,7 @@
 
                         </div>
                     </div>
-                    <div class="card-body bg-white" style="margin-top: 1px; padding: 5px;">
+                    <div class="card-body bg-white shadow-sm" style="margin-top: 1px; padding: 5px;">
                         @*-------------   User info   ------------*@
                         @{
                             var blogUser = await userManager.FindByIdAsync(post.BlogUserId);
@@ -109,7 +109,7 @@
 
                             <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
                             <div class="d-flex flex-column m-1 flex-grow-1">
-                                <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
+                                <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
 
                                 @if (post.Updated is not null)
                                 {
@@ -131,10 +131,7 @@
                         </div>
 
                         @*-------------   Title   ------------*@
-                        <a data-bs-toggle="modal" data-bs-target="@($"#detailsModal{counter}")" data-slug="@post.Slug" style="color: var(--customBlack-color);">
-                            <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
-                            <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
-                        </a>
+
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
                             <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
                             <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
@@ -163,22 +160,22 @@
                         if (width < 744)
                         {
                             <script>
-                                                   console.log("katannn m800");
-                                                   document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                console.log("katannn m800");
+                                document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
                         }
                         else if (width >= 1024 && height >= 768)
                         {
                             <script>
-                                                   document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
+                                document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
                             </script>
                         }
                         else if (width >= 700 && height >= 300)
                         {
                             <script>
-                                                           console.log("katannn m800");
-                                                           document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+                                console.log("katannn m800");
+                                document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
 
                             </script>
 
@@ -356,7 +353,7 @@
                             }
                             <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="m-1 rounded-pill img-thumbnail " style="width:40px; height:40px;">
                             <div class="d-flex flex-column m-1 flex-grow-1">
-                                <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
+                                <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
 
                                 @if (post.Updated is not null)
                                 {
@@ -378,10 +375,6 @@
                         </div>
 
                         @*-------------   Title   ------------*@
-                        <a data-bs-toggle="modal" data-bs-target="@($"#detailsModal{counter}")" data-slug="@post.Slug" style="color: var(--customBlack-color);">
-                            <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
-                            <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
-                        </a>
 
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
                             <div class="card-title px-4 h2 d-flex flex-wrap">@post.Title</div>
@@ -585,33 +578,6 @@
                 </div>
             </div>
         }
-
-        <!-- Modal -->
-        <div class="modal fade" id="@($"detailsModal{counter}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">@post.Title</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Button trigger modal -->
-                        <p>This <a href="#" role="button" class="btn btn-secondary popover-test" title="Popover title" data-bs-content="Popover body content is set in this attribute.">button</a> triggers a popover on click.</p>
-                        @{ var postdm = new PostDetailViewModel()
-                            {
-                                Post = post,
-                                Tags = post.Tags.Select(t => t.Text).ToList()
-                            };
-                        }
-                        @Html.Partial("_postDetails", postdm)
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         counter++;
 
