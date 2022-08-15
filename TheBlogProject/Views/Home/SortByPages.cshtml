@@ -133,12 +133,12 @@
                         {
                             <div class="d-flex justify-content-end">
                                 <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
-                                    <i class="fa-solid fa-trash-can fa-xl px-2"></i>
+                                    <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
                                     <span class="pb-1 pe-2">Edit</span>
                                 </a>
                                 <div class="px-1 text-muted">|</div>
                                 <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Delete" asp-controller="Posts" asp-route-id="@post.Id">
-                                    <i class="fa-solid fa-trash-can fa-xl px-2"></i>
+                                    <i class="fa-solid fa-trash-can fa-lg px-2"></i>
                                     <span class="pb-1 pe-2">Delete</span>
                                 </a>
                             </div>
@@ -166,7 +166,59 @@
                 <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
                     <div class="d-flex bd-highlight px-3 my-1">
                         @{ var zero = 0;}
-                        <div class="btn-group d-flex flex-nowrap">
+                        <div class=" likeCount" id="@($"likeCount{counter}")">
+                            <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
+                                @if (post.Likes != null)
+                                {
+                                    @post.Likes.Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </i>
+                        </div>
+                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
+                        <div class="usefulCount" id="@($"usefulCount{counter}")">
+                            <i class="fa-regular fa-file-code fa-2xs text-muted">
+                                @if (post.UsefulCodes != null)
+                                {
+                                    @post.UsefulCodes.Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </i>
+                        </div>
+                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
+                        <div class="">
+                            <i class="fa-regular fa-comments fa-2xs text-muted">
+                                @if (post.Comments != null)
+                                {
+                                    @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </i>
+                        </div>
+                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
+                        <div class="">
+                            <i class="fa-regular fa-eye fa-2xs text-muted">
+                                @if (post.Views != null)
+                                {
+                                    @post.Views
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                                Views
+                            </i>
+                        </div>
+                        <div class="btn-group d-flex flex-nowrap ms-auto">
 
                             @if (User.Identity.IsAuthenticated)
                             {
@@ -252,58 +304,6 @@
                             }
 
                         </div>
-                        <div class="ms-auto likeCount" id="@($"likeCount{counter}")">
-                            <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
-                                @if (post.Likes != null)
-                                {
-                                    @post.Likes.Count()
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                            </i>
-                        </div>
-                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
-                        <div class="usefulCount" id="@($"usefulCount{counter}")">
-                            <i class="fa-regular fa-file-code fa-2xs text-muted">
-                                @if (post.UsefulCodes != null)
-                                {
-                                    @post.UsefulCodes.Count()
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                            </i>
-                        </div>
-                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
-                        <div class="">
-                            <i class="fa-regular fa-comments fa-2xs text-muted">
-                                @if (post.Comments != null)
-                                {
-                                    @_context.Comments.Where(c => c.PostId == post.Id).Count()
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                            </i>
-                        </div>
-                        <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
-                        <div class="">
-                            <i class="fa-regular fa-eye fa-2xs text-muted">
-                                @if (post.Views != null)
-                                {
-                                    @post.Views
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                                Views
-                            </i>
-                        </div>
                     </div>
 
 
@@ -327,7 +327,7 @@
 </div>
 <div class="row">
     <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }),
+        @Html.PagedListPager(Model, page => Url.Action("SortByPages", new { page = page , id = ViewBag.PostsUser }),
             new PagedListRenderOptions
             {
                 LiElementClasses = new string[] { "page-item" },
