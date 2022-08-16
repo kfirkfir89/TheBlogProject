@@ -394,6 +394,8 @@ div > button > a h6 {
         font-size:initial;
     }
 
+
+
 }
 
 @media screen and (min-width:1200px) {
@@ -403,16 +405,17 @@ div > button > a h6 {
         width: 256.39px;
     }
 
-/*    #floatingInputSearch {
-        width: 420px;
-    }*/
-
     .offcanvasBtn > span{
         font-size: 0.8rem;
     }
     .offcanvasBtn > i {
         font-size: initial;
     }
+    .imgSize {
+        width: 60px;
+        height: 60px;
+    }
+
 
 }
 
@@ -671,6 +674,9 @@ button > a {
 .aqua-gradient {
     background: linear-gradient(40deg, #205CE9, #2F3337) !important;
 }
+.testimonial-card{
+
+}
 
 .testimonial-card .avatar {
     width: 120px;
@@ -679,4 +685,19 @@ button > a {
     margin-bottom: -60px;
     overflow: hidden;
     border-radius: 50%;
+}
+
+
+.avatarSmall {
+    width: 60px;
+    padding-top: 10px;
+    margin-top: -30px;
+    margin-bottom: -60px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.imgSize {
+    width: 120px;
+    height: 120px;
 }
