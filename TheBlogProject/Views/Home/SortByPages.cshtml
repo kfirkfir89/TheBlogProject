@@ -22,25 +22,28 @@
 <div class="row-cols-1">
     @{
         var counter = 0;
-        var postsUser = await userManager.FindByIdAsync(ViewBag.PostsUser);
     }
 
-    <div class="col p-0 m-0">
-        <div class="card testimonial-card mb-3 rounded shadow-sm">
-            <div class="card-up aqua-gradient row-cols-1 rounded-top">
-                <div class="col pt-5 mt-4 ">
-                    <div class="row">
-                        <div class="col-2"></div>
-                        <div class="col d-flex justify-content-sm-start justify-content-end pe-3 ps-lg-4 ps-xl-1 ps-md-5 ms-md-4  ps-sm-5 ms-sm-1">
-                            <div class="card-title h4 text-white">@postsUser.DisplayName</div>
+    @if (ViewBag.PostsUser != null)
+    {
+        var postsUser = await userManager.FindByIdAsync(ViewBag.PostsUser);
+
+        <div class="col p-0 m-0">
+            <div class="card testimonial-card mb-3 rounded shadow-sm">
+                <div class="card-up aqua-gradient row-cols-1 rounded-top">
+                    <div class="col pt-5 mt-4 ">
+                        <div class="row">
+                            <div class="col-2"></div>
+                            <div class="col d-flex justify-content-sm-start justify-content-end pe-3 ps-lg-4 ps-xl-1 ps-md-5 ms-md-4  ps-sm-5 ms-sm-1">
+                                <div class="card-title h4 text-white">@postsUser.DisplayName</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="avatar ms-sm-4 ms-2 white">
-                <img src="@imageService.DecodeImage(postsUser.ImageData, postsUser.ContentType)" alt="@postsUser.FullName" class="rounded-circle img-thumbnail border-5 border-white imgSize"  />
-            </div>
-            <div class="row d-flex bg-transparent m-0 mt-2">
+                <div class="avatar ms-sm-4 ms-2 white">
+                    <img src="@imageService.DecodeImage(postsUser.ImageData, postsUser.ContentType)" alt="@postsUser.FullName" class="imgSetup imgSmall rounded-circle img-thumbnail border-5 border-white imgSize" />
+                </div>
+                <div class="row d-flex bg-transparent m-0 mt-2">
                     <div class="col-2"></div>
                     <div class="col d-flex justify-content-sm-start justify-content-end pt-1 ps-lg-4 ps-xl-1 me-1 ps-md-5 ms-md-4 ps-sm-5 ms-sm-1">
                         <div class="btn-group">
@@ -72,50 +75,60 @@
                         </div>
                     </div>
 
-            </div>
-            <div class="card-body text-center mt-2">
-                <div class="row row-cols-1">
-                    <div class="col-12">
-                        <span class="fw-bolder text-muted fs-6">
-                            <i class="fa-solid fa-map-location-dot pe-2"></i>@postsUser.Location
-                        </span>
-                    </div>
-                    <div class="col-12">
-                        <span class="fw-bolder text-muted fs-6">
-                            <i class="fa-solid fa-paper-plane pe-2"></i>@postsUser.Email
-                        </span>
-                    </div>
-                    <div class="col-12 d-flex justify-content-center my-3">
-                        <p class="text-center  mx-xl-5 px-xl-5 mx-lg-3 px-lg-3 px-1" style="font-weight: 600;">
-                            @postsUser.AboutMe
-                        </p>
-                    </div>
-                    <div class="col col-sm-6">
-                        @if (ViewBag.PostsCount > 0)
+                </div>
+                <div class="card-body text-center mt-2">
+                    <div class="row row-cols-1">
+                        @if (postsUser.Location != null)
                         {
+                            <div class="col-12">
+                                <span class="fw-bolder text-muted fs-6">
+                                    <i class="fa-solid fa-map-location-dot pe-2"></i>@postsUser.Location
+                                </span>
+                            </div>
+                        }
+                        <div class="col-12">
+                            <span class="fw-bolder text-muted fs-6">
+                                <i class="fa-solid fa-paper-plane pe-2"></i>@postsUser.Email
+                            </span>
+                        </div>
+                        @if (postsUser.AboutMe != null)
+                        {
+                            <div class="col-12 d-flex justify-content-center my-3">
+                                @Html.Raw("<div class=\"font600 text-center  mx-xl-5 px-xl-5 mx-lg-3 px-lg-3 px-1\">" + postsUser.AboutMe + "</div>")
+                            </div>
+                        }
+                        <div class="col col-sm-6">
                             <span class="fw-bolder text-muted fs-6">
                                 <i class="fa-solid fa-clipboard pe-1"></i>
                                 Posts: @ViewBag.PostsCount
                             </span>
-                        }
-                    </div>
-                    <div class="col col-sm-6">
-                        @if (ViewBag.CommetnsCount > 0)
-                        {
+                        </div>
+                        <div class="col col-sm-6">
                             <span class="fw-bolder text-muted fs-6">
                                 <i class="fa-solid fa-comment pe-1"></i>
                                 Comments: @ViewBag.CommetnsCount
                             </span>
-                        }
+                        </div>
                     </div>
+
+
+
                 </div>
-
-
-
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+        if (ViewBag.BtnText == "mylikes")
+        {
+            <div class="h4 text-center">@userManager.GetUserAsync(User).Result.DisplayName Likes</div>
+        }
+        if (ViewBag.BtnText == "myuseful")
+        {
+            <div class="h4 text-center">@userManager.GetUserAsync(User).Result.DisplayName Useful Codes</div>
+        }
 
+    }
     @foreach (var post in Model)
     {
         //Is the logged in user the Author of this post??
@@ -136,9 +149,9 @@
                         var user = await userManager.FindByIdAsync(userManager.GetUserId(User));
                     }
 
-                    <div class="d-flex d-inline-block ms-1 px-2 pt-1">
+                    <div class="d-flex d-inline-block ms-1 px-2">
 
-                        <div class="d-flex flex-column m-1 flex-grow-1">
+                        <div class="d-flex flex-column m-2 flex-grow-1">
 
                             @if (post.Updated is not null)
                             {
@@ -202,7 +215,7 @@
                                 </div>
                                 <div class="text-muted h6 opacity-25 px-2 pt-1">|</div>
                                 <div class="usefulCount" id="@($"usefulCount{counter}")">
-                                    <i class="fa-regular fa-file-code fa-2xs text-muted">
+                                    <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
                                         @if (post.UsefulCodes != null)
                                         {
                                             @post.UsefulCodes.Count()
@@ -344,16 +357,9 @@
 
 <hr />
 
-<hr />
-
-<div class="row m-auto p-0">
-    <div class="col h3">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-    </div>
-</div>
 <div class="row m-auto p-0">
     <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("SortByPages", new { page = page , id = ViewBag.PostsUser }),
+        @Html.PagedListPager(Model, page => Url.Action("SortByPages", new { page = page , id = ViewBag.PostsUser, text = ViewBag.BtnText }),
             new PagedListRenderOptions
             {
                 LiElementClasses = new string[] { "page-item" },
@@ -369,62 +375,81 @@
         $(document).ready(function () {
             console.log("rdy");
 
-             $(".likeBtn").click(function () {
+            $(".likeBtn").off("click").on('click', function () {
+                var $el = $(this);
+                var slug = $el.data('slug');
+                var postLikesCount = $(this).attr('postLikesCount');
 
-                 var $el = $(this);
-                 var slug = $el.data('slug');
-                 let modalId = $(this).attr('id');
+                var e = $el.parents("#viewUpdate").children().children().children().children();
+                var elId = e.attr('id');
+                console.log(elId);
+                var pageCount = $("#" + elId).children().html();
+                postLikesCount = pageCount;
 
-                 console.log($el.data('slug'));
-                 console.log("ziki zuki `` ose string"+`@counter`);
-                 $.ajax({
+                let modalId = $(this).attr('id');
+
+                console.log($el.data('slug'));
+                console.log("ziki zuki `` ose string" + ``);
+                $.ajax({
 
                     type: "POST",
-                    url: "@Url.ActionLink("Like","Home")",
-                     data: { slug: slug },
+                    url: '/Home/Like',
+                    data: { slug: slug },
                     dataType: "json",
-                     success: function (result) {
-                         console.log(result);
+                    success: function (result) {
+                        console.log(result);
+                        trigger = false;
+                        var modalAnchor = document.getElementById(modalId);
+                        var icon = modalAnchor.firstElementChild;
 
-                         var modalAnchor = document.getElementById(modalId);
-                         var icon = modalAnchor.firstElementChild;
+                        if (icon.classList.contains("fa-regular")) {
+                            icon.classList.remove("fa-regular");
+                            icon.classList.add("fa-solid");
 
-                         if (icon.classList.contains("fa-regular")) {
-                             icon.classList.remove("fa-regular");
-                             icon.classList.add("fa-solid");
-                         } else if (icon.classList.contains("fa-solid")) {
-                             icon.classList.remove("fa-solid");
-                             icon.classList.add("fa-regular");
-                         }
+                            postLikesCount++;
 
-                         var e = $el.parents("#viewUpdate").children().children(".likeCount");
-                         var elId = e.attr('id');
+                        } else if (icon.classList.contains("fa-solid")) {
+                            icon.classList.remove("fa-solid");
+                            icon.classList.add("fa-regular");
 
-                         console.log(elId);
+                            postLikesCount--;
+                        }
 
-                         $("#" + elId).load(" #" + elId + "> *");
+                        var e = $el.parents("#viewUpdate").children().children().children().children();
+                        var elId = e.attr('id');
 
-                     },
+                        $("#" + elId).children().html(" " + postLikesCount);
+
+                    },
                     error: function (req, status, error) {
                         console.log(status)
                     }
                 });
-             });
+            });
 
-             $(".usefulBtn").click(function () {
 
-                 var $el = $(this);
-                 var slug = $el.data('slug');
-                 let modalId = $(this).attr('id');
+            $(".usefulBtn").off("click").on('click', function () {
 
-                 console.log($el.data('slug'));
-                 console.log("ziki zuki `` ose string"+`@counter`);
+                var $el = $(this);
+                var slug = $el.data('slug');
+                var postUsefulCount = $(this).attr('postUsefulCount');
 
-                 $.ajax({
+                var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
+                var elId = e.attr('id');
+                console.log(elId);
+                var pageCount = $("#" + elId).children(".usefulCount").html();
+                postUsefulCount = pageCount;
+
+                let modalId = $(this).attr('id');
+
+                console.log($el.data('slug'));
+                console.log("ziki zuki `` ose string" + ``);
+
+                $.ajax({
 
                     type: "POST",
-                    url: "@Url.ActionLink("UsefulCode", "Home")",
-                     data: { slug: slug },
+                    url: '/Home/UsefulCode',
+                    data: { slug: slug, postUsefulCount: postUsefulCount },
                     dataType: "json",
                     success: function (result) {
                         console.log(result);
@@ -434,24 +459,28 @@
                         if (icon.classList.contains("fa-regular")) {
                             icon.classList.remove("fa-regular");
                             icon.classList.add("fa-solid");
+
+                            postUsefulCount++;
+
                         } else if (icon.classList.contains("fa-solid")) {
                             icon.classList.remove("fa-solid");
                             icon.classList.add("fa-regular");
+
+                            postUsefulCount--;
                         }
 
-                        var e = $el.parents("#viewUpdate").children().children(".usefulCount");
+                        var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
                         var elId = e.attr('id');
 
-                        console.log(elId);
+                        $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
 
-                        $("#" + elId).load(" #" + elId + "> *");
 
                     },
                     error: function (req, status, error) {
                         console.log(status)
                     }
                 });
-             });
+            });
 
          })
 

@@ -25,10 +25,17 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Comments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? id)
         {
-            var allComments = await _context.Comments.ToListAsync();
-            return View("index", allComments);
+            var user = _userManager.GetUserAsync(User);
+
+            var allComments = await _context.Comments.Where(c => c.BlogUserId == id)
+                .Include(c => c.Post)
+                .Include(c => c.BlogUser)
+                .ToListAsync();
+
+            ViewBag.CommentUser = id;
+            return View(allComments);
         }
 
         public async Task<IActionResult> OriginalIndex()
@@ -208,7 +215,8 @@ namespace TheBlogProject.Controllers
             var comment = await _context.Comments.FindAsync(id);
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Posts", new { slug }, "commentSection");
+            return RedirectToAction("Index", "Comments", new { id = _userManager.GetUserAsync(User).Result.Id });
+
         }
 
         private bool CommentExists(int id)

@@ -135,14 +135,28 @@ button.btn-sm, a.btn-sm {
 }
 
 /*-----------------PAGE STYLES---------------*/
-.page-item.active .page-link {
-    background-color: #212121;
-    border-color: black;
-}
 
-.page-link {
-    color: #212121;
+.page-item.active .page-link {
+    background-color: var(--hoverLightBlue-color);
+    border: none;
+    padding-bottom: 6px;
+    margin-top: 1px;
 }
+.page-item {
+    padding: 0px;
+    margin: 0px;
+
+}
+.page-link {
+    background-color: var(--customBlack-color);
+    color: white;
+
+}
+    .page-link:hover {
+        background-color: var(--hoverLightBlue-color);
+        color: white;
+        box-shadow: none;
+    }
 
 /*-----------------SWEET ALERT STYLES---------------*/
 div.swal2-container.swal2-center.swal2-backdrop-show > div {
@@ -436,12 +450,13 @@ iframe, object, embed {
     object-fit: none; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
     max-height: 250px;
-    margin-bottom: 1rem;
+
 }
 
 .imgSmall {
-    object-fit: scale-down;
-    max-height: auto;
+    object-fit:cover;
+    object-position: top;
+    max-height: 250px;
     width: 100%;
     background-color: white;
 }
@@ -450,6 +465,8 @@ iframe, object, embed {
     object-fit: cover;
     object-position: top;
     max-height: 350px;
+    width: 100%;
+    background-color: white;
 }
 
 .logoImg {
@@ -504,6 +521,9 @@ button > a {
         color: var(--customBlack-color);
         width:100%;
     }
+        .sideBarBtn:hover .myPostsIconSideBar {
+            color:gray;
+        }
         .sideBarBtn:hover .likeIconSideBar {
             color: var(--hoverLightBlue-color);
         }
@@ -700,4 +720,8 @@ button > a {
 .imgSize {
     width: 120px;
     height: 120px;
+}
+
+.font600 {
+    font-weight: 600;
 }

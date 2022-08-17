@@ -201,26 +201,27 @@
 
 
                                     <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                                        <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
+
+                                        <img class="imgSetup imgSmall rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
                                         <span class=" align-self-center ps-1">@blogUser.DisplayName</span>
                                     </a>
 
                                     <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-text="myposts" title="My Posts">
-                                        <i class="fa-solid fa-clipboard fa-xl align-self-center likeIconSideBar ps-2"></i>
+                                        <i class="fa-solid fa-clipboard fa-xl align-self-center myPostsIconSideBar ps-2"></i>
                                         <span class="align-self-center ps-2">My Posts</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Likes">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-text="mylikes" title="User Likes">
                                         <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar ps-2"></i>
                                         <span class="align-self-center ps-2">Likes</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Useful Codes">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-text="myuseful" title="User Useful Codes">
                                         <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar ps-1  ms-1"></i>
                                         <span class="align-self-center ps-2 ms-1">Useful Codes</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Comments">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" asp-route-id="@blogUser.Id" title="User Comments">
                                         <i class="fa-regular fa-comment fa-xl align-self-center commentsIconSideBar ps-2"></i>
                                         <span class="align-self-center ps-2">Comments</span>
                                     </a>

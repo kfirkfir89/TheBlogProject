@@ -12,7 +12,7 @@
         <div class="bg-white rounded p-3 shadow-sm">
             <div class="row-cols-1 py-2">
                 <div class="col d-flex justify-content-center pb-2">
-                    <img src="@Model.CurrentImage" class="rounded-circle img-thumbnail" style="width:150px; height:150px;" />
+                    <img src="@Model.CurrentImage" class="imgSetup imgSmall rounded-circle img-thumbnail" style="width:150px; height:150px;" />
                 </div>
                 <div class="col">
                     <div class="input-group">
@@ -22,7 +22,7 @@
                             <span class="file-input-label"></span>
                             <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
                         </label>
-                    </div>
+                    </div> 
                 </div>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -48,18 +48,19 @@
                 </div>
             </div>
             <div class="col">
-                <div class="form-floating mb-3">
+                <div class="form-floating mb-5">
                     <input asp-for="Input.Location" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="Location">
                     <label class="form-labelFloating ps-2" for="floatingInputGrid">Location</label>
                     <span asp-validation-for="Input.Location" class="text-danger"></span>
                 </div>
             </div>
             <div class="col">
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.AboutMe" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="AboutMe">
-                    <label class="form-labelFloating ps-2" for="floatingInputGrid">About Me</label>
+                <div class="form-group bg-white mb-1">
+                    <label asp-for="Input.AboutMe" class="control-label h6 pt-2 ps-1"></label>
+                    <textarea asp-for="Input.AboutMe" class="form-control AboutMe ps-2" style="padding-top: 25px;" placeholder="AboutMe"></textarea>
                     <span asp-validation-for="Input.AboutMe" class="text-danger"></span>
                 </div>
+
             </div>
         </div>
 
@@ -165,4 +166,5 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script src="~/js/uploadImage.js"></script>
+    <script src="~/js/tinymceCustom.js"></script>
 }

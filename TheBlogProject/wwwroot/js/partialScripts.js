@@ -8,8 +8,14 @@ var inProgress = false;
 $(window).ready(function () {
     console.log("doc rdy");
     $("#progress").hide();
-    console.log(tag);
-    console.log(text);
+    if (inProgress == true) {
+        return;
+    }
+    inProgress = true;
+
+    if (noMoreData == true) {
+        return;
+    }
 
     $.ajax({
         type: 'POST',
