@@ -54,8 +54,8 @@
                                         <span class="pb-1 pe-2">Delete</span>
                                     </button>
                                     <div class="px-1 text-muted">|</div>
-                                    <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Index">
-                                        <i class="fa-solid fa-backward fa-lg px-2"></i>
+                                    <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Index" asp-route-id="@Model.BlogUserId">
+                                        <i class="fa-solid fa-circle-chevron-left fa-lg px-2"></i>
                                         <span class="pb-1 pe-2">Back To List</span>
                                     </a>
                                 </div>

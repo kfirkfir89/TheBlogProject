@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
+using X.PagedList;
 
 namespace TheBlogProject.Controllers
 {
@@ -25,16 +26,20 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Comments
-        public async Task<IActionResult> Index(string? id)
+        public async Task<IActionResult> Index(int? page, string? id)
         {
+            var pageNumber = page ?? 1;
+            var pageSize = 20;
             var user = _userManager.GetUserAsync(User);
 
-            var allComments = await _context.Comments.Where(c => c.BlogUserId == id)
+            var allComments = _context.Comments.Where(c => c.BlogUserId == id)
                 .Include(c => c.Post)
                 .Include(c => c.BlogUser)
-                .ToListAsync();
+                .ToPagedList(pageNumber, pageSize);
+
 
             ViewBag.CommentUser = id;
+
             return View(allComments);
         }
 

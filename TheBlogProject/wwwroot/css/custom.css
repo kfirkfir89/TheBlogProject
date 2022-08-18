@@ -725,3 +725,10 @@ button > a {
 .font600 {
     font-weight: 600;
 }
+
+.pluMinusBtn {
+    color:var(--hoverLightBlue-color);
+}
+    .pluMinusBtn:hover {
+        color: white;
+    }

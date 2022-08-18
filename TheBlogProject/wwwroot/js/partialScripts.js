@@ -119,24 +119,21 @@ function GetData() {
 
 function myPartialView_Load() {
 
-
-
-
-    $(".detailsBtn").off("click").on('click', function () {
+    $(".tagsModalBtn").off("click").on('click', function () {
         console.log("----------postD-----------------");
         var $el = $(this);
         var route = $el.data('route');
-        var returnUrl = "~/"
         console.log(route);
 
         $.ajax({
-            type: 'POST',
-            url: route,
-            data: { slug: returnUrl },
-            dataType: 'json',
+            type: 'GET',
+            url: '/Home/UserTags',
+            dataType: 'html',
             success: function (data) {
                 console.log(data);
-                $(".modal-body").html(data);
+
+                $(".modal-body").html("");
+                $(".modal-body").append(data);
             },
 
             error: function () {

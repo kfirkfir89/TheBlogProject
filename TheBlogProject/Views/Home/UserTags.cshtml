@@ -1,45 +1,58 @@
 ﻿
-@{
-    ViewData["Title"] = "UserTags";
-}
-
-<h1>UserTags</h1>
-
-
-<form class="form-group" asp-controller="Home" asp-action="UserTags">
-    <div class="row">
-        <label class="control-label">Manage Tags</label>
+<div class="row row-cols-1 container-fluid px-2 m-0">
+    <div class="col">
+        <div class="h4 text-center pb-1">My Tags</div>
     </div>
-    <div class="row row-cols-1">
-        <div class="col">
-            <div class="row">
-                <div class="col">
-                    <button onclick="AddMyTag()" type="button" class="btn btn-success note-btn-block" name="Add">ADD</button>
+    <div class="col">
+        @using (Html.BeginForm("UserTags", "Home", FormMethod.Post))
+        {
+            <div class="row row-cols-1 d-flex justify-content-center">
+                <div class="col-12 col-sm-5 d-flex justify-content-center p-0">
+                    <div class="row-cols-1 container-fluid p-0 m-0">
+                        <div class="col">
+                            <label class="h6 text-center pt-1 text-nowrap">Tags</label>
+                        </div>
+                        <div class="col">
+                            <select class="form-select" size="15" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues"></select>
+                        </div>
+                    </div>
                 </div>
-                <div class="col">
-                    <button onclick="AddMyTagBack()" type="button" class="btn btn-danger note-btn-block" name="Delete">ADD BACK</button>
+                <div class="col-4 col-sm-2 d-flex justify-content-center flex-column align-content-center">
+                    <div class="btn-group-vertical" role="group" aria-label="Basic outlined example">
+                        <a onclick="AddMyTag()" class="btn btn-outline-primary d-flex justify-content-center pluMinusBtn" name="Add">
+                            <i class="fa-solid fa-plus align-self-center"></i>
+                        </a>
+                        <a onclick="AddMyTagBack()" class="btn btn-outline-primary d-flex justify-content-center pluMinusBtn" name="Delete">
+                            <i class="fa-solid fa-minus align-self-center"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-5 d-flex justify-content-center p-0">
+                    <div class="row-cols-1 container-fluid p-0 m-0">
+                        <div class="col">
+                            <label class="h6 text-center pt-1 text-nowrap">My Tags</label>
+                        </div>
+                        <div class="col">
+                            <select class="form-select" size="15" asp-items="@((List<SelectListItem>)ViewData["TagValues"])" name="TagValues" id="TagList"></select>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-6">
-            <span>My Tags</span>
-            <select class="note-btn-block" name="TagValues" id="TagList" style="height:500px" multiple></select>
-        </div>
-        <div class="col-6">
-            <span>Tags</span>
-            <select class="note-btn-block" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues" style="height:500px" multiple></select>
-        </div>
+
+            <hr />
+            <button type="submit" class="w-100 btn btn-primary logoutButton border-1 mx-2 mb-2 shadow-none" asp-action="UserTags">Save Changes</button>
+
+
+
+
+            <script>
+                 let tagValues = '@ViewData["TagValues"]';
+                 $("form").on("submit", function () {
+                     $("#TagList option").prop("selected", "selected");
+
+                 })
+            </script>
+
+        }
     </div>
-    <button type="submit">submit</button>
-</form>
-
-@section Scripts {
-
-    <script>
-
-        let tagValues = '@ViewData["TagValues"]';
-
-    </script>
-
-    <script src="~/js/Custom.js"></script>
-}
+</div>

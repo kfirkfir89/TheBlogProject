@@ -35,11 +35,6 @@ namespace TheBlogProject.Controllers
         }
 
 
-        public IActionResult getPostD(string slug)
-        {
-            var post = _context.Posts.Where(p => p.Slug == slug).Include(p => p.Tags).Include(p => p.Comments).FirstOrDefault();
-            return PartialView("_PostDetailViewModel", post);
-        }
 
         public List<Post> GetPosts(int BlockNumber, string? text)
         {
@@ -203,7 +198,7 @@ namespace TheBlogProject.Controllers
                     .ToPagedList(pageNumber, pageSize);
 
 
-
+                
                 ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
                 ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
                 ViewBag.PostsUser = id;
@@ -510,37 +505,29 @@ namespace TheBlogProject.Controllers
         {
 
             var db = _context.Tags.Where(t => t.BlogUserId == null && t.PostId == null);
-            bool exists = false;
-            foreach (var tag in tagValues)
+            _context.Tags.RemoveRange(db);
+            
+            foreach(var tag in tagValues)
             {
-                exists = false;
-                foreach (var dbTag in db)
+                _context.Tags.Add(new Tag()
                 {
-                    if(dbTag.Text == tag)
-                    {
-                        exists = true;
-                        break;
-                    }
-                }
-                if(exists == false)
-                {
-                    _context.Tags.Add(new Tag()
-                    {
-                        Text = tag
-                    });
-                }
+                    Text = tag
+                });
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(TagManagement));
         }
 
+        [HttpGet]
         public async Task<IActionResult> UserTags()
         {
             var user = await _userManager.GetUserAsync(User);
             List<string> tagsDb = new List<string>();
             tagsDb = _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text).ToList();
             var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+            List<string> userDb = new List<string>();
+            userDb = _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text).ToList();
 
 
             if (userTags != null && userTags.Count() > 0)
@@ -561,12 +548,17 @@ namespace TheBlogProject.Controllers
                     Text = x.ToString()
                 }).ToList();
 
-                ViewData["TagValues"] = string.Join(",", userTags.Select(t => t.Text));
+                this.ViewData["TagValues"] = userDb.Select(x => new SelectListItem
+                {
+                    Text = x.ToString()
+                }).ToList();
+
+                /*                ViewData["TagValues"] = string.Join(",", userTags.Select(t => t.Text));*/
 
                 //sidebar suggestions
                 ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
 
-                return View();
+                return PartialView();
             }
 
             else
@@ -576,7 +568,7 @@ namespace TheBlogProject.Controllers
                     Text = x.ToString()
                 }).ToList();
 
-                return View();
+                return PartialView();
             }
 
         }
@@ -592,8 +584,9 @@ namespace TheBlogProject.Controllers
 
             foreach (var item in tagValues)
             {
-                user.Tags.Add(new Tag()
+                _context.Tags.Add(new Tag()
                 {
+                    BlogUserId = user.Id,
                     Text = item
                 });
             }
@@ -601,7 +594,7 @@ namespace TheBlogProject.Controllers
             await _context.SaveChangesAsync();
 
 
-            return RedirectToAction(nameof(UserTags));
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]

@@ -12,7 +12,7 @@
 @inject IImageService imageService
 @inject ApplicationDbContext _context
 
-@model IEnumerable<TheBlogProject.Models.Comment>
+@model IPagedList<TheBlogProject.Models.Comment>
 
 @{
     Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
@@ -21,69 +21,85 @@
 
 <div class="h4 text-center">@user.DisplayName Comments</div>
 
-@foreach (var item in Model)
-{
-    var isAuthor = false;
-
-    if (User.Identity.IsAuthenticated)
+    @foreach (var item in Model)
     {
-        isAuthor = (item.Post.BlogUserId == userManager.GetUserId(User));
+        var isAuthor = false;
+
+        if (User.Identity.IsAuthenticated)
+        {
+            isAuthor = (item.Post.BlogUserId == userManager.GetUserId(User));
+        }
+
+        <div class="col" style="padding:0px;">
+            @*-------------   Post card   ------------*@
+            <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
+                <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
+
+                    <div class="row row-cols-1 px-1 pt-1">
+                        <div class="col w-100 d-flex">
+                            <a class="d-flex d-inline-block flex-nowrap " asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug" style="color: var(--customBlack-color);">
+                                <span class="h6 m-0">@item.Post.Title</span>
+                            </a>
+                        </div>
+                        <div class="col d-flex justify-content-end">
+                            <div class="d-flex d-inline-block">
+
+                                <div class="d-flex flex-column flex-grow-1">
+                                    @if (item.Updated is not null)
+                                    {
+                                        <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">Updated : @item.Updated?.ToString("MMM dd, yyyy")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">@item.Created.ToString("MMM dd, yyyy")</span>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <span class="d-flex flex-wrap px-4 mx-1 m-0">@item.Body</span>
+                    </div>
+
+                </div>
+
+                @*-------------   Post footer buttons   ------------*@
+                <div class="card-footer border-0 bg-white rounded-bottom p-0" id="viewUpdate">
+                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                    {
+                        <div class="row px-sm-3 my-1 d-flex m-0">
+                            <div class="col">
+                                <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                    <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-fragment="commentSection" asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug">
+                                        <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
+                                        <span class="pb-1 pe-2">Edit</span>
+                                    </a>
+                                    <div class="px-1 text-muted">|</div>
+                                    <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Delete" asp-route-id="@item.Id">
+                                        <i class="fa-solid fa-circle-left fa-lg px-2"></i>
+                                        <span class="pb-1 pe-2">Delete</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
     }
 
-    <div class="col" style="padding:0px;">
-        @*-------------   Post card   ------------*@
-        <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
-            <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
 
-                <div class="row row-cols-1 px-1 pt-1">
-                    <div class="col w-100 d-flex">
-                        <a class="d-flex d-inline-block flex-nowrap " asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug" asp-fragment="commentSection" style="color: var(--customBlack-color);">
-                            <span class="h6 m-0">@item.Post.Title</span>
-                        </a>
-                    </div>
-                    <div class="col d-flex justify-content-end">
-                        <div class="d-flex d-inline-block">
-
-                            <div class="d-flex flex-column flex-grow-1">
-                                @if (item.Updated is not null)
-                                {
-                                    <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">Updated : @item.Updated?.ToString("MMM dd, yyyy")</span>
-                                }
-                                else
-                                {
-                                    <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">@item.Created.ToString("MMM dd, yyyy")</span>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <span class="d-flex flex-wrap px-4 mx-1 m-0">@item.Body</span>
-                </div>
-
-            </div>
-
-            @*-------------   Post footer buttons   ------------*@
-            <div class="card-footer border-0 bg-white rounded-bottom p-0" id="viewUpdate">
-                @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor) 
+@if(Model.PageCount > 1)
+{
+    <hr />
+    <div class="row m-auto p-0">
+        <div class="col">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page, id = ViewBag.CommentUser}),
+                new PagedListRenderOptions
                 {
-                    <div class="row px-sm-3 my-1 d-flex m-0">
-                        <div class="col">
-                            <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
-                                <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-fragment="commentSection" asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug">
-                                    <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
-                                    <span class="pb-1 pe-2">Edit</span>
-                                </a>
-                                <div class="px-1 text-muted">|</div>
-                                <a class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Delete" asp-route-id="@item.Id">
-                                    <i class="fa-solid fa-circle-left fa-lg px-2"></i>
-                                    <span class="pb-1 pe-2">Delete</span>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
         </div>
     </div>
 }
