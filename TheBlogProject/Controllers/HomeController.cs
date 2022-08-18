@@ -10,6 +10,7 @@ using TheBlogProject.Services;
 using TheBlogProject.ViewModels;
 using X.PagedList;
 
+
 namespace TheBlogProject.Controllers
 {
     public class HomeController : Controller
@@ -21,6 +22,7 @@ namespace TheBlogProject.Controllers
         private readonly ISlugService _slugService;
         private readonly SignInManager<BlogUser> _signInManager;
 
+
         public HomeController(ILogger<HomeController> logger, IBlogEmailSender emailSender, ApplicationDbContext context, UserManager<BlogUser> userManager, ISlugService slugService, SignInManager<BlogUser> signInManager = null)
         {
             _logger = logger;
@@ -29,10 +31,264 @@ namespace TheBlogProject.Controllers
             _userManager = userManager;
             _slugService = slugService;
             _signInManager = signInManager;
+
         }
 
 
 
+        public List<Post> GetPosts(int BlockNumber, string? text)
+        {
+            int BlockSize = 3;
+            var user = _userManager.GetUserAsync(User);
+
+            if(text != null)
+            {
+                if(text == "top" || text == "useful" || text == "foryou")
+                {
+                    if (text == "top")
+                    {
+                        var selectedPosts = _context.Posts
+                            .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                            .Where(p => p.Views != null)
+                            .Include(p => p.Tags)
+                            .OrderByDescending(p => p.Views.Value)
+                            .ToPagedList(BlockNumber, BlockSize)
+                            .ToList();
+
+                        return selectedPosts;
+                    }
+
+                    else if (text == "useful")
+                    {
+
+                        var selectedPosts = _context.Posts
+                            .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                            .Where(p => p.UsefulCodes != null)
+                            .Include(p => p.Tags)
+                            .OrderByDescending(p => p.UsefulCodes.Count)
+                            .ToPagedList(BlockNumber, BlockSize)
+                            .ToList();
+
+                        return selectedPosts;
+
+                    }
+
+                    else if (text == "foryou")
+                    {
+                        var userTags = _context.Tags.Where(t => t.BlogUserId == user.Result.Id).ToList();
+                        if(userTags != null && userTags.Count() > 0)
+                        {
+                            List<Post> selectedPosts = new List<Post>();
+                            bool flag = false;
+                            int counter = 0;
+                            List<int> postsIds = new List<int>();
+                            
+                            foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(t => t.Tags))
+                            {
+                                foreach (var userTag in userTags)
+                                {
+                                    var postTags = post.Tags.Select(t => t.Text);
+
+                                    foreach (var item in postTags)
+                                    {
+                                        if (item == userTag.Text)
+                                        {
+                                            counter++;
+                                            break;
+                                        }
+                                    }
+
+                                    if (counter >= 2)
+                                    {
+                                        counter = 0;
+                                        flag = false;
+
+                                        foreach (var pId in postsIds)
+                                        {
+                                            if (pId == post.Id)
+                                            {
+                                                flag = true;
+                                                break;
+                                            }
+                                        }
+                                        if (flag == false)
+                                        {
+                                            postsIds.Add(post.Id);
+                                            selectedPosts.Add(post);
+                                        }
+                                    }
+                                }
+                            }
+
+                            return selectedPosts.ToPagedList(BlockNumber, BlockSize).ToList();
+                        }
+                    }
+                }
+                else 
+                {
+                    /*tags*/
+                    List<Post> selectedPosts = new List<Post>();
+
+                    var posts = _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(t => t.Tags).ToList();
+
+                    foreach (var post in posts)
+                    {
+
+                        var postTags = post.Tags.Select(t => t.Text).ToList();
+
+                        foreach (var item in postTags)
+                        {
+                            if (item == text)
+                            {
+                                selectedPosts.Add(post);
+                                break;
+                            }
+                        }
+                    }
+
+                    return selectedPosts.ToPagedList(BlockNumber, BlockSize).ToList();
+                }
+            }
+
+
+            var query = _context.Posts
+                    .Include(p => p.BlogUser)
+                    .Include(p => p.Tags)
+                    .Include(p => p.Comments)
+                    .ThenInclude(p => p.BlogUser)
+                    .Include(p => p.Comments)
+                    .ThenInclude(c => c.Moderator)
+                    .OrderByDescending(p => p.Created)
+                    .ToPagedList(BlockNumber, BlockSize).ToList();
+
+            return query;
+        }
+
+
+
+
+        public async Task<IActionResult> SortBy(string? text, string? tag)
+        {
+            if(text != null)
+            {
+                ViewBag.Text = text;
+            }
+            if (tag != null)
+            {
+                ViewBag.Tag = tag;
+            }        
+            return View();
+
+        }
+
+        public async Task<IActionResult> SortByPages(int? page, string? text, string? id)
+        {
+            var user = _userManager.GetUserAsync(User);
+
+            var pageNumber = page ?? 1;
+            var pageSize = 10;
+
+            if(id != null)
+            {
+
+                var selectedPosts = _context.Posts
+                    .Where(p => p.BlogUserId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
+                    .Include(p => p.Tags)
+                    .OrderByDescending(p => p.Created)
+                    .ToPagedList(pageNumber, pageSize);
+
+
+                
+                ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
+                ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
+                ViewBag.PostsUser = id;
+
+                return View(selectedPosts);
+            }
+
+            if (text == "myposts" || text == "mylikes" || text == "myuseful")
+            {
+                if(text == "myposts")
+                {
+                    var selectedPosts = _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                        .Where(p => p.BlogUserId == user.Result.Id)
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.Created)
+                        .ToPagedList(pageNumber, pageSize);
+
+                    ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
+                    ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
+                    ViewBag.PostsUser = user.Result.Id;
+
+                    return View(selectedPosts);
+                }
+                else if (text == "mylikes")
+                {
+                    var selectedPosts = _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                        .Where(p => p.Likes.Contains(user.Result.Id))
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.Created)
+                        .ToPagedList(pageNumber, pageSize);
+
+                    ViewBag.BtnText = text;
+                    return View(selectedPosts);
+                }
+                else if (text == "myuseful")
+                {
+                    var selectedPosts = _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                        .Where(p => p.UsefulCodes.Contains(user.Result.Id))
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.Created)
+                        .ToPagedList(pageNumber, pageSize);
+
+                    ViewBag.BtnText = text;
+
+                    return View(selectedPosts);
+                }
+
+            }
+            return View();
+
+        }
+
+        [HttpPost]
+        public IActionResult InfinateScroll(int BlockNumber, string? text)
+        {
+            var posts = GetPosts(BlockNumber,text);
+
+            if(posts.Count == 0)
+            {
+                var noMoreData = true;
+                return Json(noMoreData);
+            }
+            //////////////// THis line of code only for demo. Needs to be removed ////
+/*            System.Threading.Thread.Sleep(01);*/
+            //////////////////////////////////////////////////////////////////////////
+            ViewBag.BlockNumber = BlockNumber;
+            return PartialView("_postPartial",posts);
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
+            return View();
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        public async Task<IActionResult> About(int? page , string? text, string? tag)
 
         public ActionResult GetData(int BlockNumber, int BlockSize)
         {
@@ -54,6 +310,7 @@ namespace TheBlogProject.Controllers
 
 
         public async Task<IActionResult> Index(int? page , string? text, string? tag)
+
         {
             var pageNumber = page ?? 1;
             var pageSize = 5;
@@ -271,37 +528,29 @@ namespace TheBlogProject.Controllers
         {
 
             var db = _context.Tags.Where(t => t.BlogUserId == null && t.PostId == null);
-            bool exists = false;
-            foreach (var tag in tagValues)
+            _context.Tags.RemoveRange(db);
+            
+            foreach(var tag in tagValues)
             {
-                exists = false;
-                foreach (var dbTag in db)
+                _context.Tags.Add(new Tag()
                 {
-                    if(dbTag.Text == tag)
-                    {
-                        exists = true;
-                        break;
-                    }
-                }
-                if(exists == false)
-                {
-                    _context.Tags.Add(new Tag()
-                    {
-                        Text = tag
-                    });
-                }
+                    Text = tag
+                });
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(TagManagement));
         }
 
+        [HttpGet]
         public async Task<IActionResult> UserTags()
         {
             var user = await _userManager.GetUserAsync(User);
             List<string> tagsDb = new List<string>();
             tagsDb = _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text).ToList();
             var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+            List<string> userDb = new List<string>();
+            userDb = _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text).ToList();
 
 
             if (userTags != null && userTags.Count() > 0)
@@ -322,12 +571,17 @@ namespace TheBlogProject.Controllers
                     Text = x.ToString()
                 }).ToList();
 
-                ViewData["TagValues"] = string.Join(",", userTags.Select(t => t.Text));
+                this.ViewData["TagValues"] = userDb.Select(x => new SelectListItem
+                {
+                    Text = x.ToString()
+                }).ToList();
+
+                /*                ViewData["TagValues"] = string.Join(",", userTags.Select(t => t.Text));*/
 
                 //sidebar suggestions
                 ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
 
-                return View();
+                return PartialView();
             }
 
             else
@@ -337,7 +591,7 @@ namespace TheBlogProject.Controllers
                     Text = x.ToString()
                 }).ToList();
 
-                return View();
+                return PartialView();
             }
 
         }
@@ -353,8 +607,9 @@ namespace TheBlogProject.Controllers
 
             foreach (var item in tagValues)
             {
-                user.Tags.Add(new Tag()
+                _context.Tags.Add(new Tag()
                 {
+                    BlogUserId = user.Id,
                     Text = item
                 });
             }
@@ -362,7 +617,7 @@ namespace TheBlogProject.Controllers
             await _context.SaveChangesAsync();
 
 
-            return RedirectToAction(nameof(UserTags));
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -436,7 +691,7 @@ namespace TheBlogProject.Controllers
 
             if (Id == "admin")
             {
-                await _signInManager.PasswordSignInAsync("kfirkfir89@gmail.com", "kfir123455A!", false, lockoutOnFailure: false);
+                await _signInManager.PasswordSignInAsync("kfirkfir89@gmail.com", "kfir123455AA!", false, lockoutOnFailure: false);
                 return RedirectToAction(nameof(Index));
             }
             else if(Id == "moderator")
@@ -446,12 +701,13 @@ namespace TheBlogProject.Controllers
             }
             else if(Id == "user1")
             {
-                await _signInManager.PasswordSignInAsync("kfirAAA@mailinator.com", "kfir123455A!", false, lockoutOnFailure: false);
+                await _signInManager.PasswordSignInAsync("kfirAAA2334@mailinator.com", "Abc&123!33", false, lockoutOnFailure: false);
                 return RedirectToAction(nameof(Index));
             }
 
             return View();
         }
+
 
     }
 }

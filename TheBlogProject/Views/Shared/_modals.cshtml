@@ -1,0 +1,47 @@
+﻿
+<div class="modal fade rounded" id="tagsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg container-fluid px-0">
+        <div class="modal-content">
+
+
+            <div class="modal-header d-flex justify-content-end p-3 m-0 border-0">
+                <button type="button" class="btn-close fs-6 p-0 m-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex justify-content-center p-0">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*
+    
+ Modal 
+<div class="modal fade" id="@($"detailsModal{counter}")" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">@post.Title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                 Button trigger modal 
+                <p>This <a href="#" role="button" class="btn btn-secondary popover-test" title="Popover title" data-bs-content="Popover body content is set in this attribute.">button</a> triggers a popover on click.</p>
+                @{ var postdm = new PostDetailViewModel()
+                    {
+                        Post = post,
+                        Tags = post.Tags.Select(t => t.Text).ToList()
+                    };
+                }
+                @Html.Partial("_postDetails", postdm)
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+*@

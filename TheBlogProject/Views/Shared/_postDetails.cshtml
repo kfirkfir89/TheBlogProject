@@ -11,7 +11,6 @@
 
 @{
     ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
     var post = Model.Post;
 }
 
@@ -98,7 +97,10 @@
     @{ var counter = 0; }
     @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
     {
+
+
         <div class="media p-3 mb-2 bg-cf media-border">
+
             <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@comment.BlogUser.FullName" class="mr-3 mt-3 rounded-pill img-thumbnail " style="width:60px;">
 
             <div class="media-body">
@@ -206,7 +208,8 @@
 
 
         @*Modals*@
-        <div class="modal" id="@($"editModal{counter}")">
+
+        <div class="modal" id="@($"editModal{counter}")" tabindex="-1" style="z-index: 150;">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -235,7 +238,7 @@
             </div>
         </div>
 
-        <div class="modal" id="@($"moderate{counter}")">
+        <div class="modal" id="@($"moderate{counter}")" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
 

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TheBlogProject.Data;
 using TheBlogProject.Models;
+using X.PagedList;
 
 namespace TheBlogProject.Controllers
 {
@@ -25,10 +26,21 @@ namespace TheBlogProject.Controllers
         }
 
         // GET: Comments
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page, string? id)
         {
-            var allComments = await _context.Comments.ToListAsync();
-            return View("index", allComments);
+            var pageNumber = page ?? 1;
+            var pageSize = 20;
+            var user = _userManager.GetUserAsync(User);
+
+            var allComments = _context.Comments.Where(c => c.BlogUserId == id)
+                .Include(c => c.Post)
+                .Include(c => c.BlogUser)
+                .ToPagedList(pageNumber, pageSize);
+
+
+            ViewBag.CommentUser = id;
+
+            return View(allComments);
         }
 
         public async Task<IActionResult> OriginalIndex()
@@ -208,7 +220,8 @@ namespace TheBlogProject.Controllers
             var comment = await _context.Comments.FindAsync(id);
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Posts", new { slug }, "commentSection");
+            return RedirectToAction("Index", "Comments", new { id = _userManager.GetUserAsync(User).Result.Id });
+
         }
 
         private bool CommentExists(int id)

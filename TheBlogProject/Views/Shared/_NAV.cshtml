@@ -1,0 +1,30 @@
+﻿<nav class="navbar navbar-expand-md navbar-dark mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1 fixed-top">
+    <div class="container-fluid d-flex justify-content-center">
+        <div class="container-xxl row p-0 m-0">
+            <div class="col-md-4 d-flex d-inline-block pt-md-0">
+                <form class="d-flex d-none d-md-block shadow-sm" style="height:40px;" asp-action="SearchIndex" asp-controller="Posts">
+                    <div class="input-group d-flex flex-nowrap">
+                        <div class="form-floating d-flex flex-nowrap">
+                            <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                            <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
+                            <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:41px"><i class="fa fa-search fa-lg"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-4 col-6 d-flex">
+                <a class="ms-lg-4" asp-controller="Home" asp-action="Index">
+                    <i class="ps-md-5 ms-md-5">
+                        <img class="logoImg" src="~/assets/img/navIcons/logonew.svg" />
+                    </i>
+                </a>
+            </div>
+            <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end pe-lg-5 align-items-center">
+                <partial name="_LogoutPartial" />
+                <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>

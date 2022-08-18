@@ -12,7 +12,8 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     background-color: var(--backgroundGray-color);
-    color:var(--customBlack-color);
+    color: var(--customBlack-color);
+    min-height: 100%;
 }
 
 .nav {
@@ -134,14 +135,28 @@ button.btn-sm, a.btn-sm {
 }
 
 /*-----------------PAGE STYLES---------------*/
-.page-item.active .page-link {
-    background-color: #212121;
-    border-color: black;
-}
 
-.page-link {
-    color: #212121;
+.page-item.active .page-link {
+    background-color: var(--hoverLightBlue-color);
+    border: none;
+    padding-bottom: 6px;
+    margin-top: 1px;
 }
+.page-item {
+    padding: 0px;
+    margin: 0px;
+
+}
+.page-link {
+    background-color: var(--customBlack-color);
+    color: white;
+
+}
+    .page-link:hover {
+        background-color: var(--hoverLightBlue-color);
+        color: white;
+        box-shadow: none;
+    }
 
 /*-----------------SWEET ALERT STYLES---------------*/
 div.swal2-container.swal2-center.swal2-backdrop-show > div {
@@ -203,7 +218,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 /*-----------------Search Inputtt style---------------*/
 #floatingInputSearch {
-    height: 40px;
+    height: 41px;
     width: 240px;
     padding: 0px;
     margin: 0px;
@@ -364,15 +379,12 @@ div > button > a h6 {
 }
     .logoutButton:hover {
         border: 3px solid white;
+        border-radius: 3px 3px 3px 3px;
     }
 
 
 .hoverWidthSideBar {
     width: 200px;
-}
-
-.offcanvasBtn {
-
 }
 
 @media screen and (max-width:992px) {
@@ -396,6 +408,8 @@ div > button > a h6 {
         font-size:initial;
     }
 
+
+
 }
 
 @media screen and (min-width:1200px) {
@@ -405,16 +419,17 @@ div > button > a h6 {
         width: 256.39px;
     }
 
-/*    #floatingInputSearch {
-        width: 420px;
-    }*/
-
     .offcanvasBtn > span{
         font-size: 0.8rem;
     }
     .offcanvasBtn > i {
         font-size: initial;
     }
+    .imgSize {
+        width: 60px;
+        height: 60px;
+    }
+
 
 }
 
@@ -435,12 +450,13 @@ iframe, object, embed {
     object-fit: none; /* Do not scale the image */
     object-position: center; /* Center the image within the element */
     max-height: 250px;
-    margin-bottom: 1rem;
+
 }
 
 .imgSmall {
-    object-fit: scale-down;
-    max-height: auto;
+    object-fit:cover;
+    object-position: top;
+    max-height: 250px;
     width: 100%;
     background-color: white;
 }
@@ -449,11 +465,13 @@ iframe, object, embed {
     object-fit: cover;
     object-position: top;
     max-height: 350px;
+    width: 100%;
+    background-color: white;
 }
 
 .logoImg {
     max-width: 250px;
-    height: 33px;
+    height: 41px;
 }
 
 
@@ -503,6 +521,9 @@ button > a {
         color: var(--customBlack-color);
         width:100%;
     }
+        .sideBarBtn:hover .myPostsIconSideBar {
+            color:gray;
+        }
         .sideBarBtn:hover .likeIconSideBar {
             color: var(--hoverLightBlue-color);
         }
@@ -580,3 +601,134 @@ button > a {
     width:22%;
 }
 
+.form-floating > input.floaingCustom {
+    height: 50px;
+
+
+}
+
+.form-labelFloating {
+    font-weight: 100;
+    letter-spacing: 0px;
+    opacity: 0.8;
+    font-family: 'Segoe UI Emoji';
+    line-height: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+.uploadButton {
+    border-radius: 3px 3px 3px 3px;
+    color: var(--customBlack-color);
+    font-weight: 600;
+    border: 3px solid white;
+    background-color: white;
+    padding: 0;
+    margin: 0;
+}
+
+    .uploadButton:hover {
+        border: 3px solid white;
+        color: var(--hoverLightBlue-color);
+        background-color: var(--backgroundGray-color);
+    }
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+    height:auto;
+}
+
+    .btn-file input[type=file] {
+        position: absolute;
+        top: 0;
+        right: 0;
+        min-width: 100%;
+        min-height: 100%;
+        font-size: 100px;
+        text-align: right;
+        opacity: 0;
+        background: red;
+        cursor: inherit;
+        display: block;
+    }
+
+.file-input-label {
+    display: table-cell;
+}
+
+
+.delBtn:hover{
+    background-color:red;
+}
+
+.editdel {
+    background-color:var(--backgroundGray-color);
+}
+
+.sortByPageBtn {
+    border-radius: 3px 3px 3px 3px;
+    color: var(--customBlack-color);
+    background-color: white;
+}
+    .sortByPageBtn:hover {
+        border-radius: 3px 3px 3px 3px;
+        background-color: var(--backgroundGray-color);
+        color: var(--customBlack-color);
+    }
+
+
+
+.testimonial-card .card-up {
+    height: 105px;
+    overflow: hidden;
+}
+
+.aqua-gradient {
+    background: linear-gradient(40deg, #205CE9, #2F3337) !important;
+}
+.testimonial-card{
+
+}
+
+.testimonial-card .avatar {
+    width: 120px;
+    padding-top: 10px;
+    margin-top: -60px;
+    margin-bottom: -60px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+
+.avatarSmall {
+    width: 60px;
+    padding-top: 10px;
+    margin-top: -30px;
+    margin-bottom: -60px;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.imgSize {
+    width: 120px;
+    height: 120px;
+}
+
+.font600 {
+    font-weight: 600;
+}
+
+.pluMinusBtn {
+    color:var(--hoverLightBlue-color);
+}
+    .pluMinusBtn:hover {
+        color: white;
+    }

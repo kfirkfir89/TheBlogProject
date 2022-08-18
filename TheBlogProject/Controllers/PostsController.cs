@@ -90,6 +90,8 @@ namespace TheBlogProject.Controllers
                 .OrderByDescending(p => p.Created)
                 .ToListAsync();
 
+            ViewBag.PostsUser = id;
+
             return View(posts);
         }
 
@@ -434,10 +436,22 @@ namespace TheBlogProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Where(p => p.Id == id)
+                .Include(p => p.Tags)
+                .Include(p => p.Comments)
+                .FirstOrDefaultAsync();
+
+            foreach(var tag in post.Tags)
+            {
+                _context.Tags.Remove(tag);
+            }
+            foreach (var comment in post.Comments)
+            {
+                _context.Comments.Remove(comment);
+            }
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("SortByPages", "Home" , new { text = "myposts" });
         }
 
         private bool PostExists(int id)

@@ -3,6 +3,9 @@
 @using TheBlogProject.Models
 @using TheBlogProject.Data
 @using TheBlogProject.Enums
+@using Microsoft.EntityFrameworkCore;
+
+
 
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> UserManager
@@ -52,41 +55,13 @@
             imagePath = "'/assets/img/home-bg.jpg'";
         }
         var user = await UserManager.GetUserAsync(User);
+
     }
 
     <!-- Page Header-->
     <header style="padding-bottom:70px;">
         <!-- NAV-->
-        <nav class="navbar navbar-expand-md navbar-dark mb-3 navStyle shadow-sm bg-example border-secondary border-bottom border-1 fixed-top">
-            <div class="container-fluid d-flex justify-content-center">
-                <div class="container-xxl row p-0 m-0">
-                    <div class="col-md-4 d-flex d-inline-block pt-md-0">
-                        <form class="d-flex d-none d-md-block shadow-sm" style="height:40px;" asp-action="SearchIndex" asp-controller="Posts">
-                            <div class="input-group d-flex flex-nowrap">
-                                <div class="form-floating d-flex flex-nowrap">
-                                    <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
-                                    <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
-                                    <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px"><i class="fa fa-search fa-lg"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-4 col-6 d-flex" style="padding:0px 55px;">
-                        <a class="p-0 m-0 ps-md-5 ms-md-4" asp-controller="Home" asp-action="Index">
-                            <i class="">
-                                <img class="logoImg" src="~/assets/img/navIcons/logoBig.svg" />
-                            </i>
-                        </a>
-                    </div>
-                    <div class="col-md-4 col-6 d-flex d-inline-block justify-content-end pe-lg-5 align-items-center">
-                        <partial name="_LogoutPartial" />
-                        <button class="navbar-toggler ms-4" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </nav>
+        <partial name="_NAV" />
 
         <!--CANVAS NAV-->
         <div class="offcanvas offcanvas-start bg-offcanvas" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -104,7 +79,7 @@
                     <form class="d-flex shadow-sm" style="height: 40px;" asp-action="SearchIndex" asp-controller="Posts">
                         <div class="input-group d-flex flex-nowrap">
                             <div class="form-floating d-flex flex-nowrap">
-                                <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0"  style="width: 200px;"  name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
+                                <input type="text" id="floatingInputSearch" class="ps-3 form-control rounded bg-white rounded-start rounded-0" style="width: 200px;" name="SearchTerm" placeholder="Search Term" autocomplete="off" aria-label="Search" />
                                 <label class="form-label form-labelSearch p-1" for="floatingInputSearch">search</label>
                                 <button type="submit" class="btn btn-primary px-4 rounded-end rounded-0" style="height:40px;"><i class="fa fa-search fa-lg"></i></button>
                             </div>
@@ -190,7 +165,7 @@
                                 {
                                     foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                     {
-                                        <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                        <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
                                             <i class="align-self-center likeIconSideBar">#</i>
                                             <span class="align-self-center">@tag</span>
                                         </a>
@@ -214,10 +189,9 @@
         <div class="container-xxl">
             <div class="row row-cols-1 d-flex justify-content-center">
 
-
                 <!--SIDEBAR NAV-->
                 <div class="col-3 col-3-left text-center d-none d-md-block me-2">
-                    <div class="row-cols-1 h-100 position-fixed hoverWidthSideBar" >
+                    <div class="row-cols-1 h-100 position-fixed hoverWidthSideBar">
                         <div class="col">
                             <div class="btn-group-vertical d-flex flex-nowrap">
 
@@ -228,7 +202,12 @@
 
                                     <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
                                         <img class="rounded-circle img-thumbnail" style="width:30px; height:30px;" src="@_imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" />
-                                        <span class=" align-self-center ps-1">@blogUser.FullName</span>
+                                        <span class=" align-self-center ps-1">@blogUser.DisplayName</span>
+                                    </a>
+
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-text="myposts" title="My Posts">
+                                        <i class="fa-solid fa-clipboard fa-xl align-self-center likeIconSideBar ps-2"></i>
+                                        <span class="align-self-center ps-2">My Posts</span>
                                     </a>
 
                                     <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Comments" asp-action="Index" title="User Likes">
@@ -293,7 +272,7 @@
                                     {
                                         foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                         {
-                                            <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="Index" asp-route-tag="@tag">
+                                            <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
                                                 <i class="align-self-center likeIconSideBar">#</i>
                                                 <span class="align-self-center">@tag</span>
                                             </a>
@@ -308,11 +287,15 @@
                 </div>
 
                 <!--CONTENT-->
-                <div class="col-8 d-flex flex-column h-100">
+                <div id="inContainer" class="col-md-9 col-lg-7 d-flex flex-column h-100">
+                    <!-- Modal -->
+                    <partial name="_modals" />
                     @RenderBody()
                 </div>
+                <!--TAGS RIGHT SIDEBAR-->
+                <div class="col-2">
 
-                <div class="col-1"></div>
+                </div>
 
             </div>
         </div>
@@ -329,24 +312,8 @@
                                     <a><img class="card-img-top" style="background-image: url(@imagePath)"></a>*@
 
     <!-- Footer-->
-    <footer class="footer mt-auto py-2 fixed-bottom">
-        <div class="container-fluid bg-gradient">
-            <div class="row row-cols-1 row-cols-lg-3 gy-2">
-                <div class="col text-light d-flex align-items-center order-last order-lg-first">
-                    <div class="smallfont"><span>&copy;2022</span>  Kfir Avraham | Kfirkfir89@gmail.com</div>
-                </div>
-                <div class="col d-flex align-items-center justify-content-center">
-                    <img src="/img/White logo - no background.svg" alt="Kfir Avraham Logo" height="43">
-                </div>
-                <div class="col d-flex align-items-center justify-content-start justify-content-lg-end">
-                    <div class="row p-1">
-                        <div class="col social"><a href="https://www.linkedin.com/in/kfir-avraham-91637b123/" target="__blank"><i class="fab fa-linkedin fa-2x"></i></a></div>
-                        <div class="col social"><a href="https://github.com/kfirkfir89" target="__blank"><i class="fab fa-github fa-2x"></i></a></div>
-                        <div class="col social"><a href="https://twitter.com/kfir_avraham" target="__blank"><i class="fab fa-twitter fa-2x"></i></a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <footer class="footer mt-auto py-2">
+        <partial name="_FOOTER" />
     </footer>
 
     <!-- Bootstrap core JS-->
@@ -355,13 +322,22 @@
     <script src="~/js/scripts.js"></script>
     <!-- Jquery JS(needed for summernote)-->
     <script src="~/js/jquery-3.5.1.min.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+
+
     <!-- Summernote JS-->
     <script src="~/js/summernote-lite.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/partialScripts.js"></script>
     <script>
 
          let forYou = '@ViewData["ForYou"]';
+        $(document).on('show.bs.modal', '.modal', function () {
+            const zIndex = 1040 + 10 * $('.modal:visible').length;
+            $(this).css('z-index', zIndex);
+            setTimeout(() => $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack'));
+        });
 
     </script>
 

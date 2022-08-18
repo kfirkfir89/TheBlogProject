@@ -12,18 +12,26 @@
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var tagOrText = "";
 }
 
-@model IEnumerable<Post>
+@if (ViewBag.Text != null)
+{
+    tagOrText = ViewBag.Text;
+}
+else if (ViewBag.Tag != null)
+{
+    tagOrText = ViewBag.Tag;
+}
+
+<div id="@tagOrText" class="postPartialContainer row-cols-1">
+
+</div>
 
 
-    <div class="postPartialContainer row-cols-1">
-
-    </div>
-
-    <div class="d-flex justify-content-center pt-2 mb-3">
-        <i id="progress" class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
-    </div>
+<div class="d-flex justify-content-center pt-2 mb-3">
+    <i id="progress" class="fa-solid fa-circle-notch fa-spin fa-xl"></i>
+</div>
 @section Scripts{
     <script src="~/js/partialScripts.js"></script>
 

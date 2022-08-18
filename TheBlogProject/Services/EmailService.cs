@@ -39,7 +39,7 @@ namespace TheBlogProject.Services
             smtp.Disconnect(true);
         }
 
-        public async Task SendEmailAsync(string emailTo, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string emailTo, string? subject, string? htmlMessage)
         {
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);

@@ -1,25 +1,29 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using TheBlogProject.Services
-@using TheBlogProject.ViewModels
+﻿
+@using Microsoft.AspNetCore.Identity
+
 
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> UserManager
-@inject IImageService _imageService
 
 
-<div class="row">
-    @if (!(SignInManager.IsSignedIn(User)))
-    {
-        BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
+@if (!(SignInManager.IsSignedIn(User)))
+{
+    BlogUser blogUser = (BlogUser)await UserManager.GetUserAsync(User);
 
 
-        <form class="" asp-area="Identity" asp-page="/Account/Login">
-            <button type="submit" class="btn btn-primary logoutButton border-1 px-4">LOGIN</button>
-        </form>
-        <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="admin" id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">admin</a>
-        <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="moderator" id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">moderator</a>
-        <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="user1" id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">user1</a>
 
-    }
+    <a asp-area="Identity" asp-page="/Account/Login" class="w-100 d-flex justify-content-center btn btn-primary logoutButton border-1 px-2 shadow-none">Log In</a>
+    <hr />
+    <div class="h6">Demo Login</div>
+    <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="admin" id="login-submit" type="submit" class="w-100 mt-1 d-flex justify-content-center btn btn-primary logoutButton border-1 px-2 shadow-none">Admin</a>
 
-</div>
+    <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="moderator" id="login-submit" type="submit" class="w-100 mt-1 d-flex justify-content-center btn btn-primary logoutButton border-1 px-2 shadow-none">Moderator</a>
+
+    <a asp-controller="Home" asp-action="DemoLogin" asp-route-Id="user1" id="login-submit" type="submit" class="w-100 mt-1 d-flex justify-content-center btn btn-primary logoutButton border-1 px-2 shadow-none">Guest</a>
+
+
+@*    <button type="button" class="btn btn-primary detailsBtn" data-route="/Identity/Account/Login" >fds</button>
+
+    @Html.RouteLink("fds","Login")*@
+}
+
