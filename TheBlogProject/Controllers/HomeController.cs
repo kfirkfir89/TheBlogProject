@@ -287,7 +287,30 @@ namespace TheBlogProject.Controllers
 
 
 
+
         public async Task<IActionResult> About(int? page , string? text, string? tag)
+
+        public ActionResult GetData(int BlockNumber, int BlockSize)
+        {
+            System.Threading.Thread.Sleep(4000);
+            var query = _context.Posts.Skip(BlockNumber*BlockSize).Take(BlockSize).OrderByDescending(p=>p.Id).ToList();
+            ViewData.Model = query;
+            return Json(query);
+        }
+
+
+        public async Task<IActionResult> About()
+        {
+            var BlockSize = 5;
+            var BlockNumber = 0;
+            var query = _context.Posts.Skip(BlockNumber * BlockSize).Take(BlockSize).ToList();
+
+            return View(query);
+        }
+
+
+        public async Task<IActionResult> Index(int? page , string? text, string? tag)
+
         {
             var pageNumber = page ?? 1;
             var pageSize = 5;
