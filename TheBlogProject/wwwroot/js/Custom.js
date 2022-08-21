@@ -14,8 +14,23 @@ function AddTag() {
     }
     else {
         //create a new select option
+        let array = [];
+        let indexAdd = document.getElementById("TagList").length;
+
+        for (i = 0; i < indexAdd; i++) {
+            array[i] = document.getElementById("TagList").options[i].value;
+        }
+
+        array.unshift(tagEntry.value);
+
+        for (i = 0; i < array.length; i++) {
+            let str = array[i];
+            let newOption = new Option(str, str);
+            document.getElementById("TagList").options[i] = newOption;
+        }
+/*
         let newOption = new Option(tagEntry.value, tagEntry.value);
-        document.getElementById("TagList").options[index++] = newOption;
+        document.getElementById("TagList").options[indexAdd] = newOption;*/
 
     }
     //clear out the TagEntry control

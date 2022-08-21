@@ -118,16 +118,32 @@ function GetData() {
 
 
 function myPartialView_Load() {
-
-    $(".tagsModalBtn").off("click").on('click', function () {
-        console.log("----------postD-----------------");
-        var $el = $(this);
-        var route = $el.data('route');
-        console.log(route);
+    $(".tagsManModalBtn").off("click").on('click', function () {
+        console.log("----------modall-----------------");
 
         $.ajax({
             type: 'GET',
-            url: '/Home/UserTags',
+            url: "/Home/TagManagement",
+            dataType: 'html',
+            success: function (data) {
+                console.log(data);
+
+                $(".modal-body").html("");
+                $(".modal-body").append(data);
+            },
+
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    })
+
+    $(".tagsModalBtn").off("click").on('click', function () {
+        console.log("----------modall-----------------");
+
+        $.ajax({
+            type: 'GET',
+            url: "/Home/UserTags",
             dataType: 'html',
             success: function (data) {
                 console.log(data);

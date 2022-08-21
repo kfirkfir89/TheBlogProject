@@ -18,7 +18,7 @@ namespace TheBlogProject.Services
         //This is the content of the SendContactEmailAsync() method
         //The functional portion of this method is the same as SendEmailAsync(), but the body is pre-set
 
-        public async Task SendContactEmailAsync(string emailFrom, string name, string subject, string htmlMessage)
+        public async Task SendContactEmailAsync(string name, string subject, string htmlMessage)
         {
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(_mailSettings.Mail);
@@ -26,7 +26,7 @@ namespace TheBlogProject.Services
             email.Subject = subject;
 
             var builder = new BodyBuilder();
-            builder.HtmlBody = $"<b>{name}</b> has sent you an email and can be reached at: <b>{emailFrom}</b><br/><br/>{htmlMessage}";
+            builder.HtmlBody = $"<b>{name}</b> has sent you an email about: <b>{subject}</b><hr/>{htmlMessage}";
 
             email.Body = builder.ToMessageBody();
 
