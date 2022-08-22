@@ -238,27 +238,22 @@
 
                                 }
 
-                                <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="About" title="About">
-                                    <i class="fa-solid fa-circle-exclamation fa-xl align-self-center tagsIconSideBar ps-1  ms-1"></i>
-                                    <span class=" align-self-center ps-2">About</span>
-                                </a>
-
                                 <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="Contact" title="Contact">
-                                    <i class="fa-regular fa-id-card fa-lg align-self-center tagsIconSideBar ps-1 ms-1"></i>
+                                    <i class="fa-solid fa-id-card fa-xl align-self-center tagsIconSideBar ps-1  ms-1"></i>
                                     <span class=" align-self-center ps-2">Contact</span>
                                 </a>
 
                                 @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
                                 {
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="Index" title="Comments Controler">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="CommentsManagement" title="Comments Controler">
                                         <i class="fa-regular fa-comments fa-xl align-self-center commentsManIconSideBar ps-1"></i>
                                         <span class="ms-1 align-self-center ps-1">Comments Management</span>
                                     </a>
 
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="TagManagement" title="Tag Management">
+                                    <button type="button" class="tagsManModalBtn btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" data-bs-toggle="modal" data-bs-target="#tagsModal" title="Tag Management">
                                         <i class="fa-solid fa-tags fa-xl align-self-center tagsManIconSideBar ps-2"></i>
                                         <span class="ms-1 align-self-center ps-1">Tags Management</span>
-                                    </a>
+                                    </button>
                                 }
 
                             </div>

@@ -13,7 +13,7 @@
                             <label class="h6 text-center pt-1 text-nowrap">Tags</label>
                         </div>
                         <div class="col">
-                            <select class="form-select" size="15" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues"></select>
+                            <select multiple class="form-select" size="15" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues"></select>
                         </div>
                     </div>
                 </div>
@@ -33,24 +33,34 @@
                             <label class="h6 text-center pt-1 text-nowrap">My Tags</label>
                         </div>
                         <div class="col">
-                            <select class="form-select" size="15" asp-items="@((List<SelectListItem>)ViewData["TagValues"])" name="TagValues" id="TagList"></select>
+                            <select multiple class="form-select" size="15" asp-items="@((List<SelectListItem>)ViewData["TagValues"])" name="TagValues" id="TagList"></select>
                         </div>
                     </div>
                 </div>
             </div>
 
             <hr />
-            <button type="submit" class="w-100 btn btn-primary logoutButton border-1 mx-2 mb-2 shadow-none" asp-action="UserTags">Save Changes</button>
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="w-100 btn btn-primary logoutButton border-1 mx-2 mb-2 shadow-none" asp-action="UserTags">Save Changes</button>
+            </div>
 
 
 
 
             <script>
-                 let tagValues = '@ViewData["TagValues"]';
-                 $("form").on("submit", function () {
-                     $("#TagList option").prop("selected", "selected");
+                let tagValues = '@ViewData["TagValues"]';
 
-                 })
+                $("form").on("submit", function () {
+                    selectBox = document.getElementById("TagList");
+                    for (var i = 0; i < selectBox.options.length; i++) {
+                        selectBox.options[i].selected = false;
+                    }
+                    for (var i = 0; i < selectBox.options.length; i++) {
+                        selectBox.options[i].selected = true;
+                    }
+
+
+                })
             </script>
 
         }

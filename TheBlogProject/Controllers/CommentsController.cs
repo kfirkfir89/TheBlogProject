@@ -43,10 +43,46 @@ namespace TheBlogProject.Controllers
             return View(allComments);
         }
 
-        public async Task<IActionResult> OriginalIndex()
+        public async Task<IActionResult> CommentsManagement(int? page,string? type)
         {
-            var originalComments = await _context.Comments.ToListAsync();
-            return View("index", originalComments);
+            var pageNumber = page ?? 1;
+            var pageSize = 20;
+
+            if(type == "moderated")
+            {
+                var selectedComments = await _context.Comments
+                    .Where(c => c.Moderator != null)
+                    .Include(c => c.Post)
+                    .Include(c => c.BlogUser)
+                    .OrderByDescending(c => c.Created)
+                    .ToPagedListAsync(pageNumber,pageSize);
+
+                ViewBag.type = "moderated";
+                return View(selectedComments);
+            }
+            else if (type == "new")
+            {
+                var selectedComments = await _context.Comments
+                    .Where(c => c.Moderator == null)
+                    .Include(c => c.Post)
+                    .Include(c => c.BlogUser)
+                    .OrderByDescending(c => c.Created)
+                    .ToPagedListAsync(pageNumber, pageSize);
+
+                ViewBag.type = "new";
+                return View(selectedComments);
+            }
+            else
+            {
+                var selectedComments = await _context.Comments
+                    .Include(c => c.Post)
+                    .Include(c => c.BlogUser)
+                    .ToPagedListAsync(pageNumber, pageSize);
+
+                ViewBag.type = "all";
+                return View(selectedComments);
+            }
+            
         }
 
         public async Task<IActionResult> ModeratedIndex()
@@ -145,7 +181,7 @@ namespace TheBlogProject.Controllers
                 }
 
                 //Redirect to action Details of the Post controller and the route data is the slug
-                return RedirectToAction("Details", "Posts", new {slug = newComment.Post.Slug}, "commentSection");
+                return RedirectToAction("Index", "Comments", new { id = _userManager.GetUserAsync(User).Result.Id });
             }
             return View(comment);
         }
@@ -153,7 +189,7 @@ namespace TheBlogProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Moderator")]
-        public async Task<IActionResult> Moderate(int id, [Bind("Id, Body, ModeratedBody, ModerationType")] Comment comment)
+        public async Task<IActionResult> Moderate(int id, [Bind("Id, Body, ModeratedBody, ModerationType")] Comment comment,string type)
         {
             if(id != comment.Id)
             {
@@ -166,7 +202,7 @@ namespace TheBlogProject.Controllers
 
                 try
                 {
-                    newComment.Body = comment.ModeratedBody;
+                    newComment.ModeratedBody = comment.ModeratedBody;
                     newComment.ModerationType = comment.ModerationType;
 
                     newComment.Moderated = DateTime.UtcNow;
@@ -185,8 +221,8 @@ namespace TheBlogProject.Controllers
                         throw;
                     }
                 }
+                return RedirectToAction("CommentsManagement", "Comments", new { type = type });
 
-                return RedirectToAction("Details", "Posts", new { slug = newComment.Post.Slug }, "commentSection");
             }
             return View(comment);
         }
@@ -215,12 +251,22 @@ namespace TheBlogProject.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, string slug)
+        public async Task<IActionResult> DeleteConfirmed(int id, string? type)
         {
-            var comment = await _context.Comments.FindAsync(id);
-            _context.Comments.Remove(comment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index", "Comments", new { id = _userManager.GetUserAsync(User).Result.Id });
+            if(type == "commentsManagement")
+            {
+                var comment = await _context.Comments.FindAsync(id);
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("CommentsManagement", "Comments");
+            }
+            else
+            {
+                var comment = await _context.Comments.FindAsync(id);
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", "Comments", new { id = _userManager.GetUserAsync(User).Result.Id });
+            }
 
         }
 

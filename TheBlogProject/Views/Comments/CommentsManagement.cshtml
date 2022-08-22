@@ -1,0 +1,236 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using TheBlogProject.Models
+@using TheBlogProject.Services
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@using TheBlogProject.Enums
+@using TheBlogProject.Data
+@using System.Drawing
+
+@inject UserManager<BlogUser> userManager
+@inject IImageService imageService
+@inject ApplicationDbContext _context
+
+@model IPagedList<TheBlogProject.Models.Comment>
+
+@{
+    Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
+    var counter = 0;
+}
+
+<div class="h4 text-center">Comments Management</div>
+
+<div class="col pt-2">
+    <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
+
+        @if (ViewBag.type == "all")
+        {
+            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-top bg-white" asp-controller="Comments" asp-action="CommentsManagement" title="All Comments">
+                <span class="pt-2 smallFont pb-2">All</span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Comments" asp-action="CommentsManagement" title="All Comments">
+                <span class="pt-2 smallFont pb-2">All</span>
+            </a>
+        }
+
+        @if (ViewBag.type == "new")
+        {
+            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-top bg-white" asp-controller="Comments" asp-action="CommentsManagement" asp-route-type="new" title="New Comments">
+                <span class="pt-2 smallFont pb-2">New</span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Comments" asp-action="CommentsManagement" asp-route-type="new" title="New Comments">
+                <span class="pt-2 smallFont pb-2">New</span>
+            </a>
+        }
+
+        @if (ViewBag.type == "moderated")
+        {
+            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-top bg-white" asp-controller="Comments" asp-action="CommentsManagement" asp-route-type="moderated" title="Moderated Comments">
+                <span class="pt-2 smallFont pb-2">Moderated</span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Comments" asp-action="CommentsManagement" asp-route-type="moderated" title="Moderated Comments">
+                <span class="pt-2 smallFont pb-2">Moderated</span>
+            </a>
+        }
+
+
+    </div>
+</div>
+
+
+@foreach (var item in Model)
+{
+
+    <div class="col d-flex bg-white rounded shadow-sm p-2 mb-2">
+        <div class="w-100">
+            <div class="row-cols-1">
+                <div class="col">
+                    <span class="small">
+                        <span class="fw-bold">Id </span> : @item.Id
+                    </span>
+                </div>
+                <div class="col d-flex">
+                    @if (item.Deleted is not null)
+                    {
+                        <span class="small">
+                            <span class="font-weight-bolder">Deleted</span> : @item.Deleted?.ToString("MMM dd, yyyy")
+                        </span>
+                    }
+                    else if (item.Moderated is not null)
+                    {
+                        <span class="small">
+                            <span class="fw-bold">
+                                Moderated <span class="text-danger font-italic">(@item.ModerationType.ToString().ToLower())</span>
+                            </span>
+                            : @item.Moderated?.ToString("MMM dd, yyyy")
+                        </span>
+                    }
+                    else if (item.Updated is not null)
+                    {
+                        <span class="small">
+                            <span class="fw-bold">Updated </span> : @item.Updated?.ToString("MMM dd, yyyy")
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="small">
+                            <span class="fw-bold">Created </span> : @item.Created.ToString("MMM dd, yyyy")
+                        </span>
+                    }
+                </div>
+                <div class="col">
+                    <span class="small">
+                        <span class="fw-bold">User </span> : @item.BlogUser.DisplayName
+                    </span>
+                </div>
+                <div class="col">
+                    <span class="small">
+                        <span class="fw-bold">Content </span> : @item.Body
+                    </span>
+                </div>
+                @if (item.ModeratedBody != null)
+                {
+                    <div class="col">
+                        <span class="small">
+                            <span class="fw-bold">Moderated Content </span> : @item.ModeratedBody
+                        </span>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="flex-shrink-1">
+            <div class="btn-group-vertical">
+                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug">
+                    <span class="pb-1 pe-2">Post</span>
+                </a>
+                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#moderate{counter}")">
+                    <span class="pb-1 pe-2">Moderate</span>
+                </a>
+                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#delete{counter}")">
+                    <span class="pb-1 pe-2">Delete</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    @*Modals*@
+    <div class="modal" id="@($"delete{counter}")">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    @using (Html.BeginForm("Delete", "Comments", new { id = item.Id, type = "commentsManagement" }, FormMethod.Post))
+                    {
+                        <div class="row-cols-1">
+                            <div class="col">
+                                <h4>Are you sure you want to delete this comment @item.Id?</h4>
+                            </div>
+                            <hr />
+                            <div class="col">
+                                <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                    <button type="submit" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);">
+                                        <i class="fa-solid fa-check fa-lg px-2"></i>
+                                        <span class="pb-1 pe-2">Yes</span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);" data-bs-dismiss="modal">
+                                        <i class="fa-solid fa-xmark fa-lg px-2"></i>
+                                        <span class="pb-1 pe-2">No</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="@($"moderate{counter}")">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form asp-action="Moderate" asp-controller="Comments" asp-route-type="@ViewBag.type">
+                        @Html.Hidden("Id", item.Id)
+                        @Html.Hidden("Body", item.Body)
+                        <div class="row-cols-1">
+                            <div class="col ">
+                                <h4>Moderating Comment</h4>
+                            </div>
+                            <div class="col">
+                                <label class="h6">Original Comment</label>
+                                <textarea disabled class="form-control" style="resize:none">@item.Body</textarea>
+                            </div>
+                            <div class="col">
+                                <label class="h6">Moderated Comment</label>
+                                <textarea required name="ModeratedBody" class="form-control">@item.ModeratedBody</textarea>
+                            </div>
+                            <div class="col">
+                                <label class="h6">Reason For Moderation</label>
+                                <select class="form-control" asp-for="@item.ModerationType" name="ModerationType" asp-items="Html.GetEnumSelectList<ModerationType>()"></select>
+                            </div>
+                            <hr />
+                            <div class="col">
+                                <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                    <button type="submit" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);">
+                                        <span class="pb-1 pe-2">Save Chances</span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);" data-bs-dismiss="modal">
+                                        <span class="pb-1 pe-2">Close</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    counter++;
+}
+
+@if (Model.PageCount > 1)
+{
+    <hr />
+    <div class="row m-auto p-0">
+        <div class="col">
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page, id = ViewBag.CommentUser }),
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+        </div>
+    </div>
+}

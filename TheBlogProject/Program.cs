@@ -81,13 +81,18 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.MapControllerRoute(
-    name: "SlugRoute",
-    pattern: "BlogPosts/UrlFreindly/{slug}",
-    defaults: new { controller = "Posts", action = "Details"});
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+        name: "SlugRoute",
+        pattern: "BlogPosts/UrlFreindly/{slug}",
+        defaults: new { controller = "Posts", action = "Details"});
+
     endpoints.MapControllerRoute(
     name: "Register",
     pattern: "register",
@@ -99,9 +104,6 @@ app.UseEndpoints(endpoints =>
     defaults: new { area = "Identity", controller = "Account", action = "Login" });
 
 
-    endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
 
     endpoints.MapRazorPages(); // this one
 });

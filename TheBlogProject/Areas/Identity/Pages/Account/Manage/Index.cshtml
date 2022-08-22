@@ -1,7 +1,7 @@
 ﻿@page
 @model IndexModel
 @{
-
+    Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
 }
 
 
@@ -22,7 +22,7 @@
                             <span class="file-input-label"></span>
                             <span asp-validation-for="Input.ImageFile" class="text-danger"></span>
                         </label>
-                    </div> 
+                    </div>
                 </div>
             </div>
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>

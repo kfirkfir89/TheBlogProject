@@ -164,9 +164,6 @@ namespace TheBlogProject.Controllers
             return query;
         }
 
-
-
-
         public async Task<IActionResult> SortBy(string? text, string? tag)
         {
             if(text != null)
@@ -270,44 +267,6 @@ namespace TheBlogProject.Controllers
             ViewBag.BlockNumber = BlockNumber;
             return PartialView("_postPartial",posts);
         }
-
-        public async Task<IActionResult> Index()
-        {
-            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
-            return View();
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-        public async Task<IActionResult> About(int? page , string? text, string? tag)
-
-        public ActionResult GetData(int BlockNumber, int BlockSize)
-        {
-            System.Threading.Thread.Sleep(4000);
-            var query = _context.Posts.Skip(BlockNumber*BlockSize).Take(BlockSize).OrderByDescending(p=>p.Id).ToList();
-            ViewData.Model = query;
-            return Json(query);
-        }
-
-
-        public async Task<IActionResult> About()
-        {
-            var BlockSize = 5;
-            var BlockNumber = 0;
-            var query = _context.Posts.Skip(BlockNumber * BlockSize).Take(BlockSize).ToList();
-
-            return View(query);
-        }
-
 
         public async Task<IActionResult> Index(int? page , string? text, string? tag)
 
@@ -493,10 +452,10 @@ namespace TheBlogProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Contact(ContactMe model)
         {
-            model.Message = $"{model.Message}<hr/> Phone: {model.Phone}";
-            await _emailSender.SendContactEmailAsync(model.Email, model.Name, model.Subject, model.Message);
+            model.Message = $"{model.Message}<hr/>";
+            await _emailSender.SendContactEmailAsync(model.Name, model.Subject, model.Message);
 
-            return RedirectToAction("Index");
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -505,29 +464,35 @@ namespace TheBlogProject.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        [HttpGet]
         public async Task<IActionResult> TagManagement()
         {
+            List<string> tagsDb = new List<string>();
+            tagsDb = _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text).ToList();
+
+            this.ViewData["TagValues"] = tagsDb.Select(x => new SelectListItem
+            {
+                Text = x.ToString()
+            }).ToList();
 
 
-            /*            this.ViewData["TagValues"] = _context.Tags.Select(x => new SelectListItem
-                        {
-                            Text = x.Text.ToString()
-                        }).ToList();
-            */
-            /*            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();*/
+            /*
+                        ViewData["TagValues"] = string.Join(",", _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text));*/
 
+            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
 
-            ViewData["TagValues"] = string.Join(",", _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text));
-
-
-            return View();
+            return PartialView();
         }
 
         [HttpPost]
-        public async Task<IActionResult> TagManagement(List<string> tagValues)
+        public IActionResult TagManagement(List<string> tagValues)
         {
-
+            if(tagValues == null || tagValues.Count == 0)
+            {
+                return RedirectToAction(nameof(Index));
+            }
             var db = _context.Tags.Where(t => t.BlogUserId == null && t.PostId == null);
+
             _context.Tags.RemoveRange(db);
             
             foreach(var tag in tagValues)
@@ -538,8 +503,8 @@ namespace TheBlogProject.Controllers
                 });
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(TagManagement));
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
@@ -548,7 +513,9 @@ namespace TheBlogProject.Controllers
             var user = await _userManager.GetUserAsync(User);
             List<string> tagsDb = new List<string>();
             tagsDb = _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text).ToList();
+
             var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+
             List<string> userDb = new List<string>();
             userDb = _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text).ToList();
 
@@ -597,11 +564,11 @@ namespace TheBlogProject.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserTags([Bind("Id ,BlogUserId, Text")] Tag tag, List<string> tagValues)
+        public IActionResult UserTags([Bind("Id ,BlogUserId, Text")] Tag tag, List<string> tagValues)
         {
 
-            var user = await _userManager.GetUserAsync(User);
-            var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+            var user = _userManager.GetUserAsync(User);
+            var userTags = _context.Tags.Where(t => t.BlogUserId == user.Result.Id).ToList();
 
             _context.Tags.RemoveRange(userTags);
 
@@ -609,12 +576,12 @@ namespace TheBlogProject.Controllers
             {
                 _context.Tags.Add(new Tag()
                 {
-                    BlogUserId = user.Id,
+                    BlogUserId = user.Result.Id,
                     Text = item
                 });
             }
 
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
 
             return RedirectToAction(nameof(Index));

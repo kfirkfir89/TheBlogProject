@@ -481,7 +481,7 @@ iframe, object, embed {
 }
 
 
-.fa-circle-exclamation:before {
+.fa-id-card:before {
     color: transparent;
     position: relative;
     background-clip: text;

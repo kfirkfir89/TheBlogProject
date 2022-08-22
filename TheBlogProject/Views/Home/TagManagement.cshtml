@@ -1,46 +1,60 @@
 ﻿
-@{
-    ViewData["Title"] = "TagManagement";
-}
-
-<h1>TagManagement</h1>
-
-<form class="form-group" asp-controller="Home" asp-action="tagManagement">
-    <div class="row">
-        <label class="control-label">Manage Tags</label>
+<div class="row row-cols-1 container-fluid px-2 m-0">
+    <div class="col">
+        <div class="h4 text-center pb-1">Tag Management</div>
     </div>
-    <div class="row row-cols-1">
-        <div class="col">
-            <div class="row mb-3">
-                <div class="col">
+    <div class="col">
+        @using (Html.BeginForm("tagManagement", "Home", FormMethod.Post))
+        {
+            <div class="row row-cols-1 d-flex justify-content-center px-3">
+                <div class="col d-flex justify-content-center p-0">
                     <input type="text" class="form-control" id="TagEntry" />
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <button onclick="AddTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Add">ADD</button>
+                <div class="col d-flex justify-content-center">
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                        <a onclick="AddTag()" class="btn btn-outline-primary d-flex justify-content-center pluMinusBtn" name="Add">
+                            <i class="fa-solid fa-plus align-self-center"></i>
+                        </a>
+                        <a onclick="DeleteTag()" class="btn btn-outline-primary d-flex justify-content-center pluMinusBtn" name="Delete">
+                            <i class="fa-solid fa-minus align-self-center"></i>
+                        </a>
+                    </div>
                 </div>
-                <div class="col">
-                    <button onclick="DeleteTag()" type="button" class="btn btn-dark btn-sm note-btn-block" name="Delete">DELETE</button>
+                <div class="col d-flex justify-content-center p-0">
+                    <div class="row-cols-1 container-fluid p-0 m-0">
+                        <div class="col d-flex justify-content-center">
+                            <label class="h6 text-center pt-1 text-nowrap">Tags</label>
+                        </div>
+                        <div class="col">
+                            <select multiple class="form-select" asp-items="@((List<SelectListItem>)ViewData["TagValues"])" size="15" name="TagValues" id="TagList"></select>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <select class="note-btn-block" name="TagValues" id="TagList" style="height:500px;" multiple></select>
-        </div>
+
+            <hr />
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="w-100 btn btn-primary logoutButton border-1 mx-2 mb-2 shadow-none">Save Changes</button>
+            </div>
+
+
+        }
     </div>
-    <button type="submit">submit</button>
-</form>
-
-@section Scripts {
-
-    <script>
-
-         let tagValues = '@ViewData["TagValues"]';
-
-    </script>
+</div>
 
 
-    <script src="~/js/Custom.js"></script>
+<script>
 
-}
+    let tagValues = '@ViewData["TagValues"]';
+
+    $("form").on("submit", function () {
+        selectBox = document.getElementById("TagList");
+
+
+        $("#TagList option").prop("selected", false);
+        for (var i = 0; i < selectBox.options.length; i++) {
+            selectBox.options[i].selected = true;
+        }
+    })
+
+</script>
