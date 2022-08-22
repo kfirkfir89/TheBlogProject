@@ -156,18 +156,17 @@
                 @*****************************************************************
                     SECTION 2B: Render main body
                     *****************************************************************@
-                @if (string.IsNullOrEmpty(comment.Body))
+                @if (!string.IsNullOrEmpty(comment.ModeratedBody))
                 {
-                    <span class="small font-italic">Comment not available...</span>
-                }
-                else if (comment.Moderated is not null)
-                {
-                    <div class="d-flex flex-wrap">@comment.Body</div>
+                    <div class="d-flex flex-wrap">@comment.ModeratedBody</div>
                 }
                 else if (comment.Deleted is null)
                 {
                     <div class="d-flex flex-wrap">@comment.Body</div>
-
+                }
+                else
+                {
+                    <div class="d-flex flex-wrap">@comment.Body</div>
                 }
 
 

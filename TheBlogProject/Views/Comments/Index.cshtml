@@ -17,68 +17,101 @@
 @{
     Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
     var user = await userManager.FindByIdAsync(ViewBag.CommentUser);
+    var counter = 0;
 }
 
 <div class="h4 text-center">@user.DisplayName Comments</div>
 
-    @foreach (var item in Model)
+@foreach (var item in Model)
+{
+    var isAuthor = false;
+
+    if (User.Identity.IsAuthenticated)
     {
-        var isAuthor = false;
+        isAuthor = (item.BlogUserId == userManager.GetUserId(User));
+    }
 
-        if (User.Identity.IsAuthenticated)
-        {
-            isAuthor = (item.Post.BlogUserId == userManager.GetUserId(User));
-        }
+    <div class="col" style="padding:0px;">
+        @*-------------   Post card   ------------*@
+        <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
+            <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
 
-        <div class="col" style="padding:0px;">
-            @*-------------   Post card   ------------*@
-            <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
-                <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
+                <div class="row row-cols-1 px-1 pt-1">
+                    <div class="col w-100 d-flex">
+                        <a class="d-flex d-inline-block flex-nowrap " asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug" style="color: var(--customBlack-color);">
+                            <span class="h6 m-0">@item.Post.Title</span>
+                        </a>
+                    </div>
+                    <div class="col d-flex justify-content-end">
+                        <div class="d-flex d-inline-block">
 
-                    <div class="row row-cols-1 px-1 pt-1">
-                        <div class="col w-100 d-flex">
-                            <a class="d-flex d-inline-block flex-nowrap " asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug" style="color: var(--customBlack-color);">
-                                <span class="h6 m-0">@item.Post.Title</span>
-                            </a>
-                        </div>
-                        <div class="col d-flex justify-content-end">
-                            <div class="d-flex d-inline-block">
-
-                                <div class="d-flex flex-column flex-grow-1">
-                                    @if (item.Updated is not null)
-                                    {
-                                        <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">Updated : @item.Updated?.ToString("MMM dd, yyyy")</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">@item.Created.ToString("MMM dd, yyyy")</span>
-                                    }
-                                </div>
+                            <div class="d-flex flex-column flex-grow-1">
+                                @if (item.Updated is not null)
+                                {
+                                    <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">Updated : @item.Updated?.ToString("MMM dd, yyyy")</span>
+                                }
+                                else
+                                {
+                                    <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">@item.Created.ToString("MMM dd, yyyy")</span>
+                                }
                             </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <span class="d-flex flex-wrap px-4 mx-1 m-0">@item.Body</span>
-                    </div>
-
+                </div>
+                <div class="col">
+                    <span class="d-flex flex-wrap px-4 mx-1 m-0">@item.Body</span>
                 </div>
 
-                @*-------------   Post footer buttons   ------------*@
-                <div class="card-footer border-0 bg-white rounded-bottom p-0" id="viewUpdate">
-                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+            </div>
+
+            @*-------------   Post footer buttons   ------------*@
+            <div class="card-footer border-0 bg-white rounded-bottom p-0" id="viewUpdate">
+                @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                {
+                    <div class="row px-sm-3 my-1 d-flex m-0">
+                        <div class="col">
+                            <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#editModal{counter}")">
+                                    <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
+                                    <span class="pb-1 pe-2">Edit</span>
+                                </a>
+                                <div class="px-1 text-muted">|</div>
+                                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#delete{counter}")">
+                                    <i class="fa-solid fa-circle-left fa-lg px-2"></i>
+                                    <span class="pb-1 pe-2">Delete</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+
+    @*Modals*@
+    <div class="modal" id="@($"editModal{counter}")">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    @using(Html.BeginForm("Edit", "Comments", new { id = item.Id }, FormMethod.Post))
                     {
-                        <div class="row px-sm-3 my-1 d-flex m-0">
+                        <div class="row-cols-1">
+                            <div class="col ">
+                                <h4>Editing Comment</h4>
+                            </div>
+                            <div class="col">
+                                <textarea name="Body" class="form-control" required>@item.Body</textarea>
+                            </div>
                             <div class="col">
                                 <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
-                                    <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-fragment="commentSection" asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug">
-                                        <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
-                                        <span class="pb-1 pe-2">Edit</span>
-                                    </a>
-                                    <div class="px-1 text-muted">|</div>
-                                    <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Delete" asp-route-id="@item.Id">
-                                        <i class="fa-solid fa-circle-left fa-lg px-2"></i>
-                                        <span class="pb-1 pe-2">Delete</span>
-                                    </a>
+                                    <button type="submit" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);">
+                                        <span class="pb-1 pe-2">Save Chances</span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);" data-bs-dismiss="modal">
+                                        <span class="pb-1 pe-2">Close</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -86,15 +119,49 @@
                 </div>
             </div>
         </div>
-    }
+    </div>
+
+    <div class="modal" id="@($"delete{counter}")">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    @using (Html.BeginForm("Delete", "Comments", new { id = item.Id }, FormMethod.Post))
+                    {
+                        <div class="row-cols-1">
+                            <div class="col">
+                                <h4>Are you sure you want to delete this comment @item.Id?</h4>
+                            </div>
+                            <hr />
+                            <div class="col">
+                                <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                    <button type="submit" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);">
+                                        <i class="fa-solid fa-check fa-lg px-2"></i>
+                                        <span class="pb-1 pe-2">Yes</span>
+                                    </button>
+                                    <button type="button" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);" data-bs-dismiss="modal">
+                                        <i class="fa-solid fa-xmark fa-lg px-2"></i>
+                                        <span class="pb-1 pe-2">No</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-@if(Model.PageCount > 1)
+    counter++;
+}
+
+
+@if (Model.PageCount > 1)
 {
     <hr />
     <div class="row m-auto p-0">
         <div class="col">
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page, id = ViewBag.CommentUser}),
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page, id = ViewBag.CommentUser }),
                 new PagedListRenderOptions
                 {
                     LiElementClasses = new string[] { "page-item" },

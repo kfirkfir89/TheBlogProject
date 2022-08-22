@@ -164,9 +164,6 @@ namespace TheBlogProject.Controllers
             return query;
         }
 
-
-
-
         public async Task<IActionResult> SortBy(string? text, string? tag)
         {
             if(text != null)
@@ -270,44 +267,6 @@ namespace TheBlogProject.Controllers
             ViewBag.BlockNumber = BlockNumber;
             return PartialView("_postPartial",posts);
         }
-
-        public async Task<IActionResult> Index()
-        {
-            ViewBag.Posts = _context.Posts.Where(p => p.Tags.Count > 0).Include(p => p.Tags).ToList();
-            return View();
-
-        }
-
-
-
-
-
-
-
-
-
-
-
-        public async Task<IActionResult> About(int? page , string? text, string? tag)
-
-        public ActionResult GetData(int BlockNumber, int BlockSize)
-        {
-            System.Threading.Thread.Sleep(4000);
-            var query = _context.Posts.Skip(BlockNumber*BlockSize).Take(BlockSize).OrderByDescending(p=>p.Id).ToList();
-            ViewData.Model = query;
-            return Json(query);
-        }
-
-
-        public async Task<IActionResult> About()
-        {
-            var BlockSize = 5;
-            var BlockNumber = 0;
-            var query = _context.Posts.Skip(BlockNumber * BlockSize).Take(BlockSize).ToList();
-
-            return View(query);
-        }
-
 
         public async Task<IActionResult> Index(int? page , string? text, string? tag)
 

@@ -245,7 +245,7 @@
 
                                 @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
                                 {
-                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="Index" title="Comments Controler">
+                                    <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn border-1 border-top mt-2 shadow-none" asp-controller="Comments" asp-action="CommentsManagement" title="Comments Controler">
                                         <i class="fa-regular fa-comments fa-xl align-self-center commentsManIconSideBar ps-1"></i>
                                         <span class="ms-1 align-self-center ps-1">Comments Management</span>
                                     </a>

@@ -104,10 +104,10 @@
                             </span>
                         </div>
                         <div class="col col-sm-6">
-                            <span class="fw-bolder text-muted fs-6">
+                            <a class="fw-bolder text-muted fs-6" asp-action="Index" asp-controller="Comments" asp-route-id="@postsUser.Id">
                                 <i class="fa-solid fa-comment pe-1"></i>
                                 Comments: @ViewBag.CommetnsCount
-                            </span>
+                            </a>
                         </div>
                     </div>
 
