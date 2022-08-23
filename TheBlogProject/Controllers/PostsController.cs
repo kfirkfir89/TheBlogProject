@@ -253,7 +253,7 @@ namespace TheBlogProject.Controllers
                 await _context.SaveChangesAsync();
 
 
-                return RedirectToAction(nameof(Details), "Posts" ,post);
+                return RedirectToAction("Details",new { slug = post.Slug });
             }
 
             var user = await _userManager.GetUserAsync(User);

@@ -151,7 +151,7 @@ namespace TheBlogProject.Controllers
         // POST: Comments/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id, Body")] Comment comment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Body")] Comment comment, int? backto)
         {
             if (id != comment.Id)
             {
@@ -180,8 +180,15 @@ namespace TheBlogProject.Controllers
                     }
                 }
 
-                //Redirect to action Details of the Post controller and the route data is the slug
-                return RedirectToAction("Index", "Comments", new { id = _userManager.GetUserAsync(User).Result.Id });
+                if(backto != null)
+                {
+                    return RedirectToAction("Details", "Posts", new { slug = _context.Posts.Find(backto).Slug });
+                }
+                else
+                {
+                    //Redirect to action Details of the Post controller and the route data is the slug
+                    return RedirectToAction("Index", "Comments", new { id = _userManager.GetUserAsync(User).Result.Id });
+                }
             }
             return View(comment);
         }
@@ -189,7 +196,7 @@ namespace TheBlogProject.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Moderator")]
-        public async Task<IActionResult> Moderate(int id, [Bind("Id, Body, ModeratedBody, ModerationType")] Comment comment,string type)
+        public async Task<IActionResult> Moderate(int id, [Bind("Id, Body, ModeratedBody, ModerationType")] Comment comment,string type ,int backto)
         {
             if(id != comment.Id)
             {
@@ -221,7 +228,14 @@ namespace TheBlogProject.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("CommentsManagement", "Comments", new { type = type });
+                if(backto != null)
+                {
+                    return RedirectToAction("Details", "Posts", new { slug = _context.Posts.Find(backto).Slug });
+                }
+                else
+                {
+                    return RedirectToAction("CommentsManagement", "Comments", new { type = type });
+                }
 
             }
             return View(comment);
@@ -251,7 +265,7 @@ namespace TheBlogProject.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, string? type)
+        public async Task<IActionResult> DeleteConfirmed(int id, string? type, int? backto)
         {
             if(type == "commentsManagement")
             {
@@ -259,6 +273,14 @@ namespace TheBlogProject.Controllers
                 _context.Comments.Remove(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("CommentsManagement", "Comments");
+            }
+            else if(backto != null)
+            {
+                var comment = await _context.Comments.FindAsync(id);
+                _context.Comments.Remove(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Details", "Posts", new { slug = _context.Posts.Find(backto).Slug });
+
             }
             else
             {

@@ -71,96 +71,104 @@
 @foreach (var item in Model)
 {
 
-    <div class="col d-flex bg-white rounded shadow-sm p-2 mb-2">
-        <div class="w-100">
-            <div class="row-cols-1">
-                <div class="col">
-                    <span class="small">
-                        <span class="fw-bold">Id </span> : @item.Id
-                    </span>
-                </div>
-                <div class="col d-flex">
-                    @if (item.Deleted is not null)
-                    {
+    <div id="@counter" class="col bg-white rounded shadow-sm p-2 mb-2">
+        <div class="row row-cols-1 p-0 m-0">
+            <div class="col col-sm-11">
+                <div class="row-cols-1">
+                    <div class="col">
                         <span class="small">
-                            <span class="font-weight-bolder">Deleted</span> : @item.Deleted?.ToString("MMM dd, yyyy")
+                            <span class="fw-bold">Id </span> : @item.Id
                         </span>
-                    }
-                    else if (item.Moderated is not null)
-                    {
-                        <span class="small">
-                            <span class="fw-bold">
-                                Moderated <span class="text-danger font-italic">(@item.ModerationType.ToString().ToLower())</span>
-                            </span>
-                            : @item.Moderated?.ToString("MMM dd, yyyy")
-                        </span>
-                    }
-                    else if (item.Updated is not null)
-                    {
-                        <span class="small">
-                            <span class="fw-bold">Updated </span> : @item.Updated?.ToString("MMM dd, yyyy")
-                        </span>
-                    }
-                    else
-                    {
-                        <span class="small">
-                            <span class="fw-bold">Created </span> : @item.Created.ToString("MMM dd, yyyy")
-                        </span>
-                    }
-                </div>
-                <div class="col">
-                    <span class="small">
-                        <span class="fw-bold">User </span> : @item.BlogUser.DisplayName
-                    </span>
-                </div>
-                <div class="col">
-                    <div class="truncate">
-                        <div class="toggledText" id="@($"toggledText{counter}")">
-                            <span class="small">
-                                <span class="fw-bold">Content </span> :@Html.Raw(item.Body)
-                            </span>
-                        </div>
-                        @if (item.Body.Length > 100)
+                    </div>
+                    <div class="col d-flex">
+                        @if (item.Deleted is not null)
                         {
-                            <a href="#" id="@($"readmore{counter}")" class="readM">
-                                <span class="readmore-txt fst-italic fs-6">Read more</span>
-                                <span class="readless-txt fst-italic fs-6">Read Less</span>
-                            </a>
+                            <span class="small">
+                                <span class="font-weight-bolder">Deleted</span> : @item.Deleted?.ToString("MMM dd, yyyy")
+                            </span>
+                        }
+                        else if (item.Moderated is not null)
+                        {
+                            <span class="small">
+                                <span class="fw-bold">
+                                    Moderated <span class="text-danger font-italic">(@item.ModerationType.ToString().ToLower())</span>
+                                </span>
+                                : @item.Moderated?.ToString("MMM dd, yyyy")
+                            </span>
+                        }
+                        else if (item.Updated is not null)
+                        {
+                            <span class="small">
+                                <span class="fw-bold">Updated </span> : @item.Updated?.ToString("MMM dd, yyyy")
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="small">
+                                <span class="fw-bold">Created </span> : @item.Created.ToString("MMM dd, yyyy")
+                            </span>
                         }
                     </div>
-                </div>
-                @if (item.ModeratedBody != null)
-                {
+                    <div class="col">
+                        <span class="small">
+                            <span class="fw-bold">User </span> : @item.BlogUser.DisplayName
+                        </span>
+                    </div>
                     <div class="col">
                         <div class="truncate">
-                            <div class="toggledText" id="@($"toggled2Text{counter}")">
+                            <div class="toggledText" id="@($"toggledText{counter}")">
                                 <span class="small">
-                                    <span class="fw-bold">Moderated Content </span> :@Html.Raw(item.ModeratedBody)
+                                    <span class="fw-bold">Content </span> :@Html.Raw(item.Body)
                                 </span>
                             </div>
-                            @if (item.ModeratedBody.Length > 100)
+                            @if (item.Body.Length > 100)
                             {
-                                <a href="#" id="@($"read2more{counter}")" class="readM">
+                                <a href="#" id="@($"readmore{counter}")" class="readM">
                                     <span class="readmore-txt fst-italic fs-6">Read more</span>
                                     <span class="readless-txt fst-italic fs-6">Read Less</span>
                                 </a>
                             }
                         </div>
                     </div>
-                }
+                    @if (item.ModeratedBody != null)
+                    {
+                        <div class="col">
+                            <div class="truncate">
+                                <div class="toggledText" id="@($"toggled2Text{counter}")">
+                                    <span class="small">
+                                        <span class="fw-bold">Moderated Content </span> :@Html.Raw(item.ModeratedBody)
+                                    </span>
+                                </div>
+                                @if (item.ModeratedBody.Length > 100)
+                                {
+                                    <a href="#" id="@($"read2more{counter}")" class="readM">
+                                        <span class="readmore-txt fst-italic fs-6">Read more</span>
+                                        <span class="readless-txt fst-italic fs-6">Read Less</span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
-        <div class="flex-shrink-1">
-            <div class="btn-group-vertical">
-                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug">
-                    <span class="pb-1 pe-2">Post</span>
-                </a>
-                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#moderate{counter}")">
-                    <span class="pb-1 pe-2">Moderate</span>
-                </a>
-                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#delete{counter}")">
-                    <span class="pb-1 pe-2">Delete</span>
-                </a>
+            <div class="col col-sm-1 p-0">
+                <div class="row row-cols-1">
+                    <div class="col-4 col-sm-12">
+                        <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug">
+                            <span>Post</span>
+                        </a>
+                    </div>
+                    <div class="col-4 col-sm-12">
+                        <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#moderate{counter}")">
+                            <span>Moderate</span>
+                        </a>
+                    </div>
+                    <div class="col-4 col-sm-12">
+                        <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#delete{counter}")">
+                            <span>Delete</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -198,7 +206,7 @@
     </div>
 
     <div class="modal" id="@($"moderate{counter}")">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Modal body -->
                 <div class="modal-body">
@@ -240,6 +248,8 @@
     </div>
 
     <script>
+        document.getElementById("0").classList.remove("rounded");
+        document.getElementById("0").classList.add("rounded-bottom");
         document.querySelector('#readmore'+'@counter').addEventListener("click", function (e) {
             e.preventDefault();
             document.querySelector('#toggledText'+'@counter').classList.toggle('toggle');

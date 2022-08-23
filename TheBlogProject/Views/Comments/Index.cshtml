@@ -115,7 +115,7 @@
                                 </a>
                                 <div class="px-1 text-muted">|</div>
                                 <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="@($"#delete{counter}")">
-                                    <i class="fa-solid fa-circle-left fa-lg px-2"></i>
+                                    <i class="fa-solid fa-trash-can fa-lg px-2"></i>
                                     <span class="pb-1 pe-2">Delete</span>
                                 </a>
                             </div>
@@ -129,7 +129,7 @@
 
     @*Modals*@
     <div class="modal" id="@($"editModal{counter}")">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <!-- Modal body -->
                 <div class="modal-body">
@@ -220,9 +220,9 @@
     tinymce.init({
         selector: '.commentBody',
         menubar: false,
-        height: 300,
-        plugins: 'lists code emoticons ',
-        toolbar: ' bold italic underline | backcolor| ' + ' emoticons | hr',
+        height: 200,
+        plugins: 'lists code emoticons codesample',
+        toolbar: ' bold italic backcolor underline ' + ' emoticons codesample hr' + 'codesample',
         codesample_global_prismjs: true,
         emoticons_append: {
             custom_mind_explode: {
@@ -230,6 +230,6 @@
                 char: '🤯'
             }
         },
-        content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px;  } p{margin:0;}",
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
     });
 </script>

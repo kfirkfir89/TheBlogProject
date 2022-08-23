@@ -265,8 +265,8 @@ namespace TheBlogProject.Controllers
                        .OrderByDescending(p => p.Created)
                        .ToPagedList(pageNumber, pageSize);
 
-                    ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
-                    ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
+                    ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == user.Result.Id).Count();
+                    ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == user.Result.Id).Count();
                     ViewBag.PostsUser = user.Result.Id;
 
                     return View(selectedPosts);

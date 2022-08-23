@@ -1,97 +1,131 @@
 ﻿@using TheBlogProject.Enums
+@using TheBlogProject.Services
+
+@inject IImageService imageService
+
 @model TheBlogProject.Models.Post
+
 
 @{
     ViewData["Title"] = "Edit";
 }
+@{
+    Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
+}
 
-<h1>Edit</h1>
-
-<h4>Post</h4>
-<hr />
-
-        <form asp-action="Edit" enctype="multipart/form-data">
+<div class="col">
+    <div class="row-cols-1">
+        <div class="col">
+            <div class="h4 text-center pb-1">Edit Post</div>
+        </div>
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Abstract" class="control-label"></label>
-                <textarea asp-for="Abstract" class="form-control"></textarea>
-                <span asp-validation-for="Abstract" class="text-danger"></span>
-            </div>
-            <div class="form-group bg-white">
-                <label asp-for="Content" class="control-label"></label>
-                <textarea asp-for="Content" class="form-control"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="row">
-                        <label class="control-label">Manage Tags</label>
+            <div class="row-cols-1 py-2">
+                <div class="col d-flex justify-content-center pb-2">
+                    <img id="postDetailsImage" src="@imageService.DecodeImage(Model.ImageData, Model.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image" >
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <label asp-for="Image" class="btn btn-primary note-btn-block shadow-none uploadButton btn-file p-2" for="multiple_input_group p-2" placeholder="ImageFile">
+                            <input asp-for="Image" id="multiple_input_group" type="file">
+                            <i class="fa-solid fa-upload fa-2xl"></i>
+                            <span class="file-input-label"></span>
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </label>
                     </div>
-                    <div class="row row-cols-1">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Title" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="Title">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Title</label>
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-floating mb-3">
+                    <input asp-for="Abstract" class="form-control ps-2 floaingCustom" style="padding-top: 25px;" id="floatingInputGrid" placeholder="Abstract">
+                    <label class="form-labelFloating ps-2" for="floatingInputGrid">Abstract</label>
+                    <span asp-validation-for="Abstract" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group bg-transparent mb-1">
+                    <textarea asp-for="Content" class="form-control AboutMe ps-2" style="padding-top: 25px;"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row row-cols-1 d-flex justify-content-center px-3">
+                <div class="col-12 col-sm-5 d-flex justify-content-center p-0">
+                    <div class="row-cols-1 container-fluid p-0 m-0">
                         <div class="col">
-                            <div class="row">
-                                <div class="col">
-                                    <button onclick="AddMyTag()" type="button" class="btn btn-success note-btn-block" name="Add">ADD</button>
-                                </div>
-                                <div class="col">
-                                    <button onclick="AddMyTagBack()" type="button" class="btn btn-danger note-btn-block" name="Delete">ADD BACK</button>
-                                </div>
-                            </div>
+                            <label class="h6 text-center pt-1 text-nowrap">Tags</label>
                         </div>
-                        <div class="col-6">
-                            <span>Post Tags</span>
-                            <select class="note-btn-block" name="TagValues" id="TagList" style="height:500px" multiple></select>
+                        <div class="col">
+                            <select multiple class="form-select" size="8" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues"></select>
                         </div>
-                        <div class="col-6">
-                            <span>Tags</span>
-                            <select class="note-btn-block" asp-items="@((List<SelectListItem>)ViewData["DatabaseTagValues"])" name="DatabaseTagValues" id="DatabaseTagValues" style="height:500px" multiple></select>
+                    </div>
+                </div>
+                <div class="col-4 col-sm-2 d-flex justify-content-center flex-column align-content-center">
+                    <div class="btn-group-vertical" role="group" aria-label="Basic outlined example">
+                        <a onclick="AddMyTag()" class="btn btn-outline-primary d-flex justify-content-center pluMinusBtn" name="Add">
+                            <i class="fa-solid fa-plus align-self-center"></i>
+                        </a>
+                        <a onclick="AddMyTagBack()" class="btn btn-outline-primary d-flex justify-content-center pluMinusBtn" name="Delete">
+                            <i class="fa-solid fa-minus align-self-center"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-5 d-flex justify-content-center p-0">
+                    <div class="row-cols-1 container-fluid p-0 m-0">
+                        <div class="col">
+                            <label class="h6 text-center pt-1 text-nowrap">Post Tags</label>
+                        </div>
+                        <div class="col">
+                            <select multiple class="form-select" size="8" name="TagValues" id="TagList"></select>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input type="file" name="NewImage" asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
+
             <div class="form-group">
                 <label asp-for="ReadyStatus" class="control-label"></label>
-                <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
+                <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-select"></select>
                 <span asp-validation-for="ReadyStatus" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <hr />
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="w-100 btn btn-primary logoutButton border-1 mb-2 shadow-none">Save Changes</button>
             </div>
         </form>
+    </div>
+</div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Home" asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-
     <script>
 
          let tagValues = '@ViewData["TagValues"]';
 
-     //Default font size but not for placeholder...
-@*         $('#Content').summernote({
-             placeholder: "Content"
-         });*@
+    </script>
+    <script src="~/js/uploadImage.js"></script>
+    <script src="~/js/Custom.js"></script>
 
+    <script>
+
+        var useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
         tinymce.init({
             selector: '#Content',
-            plugins: 'image code print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
+            plugins: 'print preview paste importcss searchreplace autolink autosave save directionality code visualblocks visualchars fullscreen image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime advlist lists wordcount imagetools textpattern noneditable help charmap quickbars emoticons',
             imagetools_cors_hosts: ['picsum.photos'],
             menubar: 'file edit view insert format tools table help',
-            toolbar: 'undo redo | link image | code | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
+            toolbar: 'undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft aligncenter alignright alignjustify | outdent indent |  numlist bullist | forecolor backcolor removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media template link anchor codesample | ltr rtl',
             toolbar_sticky: true,
             autosave_ask_before_unload: true,
             autosave_interval: '30s',
@@ -112,120 +146,42 @@
                 { title: 'Some class', value: 'class-name' }
             ],
             importcss_append: true,
-            toolbar_mode: 'floating',
-            tinycomments_mode: 'embedded',
-            tinycomments_author: 'Author name',
-            /* enable title field in the Image dialog*/
-            image_title: true,
-            /* enable automatic uploads of images represented by blob or data URIs*/
-            automatic_uploads: true,
-            /*
-              URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
-              images_upload_url: 'postAcceptor.php',
-              here we add custom filepicker only to Image dialog
-            */
-            file_picker_types: 'image',
-            /* and here's our custom image picker*/
-            file_picker_callback: function (cb, value, meta) {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
+            file_picker_callback: function (callback, value, meta) {
+                /* Provide file and text for the link dialog */
+                if (meta.filetype === 'file') {
+                    callback('https://www.google.com/logos/google.jpg', { text: 'My text' });
+                }
 
-                /*
-                  Note: In modern browsers input[type="file"] is functional without
-                  even adding it to the DOM, but that might not be the case in some older
-                  or quirky browsers like IE, so you might want to add it to the DOM
-                  just in case, and visually hide it. And do not forget do remove it
-                  once you do not need it anymore.
-                */
+                /* Provide image and alt text for the image dialog */
+                if (meta.filetype === 'image') {
+                    callback('https://www.google.com/logos/google.jpg', { alt: 'My alt text' });
+                }
 
-                input.onchange = function () {
-                    var file = this.files[0];
-
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        /*
-                          Note: Now we need to register the blob in TinyMCEs image blob
-                          registry. In the next release this part hopefully won't be
-                          necessary, as we are looking to handle it internally.
-                        */
-                        var id = 'blobid' + (new Date()).getTime();
-                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                        var base64 = reader.result.split(',')[1];
-                        var blobInfo = blobCache.create(id, file, base64);
-                        blobCache.add(blobInfo);
-
-                        /* call the callback and populate the Title field with the file name */
-                        cb(blobInfo.blobUri(), { title: file.name });
-                    };
-                    reader.readAsDataURL(file);
-                };
-
-                input.click();
+                /* Provide alternative source and posted for the media dialog */
+                if (meta.filetype === 'media') {
+                    callback('movie.mp4', { source2: 'alt.ogg', poster: 'https://www.google.com/logos/google.jpg' });
+                }
             },
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
-
-
-        });
-
-
-        tinymce.init({
-            selector: 'textarea#file-picker',
-            plugins: 'image code',
-            toolbar: 'undo redo | link image | code',
-            /* enable title field in the Image dialog*/
-            image_title: true,
-            /* enable automatic uploads of images represented by blob or data URIs*/
-            automatic_uploads: true,
-            /*
-              URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
-              images_upload_url: 'postAcceptor.php',
-              here we add custom filepicker only to Image dialog
-            */
-            file_picker_types: 'image',
-            /* and here's our custom image picker*/
-            file_picker_callback: function (cb, value, meta) {
-                var input = document.createElement('input');
-                input.setAttribute('type', 'file');
-                input.setAttribute('accept', 'image/*');
-
-                /*
-                  Note: In modern browsers input[type="file"] is functional without
-                  even adding it to the DOM, but that might not be the case in some older
-                  or quirky browsers like IE, so you might want to add it to the DOM
-                  just in case, and visually hide it. And do not forget do remove it
-                  once you do not need it anymore.
-                */
-
-                input.onchange = function () {
-                    var file = this.files[0];
-
-                    var reader = new FileReader();
-                    reader.onload = function () {
-                        /*
-                          Note: Now we need to register the blob in TinyMCEs image blob
-                          registry. In the next release this part hopefully won't be
-                          necessary, as we are looking to handle it internally.
-                        */
-                        var id = 'blobid' + (new Date()).getTime();
-                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
-                        var base64 = reader.result.split(',')[1];
-                        var blobInfo = blobCache.create(id, file, base64);
-                        blobCache.add(blobInfo);
-
-                        /* call the callback and populate the Title field with the file name */
-                        cb(blobInfo.blobUri(), { title: file.name });
-                    };
-                    reader.readAsDataURL(file);
-                };
-
-                input.click();
-            },
+            templates: [
+                { title: 'New Table', description: 'creates a new table', content: '<div class="mceTmpl"><table width="98%%"  border="0" cellspacing="0" cellpadding="0"><tr><th scope="col"> </th><th scope="col"> </th></tr><tr><td> </td><td> </td></tr></table></div>' },
+                { title: 'Starting my story', description: 'A cure for writers block', content: 'Once upon a time...' },
+                { title: 'New list with dates', description: 'New List with dates', content: '<div class="mceTmpl"><span class="cdate">cdate</span><br /><span class="mdate">mdate</span><h2>My List</h2><ul><li></li><li></li></ul></div>' }
+            ],
+            template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+            template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+            height: 600,
+            image_caption: true,
+            quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+            noneditable_noneditable_class: 'mceNonEditable',
+            toolbar_mode: 'sliding',
+            contextmenu: 'link image imagetools table',
+            skin: useDarkMode ? 'oxide-dark' : 'oxide',
+            content_css: useDarkMode ? 'dark' : 'default',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         });
+
+
+
     </script>
-
-
-    <script src="~/js/Custom.js"></script>
 
 }
