@@ -116,6 +116,56 @@
                 </div>
             </div>
         </div>
+
+        @if(ViewBag.PostsUser == userManager.GetUserAsync(User).Result.Id)
+        {
+            <div class="col pt-2">
+                <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
+
+                    @if (ViewBag.type == "productionReady")
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="productionReady" title="ProductionReady">
+                            <span class="pt-2 smallFont pb-2">Production</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="productionReady" title="ProductionReady">
+                            <span class="pt-2 smallFont pb-2">Production</span>
+                        </a>
+                    }
+
+                    @if (ViewBag.type == "incomplete")
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="incomplete" title="Incomplete">
+                            <span class="pt-2 smallFont pb-2">Incomplete</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="incomplete" title="Incomplete">
+                            <span class="pt-2 smallFont pb-2">Incomplete</span>
+                        </a>
+                    }
+
+                    @if (ViewBag.type == "previewReady")
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="previewReady" title="PreviewReady">
+                            <span class="pt-2 smallFont pb-2">Preview</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="previewReady" title="PreviewReady">
+                            <span class="pt-2 smallFont pb-2">Preview</span>
+                        </a>
+                    }
+
+
+                </div>
+            </div>
+        }
+
     }
     else
     {
@@ -129,6 +179,8 @@
         }
 
     }
+
+
     @foreach (var post in Model)
     {
         //Is the logged in user the Author of this post??
@@ -141,8 +193,8 @@
 
         <div class="col" style="padding:0px;">
             @*-------------   Post card   ------------*@
-            <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
-                <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
+            <div id="@counter" class="card bg-white mb-3 shadow-sm rounded border-0" style="padding:0px;">
+                <div  class="card-body bg-white" style="margin-top: 1px; padding: 5px;">
                     @*-------------   User info   ------------*@
                     @{
                         var blogUser = await userManager.FindByIdAsync(post.BlogUserId);
@@ -375,6 +427,8 @@
 @section Scripts {
 
     <script>
+        document.getElementById("0").classList.remove("rounded");
+        document.getElementById("0").classList.add("rounded-bottom");
 
         $(document).ready(function () {
             console.log("rdy");

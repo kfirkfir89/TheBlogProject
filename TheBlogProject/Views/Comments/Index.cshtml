@@ -35,7 +35,7 @@
         @*-------------   Post card   ------------*@
         <div class="card bg-transparent mb-3 shadow-sm rounded border-0" style="padding:0px;">
             <div class="card-body bg-white rounded-top" style="margin-top: 1px; padding: 5px;">
-
+                @Html.Hidden("Id", item.Id)
                 <div class="row row-cols-1 px-1 pt-1">
                     <div class="col w-100 d-flex">
                         <a class="d-flex d-inline-block flex-nowrap " asp-action="Details" asp-controller="Posts" asp-route-slug="@item.Post.Slug" style="color: var(--customBlack-color);">
@@ -46,22 +46,60 @@
                         <div class="d-flex d-inline-block">
 
                             <div class="d-flex flex-column flex-grow-1">
-                                @if (item.Updated is not null)
+                                @if (item.Deleted is not null)
                                 {
-                                    <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">Updated : @item.Updated?.ToString("MMM dd, yyyy")</span>
+                                    <span class="small">
+                                        <span class="font-weight-bolder">Deleted</span> : @item.Deleted?.ToString("MMM dd, yyyy")
+                                    </span>
+                                }
+                                else if (item.Moderated is not null)
+                                {
+                                    <span class="small">
+                                        <span class="fw-bold">
+                                            Moderated <span class="text-danger font-italic">(@item.ModerationType.ToString().ToLower())</span>
+                                        </span>
+                                        : @item.Moderated?.ToString("MMM dd, yyyy")
+                                    </span>
+                                }
+                                else if (item.Updated is not null)
+                                {
+                                    <span class="small">
+                                        <span class="fw-bold">Updated </span> : @item.Updated?.ToString("MMM dd, yyyy")
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span class="smallFont text-muted fw-lighter fst-italic text-nowrap">@item.Created.ToString("MMM dd, yyyy")</span>
+                                    <span class="small">
+                                        <span class="fw-bold">Created </span> : @item.Created.ToString("MMM dd, yyyy")
+                                    </span>
                                 }
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col">
-                    <span class="d-flex flex-wrap px-4 mx-1 m-0">@item.Body</span>
+                    <div class="truncate">
+                        <div class="toggledText" id="@($"toggledText{counter}")">
+                            <span class="d-flex flex-wrap px-4 mx-1 m-0">
+                                @if (!string.IsNullOrEmpty(item.ModeratedBody))
+                                {
+                                    @Html.Raw("<div class=\"p-1 m-0\">" + item.ModeratedBody + "</div>")
+                                }
+                                else
+                                {
+                                    @Html.Raw("<div class=\"p-1 m-0\">" + item.Body + "</div>")
+                                }
+                            </span>
+                        </div>
+                        @if (item.Body.Length > 100)
+                        {
+                            <a href="#" id="@($"readmore{counter}")" class="readM">
+                                <span class="readmore-txt fst-italic fs-6">Read more</span>
+                                <span class="readless-txt fst-italic fs-6">Read Less</span>
+                            </a>
+                        }
+                    </div>
                 </div>
-
             </div>
 
             @*-------------   Post footer buttons   ------------*@
@@ -95,14 +133,14 @@
             <div class="modal-content">
                 <!-- Modal body -->
                 <div class="modal-body">
-                    @using(Html.BeginForm("Edit", "Comments", new { id = item.Id }, FormMethod.Post))
+                    @using (Html.BeginForm("Edit", "Comments", new { id = item.Id }, FormMethod.Post))
                     {
                         <div class="row-cols-1">
                             <div class="col ">
                                 <h4>Editing Comment</h4>
                             </div>
                             <div class="col">
-                                <textarea name="Body" class="form-control" required>@item.Body</textarea>
+                                <textarea asp-for="@item.Body" name="Body" class="form-control commentBody"></textarea>
                             </div>
                             <div class="col">
                                 <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
@@ -151,6 +189,12 @@
         </div>
     </div>
 
+    <script>
+        document.querySelector('#readmore'+'@counter').addEventListener("click", function (e) {
+            e.preventDefault();
+            document.querySelector('#toggledText'+'@counter').classList.toggle('toggle');
+        });
+    </script>
 
     counter++;
 }
@@ -170,3 +214,22 @@
         </div>
     </div>
 }
+
+
+<script>
+    tinymce.init({
+        selector: '.commentBody',
+        menubar: false,
+        height: 300,
+        plugins: 'lists code emoticons ',
+        toolbar: ' bold italic underline | backcolor| ' + ' emoticons | hr',
+        codesample_global_prismjs: true,
+        emoticons_append: {
+            custom_mind_explode: {
+                keywords: ['brain', 'mind', 'explode', 'blown'],
+                char: '🤯'
+            }
+        },
+        content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px;  } p{margin:0;}",
+    });
+</script>

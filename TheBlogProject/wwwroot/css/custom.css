@@ -732,3 +732,25 @@ button > a {
     .pluMinusBtn:hover {
         color: white;
     }
+
+p{
+    margin:0;
+}
+
+.toggledText {
+    height: 35px;
+    overflow: hidden;
+}
+
+    .toggledText.toggle {
+        height: auto;
+    }
+
+        .readless-txt,
+        .toggledText.toggle ~ .readM span.readmore-txt {
+            display: none;
+        }
+
+        .toggledText.toggle ~ .readM span.readless-txt {
+            display: block;
+        }

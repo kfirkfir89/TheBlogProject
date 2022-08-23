@@ -12,7 +12,6 @@ namespace TheBlogProject.Models
         public string? ModeratorId { get; set; }
 
         [Required]
-        [StringLength(500, ErrorMessage = "The {0} must be at least {2} and not more then {1}", MinimumLength = 2)]
         [Display(Name = "Comment")]
         public string Body { get; set; }
 
@@ -21,7 +20,6 @@ namespace TheBlogProject.Models
         public DateTime? Moderated { get; set; }
         public DateTime? Deleted { get; set; }
 
-        [StringLength(500, ErrorMessage = "The {0} must be at least {2} and not more then {1}", MinimumLength = 2)]
         [Display(Name = "Moderated Comment")]
         public string? ModeratedBody { get; set; }
 

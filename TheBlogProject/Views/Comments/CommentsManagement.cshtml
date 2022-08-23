@@ -114,16 +114,38 @@
                     </span>
                 </div>
                 <div class="col">
-                    <span class="small">
-                        <span class="fw-bold">Content </span> : @item.Body
-                    </span>
+                    <div class="truncate">
+                        <div class="toggledText" id="@($"toggledText{counter}")">
+                            <span class="small">
+                                <span class="fw-bold">Content </span> :@Html.Raw(item.Body)
+                            </span>
+                        </div>
+                        @if (item.Body.Length > 100)
+                        {
+                            <a href="#" id="@($"readmore{counter}")" class="readM">
+                                <span class="readmore-txt fst-italic fs-6">Read more</span>
+                                <span class="readless-txt fst-italic fs-6">Read Less</span>
+                            </a>
+                        }
+                    </div>
                 </div>
                 @if (item.ModeratedBody != null)
                 {
                     <div class="col">
-                        <span class="small">
-                            <span class="fw-bold">Moderated Content </span> : @item.ModeratedBody
-                        </span>
+                        <div class="truncate">
+                            <div class="toggledText" id="@($"toggled2Text{counter}")">
+                                <span class="small">
+                                    <span class="fw-bold">Moderated Content </span> :@Html.Raw(item.ModeratedBody)
+                                </span>
+                            </div>
+                            @if (item.ModeratedBody.Length > 100)
+                            {
+                                <a href="#" id="@($"read2more{counter}")" class="readM">
+                                    <span class="readmore-txt fst-italic fs-6">Read more</span>
+                                    <span class="readless-txt fst-italic fs-6">Read Less</span>
+                                </a>
+                            }
+                        </div>
                     </div>
                 }
             </div>
@@ -217,6 +239,18 @@
         </div>
     </div>
 
+    <script>
+        document.querySelector('#readmore'+'@counter').addEventListener("click", function (e) {
+            e.preventDefault();
+            document.querySelector('#toggledText'+'@counter').classList.toggle('toggle');
+        });
+    </script>
+    <script>
+        document.querySelector('#read2more'+'@counter').addEventListener("click", function (e) {
+            e.preventDefault();
+            document.querySelector('#toggled2Text'+'@counter').classList.toggle('toggle');
+        });
+    </script>
     counter++;
 }
 

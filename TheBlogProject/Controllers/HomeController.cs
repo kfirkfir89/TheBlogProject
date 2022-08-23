@@ -178,17 +178,18 @@ namespace TheBlogProject.Controllers
 
         }
 
-        public async Task<IActionResult> SortByPages(int? page, string? text, string? id)
+        public async Task<IActionResult> SortByPages(int? page, string? text, string? id,string? type)
         {
             var user = _userManager.GetUserAsync(User);
 
             var pageNumber = page ?? 1;
             var pageSize = 10;
+            var selectedPosts = new object();
 
-            if(id != null)
+            if (id != null)
             {
 
-                var selectedPosts = _context.Posts
+                selectedPosts = _context.Posts
                     .Where(p => p.BlogUserId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
                     .Include(p => p.Tags)
                     .OrderByDescending(p => p.Created)
@@ -202,12 +203,43 @@ namespace TheBlogProject.Controllers
 
                 return View(selectedPosts);
             }
-
-            if (text == "myposts" || text == "mylikes" || text == "myuseful")
+            if(type != null)
             {
-                if(text == "myposts")
+                if (type == "incomplete")
                 {
-                    var selectedPosts = _context.Posts
+                     selectedPosts = _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.Incomplete)
+                        .Where(p => p.BlogUserId == user.Result.Id)
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.Created)
+                        .ToPagedList(pageNumber, pageSize);
+
+                    ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
+                    ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
+                    ViewBag.PostsUser = user.Result.Id;
+                    ViewBag.type = type;
+                    return View(selectedPosts);
+
+                }
+                else if (type == "previewReady")
+                {
+                     selectedPosts = _context.Posts
+                        .Where(p => p.ReadyStatus == ReadyStatus.PreviewReady)
+                        .Where(p => p.BlogUserId == user.Result.Id)
+                        .Include(p => p.Tags)
+                        .OrderByDescending(p => p.Created)
+                        .ToPagedList(pageNumber, pageSize);
+
+                    ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
+                    ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
+                    ViewBag.PostsUser = user.Result.Id;
+                    ViewBag.type = type;
+                    return View(selectedPosts);
+                }
+                else
+                {
+                
+                     selectedPosts = _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Where(p => p.BlogUserId == user.Result.Id)
                         .Include(p => p.Tags)
@@ -217,12 +249,31 @@ namespace TheBlogProject.Controllers
                     ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
                     ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
                     ViewBag.PostsUser = user.Result.Id;
+                    ViewBag.type = type;
+                    return View(selectedPosts);
+                }
+            }
+            if (text == "myposts" || text == "mylikes" || text == "myuseful")
+            {
+
+                if (text == "myposts")
+                {
+                    selectedPosts = _context.Posts
+                       .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
+                       .Where(p => p.BlogUserId == user.Result.Id)
+                       .Include(p => p.Tags)
+                       .OrderByDescending(p => p.Created)
+                       .ToPagedList(pageNumber, pageSize);
+
+                    ViewBag.CommetnsCount = _context.Comments.Where(c => c.BlogUserId == id).Count();
+                    ViewBag.PostsCount = _context.Posts.Where(p => p.BlogUserId == id).Count();
+                    ViewBag.PostsUser = user.Result.Id;
 
                     return View(selectedPosts);
                 }
                 else if (text == "mylikes")
                 {
-                    var selectedPosts = _context.Posts
+                     selectedPosts = _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Where(p => p.Likes.Contains(user.Result.Id))
                         .Include(p => p.Tags)
@@ -230,11 +281,12 @@ namespace TheBlogProject.Controllers
                         .ToPagedList(pageNumber, pageSize);
 
                     ViewBag.BtnText = text;
+
                     return View(selectedPosts);
                 }
                 else if (text == "myuseful")
                 {
-                    var selectedPosts = _context.Posts
+                     selectedPosts = _context.Posts
                         .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                         .Where(p => p.UsefulCodes.Contains(user.Result.Id))
                         .Include(p => p.Tags)
