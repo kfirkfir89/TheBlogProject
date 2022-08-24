@@ -16,7 +16,6 @@
     var post = Model.Post;
 }
 
-
 <article>
     <div class="card shadow-sm rounded">
         @if (post.ImageData != null)
@@ -36,6 +35,12 @@
 
                 </script>
             }
+            else if (width >= 744 && height <= 400)
+            {
+                <script>
+                    document.getElementById("postDetailsImage").classList.add("imgSmall");
+                </script>
+            }
             else if (width >= 1024 && height >= 768)
             {
                 <script>
@@ -50,9 +55,9 @@
                 var user = await userManager.FindByIdAsync(userManager.GetUserId(User));
             }
 
-            <div class="d-flex d-inline-block px-2 py-1">
+            <div class="d-flex d-inline-block px-2 px-sm-4 pb-1">
                 <div class="pt-2">
-                    <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgSmall rounded-circle img-thumbnail" style="width:40px; height:40px;">
+                    <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail" style="width:40px; height:40px;">
                 </div>
                 <div class="d-flex flex-column m-1 flex-grow-1">
                     <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
@@ -67,8 +72,8 @@
                     }
                 </div>
             </div>
-            <h4 class="card-title">@post.Title</h4>
-            <div class="container-fluid col-12 border-right bg-white rounded-bottom pt-3">
+            <div class="card-title h5 px-sm-4">@post.Title</div>
+            <div class="container-fluid col-12 border-right bg-white rounded-bottom pt-3 px-sm-4">
                 @Html.Raw(Model.Post.Content)
             </div>
             <hr />
@@ -243,22 +248,26 @@
 <div>
     @if (User.Identity.IsAuthenticated)
     {
-        <form asp-action="Create" asp-controller="Comments" method="post">
-            @Html.Hidden("PostId", Model.Post.Id)
-            @Html.Hidden("Slug", Model.Post.Slug)
+        <div class="card bg-transparent border-0">
+            <form asp-action="Create" asp-controller="Comments" method="post">
+                @Html.Hidden("PostId", Model.Post.Id)
+                @Html.Hidden("Slug", Model.Post.Slug)
 
-            <div class="row h5 d-flex justify-content-center pt-2">
-                Add Comment
-            </div>
-            <div class="row-cols-1 bg-white rounded shadow-sm">
-                <div class="col ">
-                    <textarea name="body" rows="10" class="form-control commentAdd"></textarea>
+                <div class="row m-0">
+                    <div class="col h5 d-flex justify-content-center py-2 m-0">
+                        Add Comment
+                    </div>
                 </div>
-                <div class="col">
-                    <button type="submit" class="w-100 btn btn-primary logoutButton border-1 px-2 shadow-none">Submit</button>
+                <div class="row-cols-1 bg-white rounded shadow-sm">
+                    <div class="col ">
+                        <textarea name="body" rows="10" class="form-control commentAdd"></textarea>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="w-100 btn btn-primary logoutButton border-1 px-2 shadow-none">Submit</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     }
     else
     {
@@ -269,96 +278,106 @@
 
     <hr />
 
-
-    <div id="commentSection" class="row h5 d-flex justify-content-center">
-        @Model.Post.Comments.Count COMMENT(S)
+    <div class="row m-0" id="commentSection">
+        <div class="col h5 d-flex justify-content-center p-0 mb-1">
+            @Model.Post.Comments.Count COMMENT(S)
+        </div>
     </div>
 
 
     @{ var counter = 0; }
     @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
     {
-        <div class="row-cols-1 bg-white rounded shadow-sm mb-2">
-            <div class="row row-cols-1 d-flex d-inline-block px-2 py-1">
-                <div class="col col-sm-9 d-flex d-inline-block pt-2">
-                    <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgSmall rounded-circle img-thumbnail me-1" style="width:40px; height:40px;">
-                    <div class="d-flex flex-column">
-                        <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
-                        @****************************************************************
-                            SECTION 1: POST ON OR UPDATED ON
-                            *****************************************************************@
-                        @if (comment.Deleted is not null)
+        <div class="card bg-white border-0 rounded shadow-sm p-0 mb-2">
+            <div class="card-body p-0">
+                <div class="row-cols-1">
+                    <div class="col">
+                        <div class="row row-cols-1 d-flex d-inline-block px-2 py-1 m-0">
+                            <div class="col col-sm-9 d-flex d-inline-block pt-2">
+                                <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgSmall rounded-circle img-thumbnail me-1" style="width:40px; height:40px;">
+                                <div class="d-flex flex-column">
+                                    <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
+                                    @****************************************************************
+                                        SECTION 1: POST ON OR UPDATED ON
+                                        *****************************************************************@
+                                    @if (comment.Deleted is not null)
+                                    {
+                                        <span class="small small text-muted fw-lighter fst-italic fs-6">
+                                            Deleted : @comment.Deleted?.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                    else if (comment.Moderated is not null)
+                                    {
+                                        <span class="small small text-muted fw-lighter fst-italic fs-6">
+                                            Moderated <span class="text-danger font-italic fs-6">(@comment.ModerationType.ToString().ToLower())</span>
+                                            : @comment.Moderated?.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                    else if (comment.Updated is not null)
+                                    {
+                                        <span class="small text-muted fw-lighter fst-italic fs-6">
+                                            Updated  : @comment.Updated?.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="small text-muted fw-lighter fst-italic fs-6">
+                                            Created  : @comment.Created.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col col-sm-3 ms-auto d-flex justify-content-end">
+                                <div class="d-flex justify-content-end">
+                                    @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
+                                    {
+                                        <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#editModal">
+                                            <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
+                                            <span class="pb-1 pe-2">Edit</span>
+                                        </a>
+                                        <div class="px-1 text-muted fs-6 opacity-25 px-2 pt-1">|</div>
+                                    }
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        if ((User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
+                                           || comment.BlogUserId == userManager.GetUserAsync(User).Result.Id
+                                           && comment.Deleted is null)
+                                        {
+                                            <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#delete">
+                                                <i class="fa-solid fa-trash-can fa-lg px-2"></i>
+                                                <span class="pb-1 pe-2">Delete</span>
+                                            </a>
+
+                                        }
+                                        if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
+                                        {
+                                            <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#moderate">
+                                                <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
+                                                <span class="pb-1 pe-2">Moderate</span>
+                                            </a>
+
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col bg-white py-2">
+                        @if (!string.IsNullOrEmpty(comment.ModeratedBody))
                         {
-                            <span class="small small text-muted fw-lighter fst-italic fs-6">
-                                Deleted : @comment.Deleted?.ToString("MMM dd, yyyy")
-                            </span>
-                        }
-                        else if (comment.Moderated is not null)
-                        {
-                            <span class="small small text-muted fw-lighter fst-italic fs-6">
-                                Moderated <span class="text-danger font-italic fs-6">(@comment.ModerationType.ToString().ToLower())</span>
-                                : @comment.Moderated?.ToString("MMM dd, yyyy")
-                            </span>
-                        }
-                        else if (comment.Updated is not null)
-                        {
-                            <span class="small text-muted fw-lighter fst-italic fs-6">
-                                Updated  : @comment.Updated?.ToString("MMM dd, yyyy")
-                            </span>
+                            <div class="border border-1 bg-white rounded p-2 mx-3 fs-6">
+                                @Html.Raw(comment.ModeratedBody)
+                            </div>
                         }
                         else
                         {
-                            <span class="small text-muted fw-lighter fst-italic fs-6">
-                                Created  : @comment.Created.ToString("MMM dd, yyyy")
-                            </span>
+                            <div class="border border-1 bg-white rounded p-2 mx-3 fs-6">
+                                @Html.Raw(comment.Body)
+                            </div>
                         }
                     </div>
                 </div>
-                <div class="col col-sm-3 ms-auto d-flex justify-content-end">
-                    <div class="d-flex justify-content-end">
-                        @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
-                        {
-                            <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#editModal">
-                                <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
-                                <span class="pb-1 pe-2">Edit</span>
-                            </a>
-                            <div class="px-1 text-muted fs-6 opacity-25 px-2 pt-1">|</div>
-                        }
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            if ((User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
-                               || comment.BlogUserId == userManager.GetUserAsync(User).Result.Id
-                               && comment.Deleted is null)
-                            {
-                                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#delete">
-                                    <i class="fa-solid fa-trash-can fa-lg px-2"></i>
-                                    <span class="pb-1 pe-2">Delete</span>
-                                </a>
-
-                            }
-                            if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
-                            {
-                                <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#moderate">
-                                    <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
-                                    <span class="pb-1 pe-2">Moderate</span>
-                                </a>
-
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-
-            <div class="container-fluid col-12 border-right bg-white rounded-bottom py-3">
-                @if (!string.IsNullOrEmpty(comment.ModeratedBody))
-                {
-                    @Html.Raw(comment.ModeratedBody)
-                }
-                else
-                {
-                    @Html.Raw(comment.Body)
-                }
-
             </div>
         </div>
 
@@ -369,7 +388,7 @@
                 <div class="modal-content">
                     <!-- Modal body -->
                     <div class="modal-body">
-                        @using (Html.BeginForm("Edit", "Comments", new { id = comment.Id}, FormMethod.Post))
+                        @using (Html.BeginForm("Edit", "Comments", new { id = comment.Id }, FormMethod.Post))
                         {
                             @Html.Hidden("backto", comment.Post.Id)
                             <div class="row-cols-1">

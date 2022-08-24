@@ -1,14 +1,11 @@
 ﻿@using TheBlogProject.Enums
 @using TheBlogProject.Services
+@using System.Drawing
 
 @inject IImageService imageService
 
 @model TheBlogProject.Models.Post
 
-
-@{
-    ViewData["Title"] = "Edit";
-}
 @{
     Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
 }
@@ -18,19 +15,42 @@
         <div class="col">
             <div class="h4 text-center pb-1">Edit Post</div>
         </div>
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row-cols-1 py-2">
                 <div class="col d-flex justify-content-center pb-2">
-                    <img id="postDetailsImage" src="@imageService.DecodeImage(Model.ImageData, Model.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image" >
+                    @if (Model.ImageData != null)
+                    {
+                        <img id="postDetailsImage" src="@imageService.DecodeImage(Model.ImageData, Model.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
+
+                        MemoryStream imageStream = new MemoryStream(Model.ImageData);
+                        Bitmap image = new Bitmap(imageStream);
+                        int width = image.Width;
+                        int height = image.Height;
+
+                        if (width < 744)
+                        {
+                            <script>
+                                console.log("katannn m800");
+                                document.getElementById("postDetailsImage").classList.add("imgSmall");
+
+                            </script>
+                        }
+                        else if (width >= 1024 && height >= 768)
+                        {
+                            <script>
+                                document.getElementById("postDetailsImage").classList.add("imgBig");
+                            </script>
+                        }
+                    }
                 </div>
                 <div class="col">
                     <div class="input-group">
-                        <label asp-for="Image" class="btn btn-primary note-btn-block shadow-none uploadButton btn-file p-2" for="multiple_input_group p-2" placeholder="ImageFile">
-                            <input asp-for="Image" id="multiple_input_group" type="file">
+                        <label class="btn btn-primary note-btn-block shadow-none uploadButton btn-file p-2" for="newImage" placeholder="newImage">
+                            <input name="newImage" id="newImage" type="file">
                             <i class="fa-solid fa-upload fa-2xl"></i>
                             <span class="file-input-label"></span>
-                            <span asp-validation-for="Image" class="text-danger"></span>
+                            <span class="text-danger"></span>
                         </label>
                     </div>
                 </div>

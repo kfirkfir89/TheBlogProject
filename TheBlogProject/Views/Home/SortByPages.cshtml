@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="avatar ms-sm-4 ms-2 white">
-                    <img src="@imageService.DecodeImage(postsUser.ImageData, postsUser.ContentType)" alt="@postsUser.FullName" class="imgSetup imgSmall rounded-circle img-thumbnail border-5 border-white imgSize" />
+                    <img src="@imageService.DecodeImage(postsUser.ImageData, postsUser.ContentType)" alt="@postsUser.FullName" class="imgSetup imgCircle rounded-circle img-thumbnail border-5 border-white imgSize" />
                 </div>
                 <div class="row d-flex bg-transparent m-0 mt-2">
                     <div class="col-2"></div>
@@ -117,53 +117,57 @@
             </div>
         </div>
 
-        @if(ViewBag.PostsUser == userManager.GetUserAsync(User).Result.Id)
-        {
-            <div class="col pt-2">
-                <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
 
-                    @if (ViewBag.type == "productionReady")
-                    {
-                        <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="productionReady" title="ProductionReady">
-                            <span class="pt-2 smallFont pb-2">Production</span>
-                        </a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="productionReady" title="ProductionReady">
-                            <span class="pt-2 smallFont pb-2">Production</span>
-                        </a>
-                    }
+        if (User.Identity.IsAuthenticated) 
+        { 
+            if(ViewBag.PostsUser == userManager.GetUserAsync(User).Result.Id)
+            {
+                <div class="col pt-2">
+                    <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
 
-                    @if (ViewBag.type == "incomplete")
-                    {
-                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="incomplete" title="Incomplete">
-                            <span class="pt-2 smallFont pb-2">Incomplete</span>
-                        </a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="incomplete" title="Incomplete">
-                            <span class="pt-2 smallFont pb-2">Incomplete</span>
-                        </a>
-                    }
+                        @if (ViewBag.type == "productionReady")
+                        {
+                            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="productionReady" title="ProductionReady">
+                                <span class="pt-2 smallFont pb-2">Production</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="productionReady" title="ProductionReady">
+                                <span class="pt-2 smallFont pb-2">Production</span>
+                            </a>
+                        }
 
-                    @if (ViewBag.type == "previewReady")
-                    {
-                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="previewReady" title="PreviewReady">
-                            <span class="pt-2 smallFont pb-2">Preview</span>
-                        </a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="previewReady" title="PreviewReady">
-                            <span class="pt-2 smallFont pb-2">Preview</span>
-                        </a>
-                    }
+                        @if (ViewBag.type == "incomplete")
+                        {
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="incomplete" title="Incomplete">
+                                <span class="pt-2 smallFont pb-2">Incomplete</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="incomplete" title="Incomplete">
+                                <span class="pt-2 smallFont pb-2">Incomplete</span>
+                            </a>
+                        }
+
+                        @if (ViewBag.type == "previewReady")
+                        {
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortByPages" asp-route-type="previewReady" title="PreviewReady">
+                                <span class="pt-2 smallFont pb-2">Preview</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="SortByPages" asp-route-type="previewReady" title="PreviewReady">
+                                <span class="pt-2 smallFont pb-2">Preview</span>
+                            </a>
+                        }
 
 
+                    </div>
                 </div>
-            </div>
+            }
         }
 
     }

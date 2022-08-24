@@ -453,8 +453,16 @@ iframe, object, embed {
 
 }
 
+.imgCircle {
+    object-fit: cover;
+    object-position: top;
+    max-height: 250px;
+    width: 100%;
+    background-color: white;
+}
+
 .imgSmall {
-    object-fit:cover;
+    object-fit: scale-down;
     object-position: top;
     max-height: 250px;
     width: 100%;
@@ -463,16 +471,26 @@ iframe, object, embed {
 
 .imgBig {
     object-fit: cover;
-    object-position: top;
-    max-height: 350px;
+    object-position: 0 30%;
+    max-height: 300px;
     width: 100%;
     background-color: white;
+
 }
 
 .logoImg {
     max-width: 250px;
     height: 41px;
 }
+
+
+
+
+
+
+
+
+
 
 
 .smallFont {
