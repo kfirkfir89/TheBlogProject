@@ -235,7 +235,6 @@
                                 else
                                 {
                                     <partial name="_LoginPartial" />
-
                                 }
 
                                 <a class="btn btn-primary d-inline-flex flex-nowrap sideBarBtn shadow-none" asp-controller="Home" asp-action="Contact" title="Contact">
@@ -258,23 +257,23 @@
 
                             </div>
 
-                            <div class="h6 border-top border-bottom border-1 py-2 pe-3 mt-4">My Tags</div>
-
-                            <div class="btn-group-vertical note-btn-block">
                                 @if (SignInManager.IsSignedIn(User))
                                 {
-                                    if (_context.Tags.Where(t => t.BlogUserId == user.Id) != null)
-                                    {
-                                        foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
-                                        {
-                                            <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
-                                                <i class="align-self-center likeIconSideBar">#</i>
-                                                <span class="align-self-center">@tag</span>
-                                            </a>
-                                        }
-                                    }
+                                    <div class="h6 border-top border-bottom border-1 py-2 pe-3 mt-4">My Tags</div>
+
+                                    <div class="btn-group-vertical note-btn-block">
+                                            @if (_context.Tags.Where(t => t.BlogUserId == user.Id) != null)
+                                            {
+                                                foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
+                                                {
+                                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
+                                                        <i class="align-self-center likeIconSideBar">#</i>
+                                                        <span class="align-self-center">@tag</span>
+                                                    </a>
+                                                }
+                                            }
+                                    </div>
                                 }
-                            </div>
 
                         </div>
                     </div>
@@ -290,95 +289,97 @@
                 <!--TAGS RIGHT SIDEBAR-->
                 <div class="col-3 col-3-right d-none d-lg-block ms-2 mt-4">
                     <div class="row-cols-1 d-flex flex-column h-100">
-                        <div class="col">
-                            @if (SignInManager.IsSignedIn(User))
-                            {
-
-                                var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
-                                if (userTags != null && userTags.Count() > 0)
-                                {
-                                    List<Post> selectedPosts = new List<Post>();
-                                    bool flag = false;
-                                    int counter = 0;
-                                    List<int> postsIds = new List<int>();
-
-                                    foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(p => p.Tags))
-                                    {
-                                        foreach (var userTag in userTags)
-                                        {
-                                            var postTags = post.Tags.Select(t => t.Text);
-
-                                            foreach (var item in postTags)
+                        <!--Random Posts-->
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <div class="col d-flex flex-column p-0 m-0 border border-1 rounded">
+                                <div class="h6 text-center py-1">
+                                    Suggestions
+                                </div>
+                                @{ 
+                                    var userTags = _context.Tags.Where(t => t.BlogUserId == user.Id).ToList();
+                                    if (userTags != null && userTags.Count() > 0)
                                             {
-                                                if (item == userTag.Text)
-                                                {
-                                                    counter++;
-                                                    break;
-                                                }
-                                            }
+                                                List<Post> selectedPosts = new List<Post>();
+                                                bool flag = false;
+                                                int counter = 0;
+                                                List<int> postsIds = new List<int>();
 
-                                            if (counter >= 2)
-                                            {
-                                                counter = 0;
-                                                flag = false;
-
-                                                foreach (var pId in postsIds)
+                                                foreach (var post in _context.Posts.Where(p => p.Tags.Count() > 0).Where(p => p.ReadyStatus == ReadyStatus.ProductionReady).Include(p => p.Tags))
                                                 {
-                                                    if (pId == post.Id)
+                                                    foreach (var userTag in userTags)
                                                     {
-                                                        flag = true;
-                                                        break;
+                                                        var postTags = post.Tags.Select(t => t.Text);
+
+                                                        foreach (var item in postTags)
+                                                        {
+                                                            if (item == userTag.Text)
+                                                            {
+                                                                counter++;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if (counter >= 2)
+                                                        {
+                                                            counter = 0;
+                                                            flag = false;
+
+                                                            foreach (var pId in postsIds)
+                                                            {
+                                                                if (pId == post.Id)
+                                                                {
+                                                                    flag = true;
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if (flag == false)
+                                                            {
+                                                                postsIds.Add(post.Id);
+                                                                selectedPosts.Add(post);
+
+                                                            }
+                                                        }
                                                     }
                                                 }
-                                                if (flag == false)
-                                                {
-                                                    postsIds.Add(post.Id);
-                                                    selectedPosts.Add(post);
 
+                                                Random rnd = new Random();
+                                                var rnd3Posts = selectedPosts.OrderBy(p => Guid.NewGuid()).Take(5).ToList();
+
+                                                foreach (var post in rnd3Posts)
+                                                {
+                                                    <a class="cardPostSM p-1 m-0" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                                                        <div class="card-title d-flex flex-wrap p-1 pb-1 m-0">@post.Title</div>
+                                                    </a>
                                                 }
                                             }
-                                        }
-                                    }
-
-                                    Random rnd = new Random();
-                                    var rnd3Posts = selectedPosts.OrderBy(p => Guid.NewGuid()).Take(3).ToList();
-
-                                    foreach (var post in rnd3Posts)
-                                    {
-                                        <a class="card cardPostSM p-1 " asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                                            <div class="card-title d-flex flex-wrap p-1 pb-1 m-0 border-1 border-bottom">@post.Title</div>
-                                            <i class="fa-regular fa-eye fa-xs text-muted py-2 mt-1 ms-auto">
-                                                @{ var zero = 0; }
-                                                @if (post.Views != null)
-                                                {
-                                                    @post.Views
-                                                }
-                                                else
-                                                {
-                                                    @zero
-                                                }
-                                                Views
-                                            </i>
-                                        </a>
-                                    }
                                 }
+                            </div>
+                        }
 
-
-
-                            }
-                        </div>
-
-                        <div class="col">
-
-                            <div class="btn-group-vertical note-btn-block">
-
-                                @foreach (var tag in _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text))
-                                {
-                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
-                                        <i class="align-self-center likeIconSideBar">#</i>
-                                        <span class="align-self-center">@tag</span>
+                        <!--DB Tags-->
+                        <div class="col d-flex flex-column border border-1 mt-2 rounded">
+                            <div class="h6 text-center py-1">
+                                Tags
+                            </div>
+                            <div class="col">
+                                <div class="truncate">
+                                    <div class="toggledTextTags" id="toggledTextTags">
+                                        <span class="small">
+                                            @foreach (var tag in _context.Tags.Where(t => t.PostId == null && t.BlogUserId == null).Select(t => t.Text))
+                                            {
+                                                <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
+                                                    <i class="align-self-center likeIconSideBar">#</i>
+                                                    <span class="align-self-center">@tag</span>
+                                                </a>
+                                            }
+                                        </span>
+                                    </div>
+                                    <a href="#" id="readmore" class="readM">
+                                        <span class="readmore-txt fst-italic fs-6 text-muted ms-5 ps-5">Show More</span>
+                                        <span class="readless-txt fst-italic fs-6 text-muted ms-5 ps-5">Show Less</span>
                                     </a>
-                                }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -399,7 +400,7 @@
                                     <a><img class="card-img-top" style="background-image: url(@imagePath)"></a>*@
 
     <!-- Footer-->
-    <footer class="footer mt-auto py-2">
+    <footer class="footer mt-auto py-1 bg-example">
         <partial name="_FOOTER" />
     </footer>
 
@@ -422,12 +423,10 @@
     <script>
 
         let forYou = '@ViewData["ForYou"]';
-@*        $(document).on('show.bs.modal', '.modal', function () {
-            const zIndex = 1040 + 10 * $('.modal:visible').length;
-            $(this).css('z-index', zIndex);
-            setTimeout(() => $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack'));
+        document.querySelector('#readmore').addEventListener("click", function (e) {
+            e.preventDefault();
+            document.querySelector('#toggledTextTags').classList.toggle('toggle');
         });
-*@
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

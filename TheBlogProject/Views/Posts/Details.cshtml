@@ -55,7 +55,7 @@
                 var user = await userManager.FindByIdAsync(userManager.GetUserId(User));
             }
 
-            <div class="d-flex d-inline-block px-2 px-sm-4 pb-1">
+            <div class="d-flex d-inline-block px-2 pb-1">
                 <div class="pt-2">
                     <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail" style="width:40px; height:40px;">
                 </div>
@@ -72,8 +72,8 @@
                     }
                 </div>
             </div>
-            <div class="card-title h5 px-sm-4">@post.Title</div>
-            <div class="container-fluid col-12 border-right bg-white rounded-bottom pt-3 px-sm-4">
+            <div class="card-title h1 px-sm-5">@post.Title</div>
+            <div class="container-fluid col-12 border-right bg-white rounded-bottom pt-3 px-sm-5">
                 @Html.Raw(Model.Post.Content)
             </div>
             <hr />
@@ -294,7 +294,7 @@
                     <div class="col">
                         <div class="row row-cols-1 d-flex d-inline-block px-2 py-1 m-0">
                             <div class="col col-sm-9 d-flex d-inline-block pt-2">
-                                <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgSmall rounded-circle img-thumbnail me-1" style="width:40px; height:40px;">
+                                <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail me-1" style="width:40px; height:40px;">
                                 <div class="d-flex flex-column">
                                     <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
                                     @****************************************************************
