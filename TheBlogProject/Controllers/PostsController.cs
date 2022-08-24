@@ -253,7 +253,7 @@ namespace TheBlogProject.Controllers
                 await _context.SaveChangesAsync();
 
 
-                return RedirectToAction(nameof(Details), "Posts" ,post);
+                return RedirectToAction("Details",new { slug = post.Slug });
             }
 
             var user = await _userManager.GetUserAsync(User);
@@ -404,7 +404,7 @@ namespace TheBlogProject.Controllers
                     }
                 }
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details",new {slug = _context.Posts.Find(id).Slug } );
             }
 
 

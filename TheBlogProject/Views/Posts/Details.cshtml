@@ -4,278 +4,485 @@
 @using TheBlogProject.ViewModels
 @using Microsoft.AspNetCore.Identity
 @using System.Drawing
+@using TheBlogProject.Data
 
+@inject ApplicationDbContext _context
 @inject IImageService imageService
 @inject UserManager<BlogUser> userManager
 @model PostDetailViewModel
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_LayoutOneCol.cshtml";
     var post = Model.Post;
 }
 
-
 <article>
-    <div class="row-cols-1 shadow-sm rounded">
-        <div class="col">
-            @if (post.ImageData != null)
+    <div class="card shadow-sm rounded">
+        @if (post.ImageData != null)
+        {
+            <img id="postDetailsImage" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
+
+            MemoryStream imageStream = new MemoryStream(post.ImageData);
+            Bitmap image = new Bitmap(imageStream);
+            int width = image.Width;
+            int height = image.Height;
+
+            if (width < 744)
             {
-                <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                    <img id="postDetailsImage" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
-                </a>
-                MemoryStream imageStream = new MemoryStream(post.ImageData);
-                Bitmap image = new Bitmap(imageStream);
-                int width = image.Width;
-                int height = image.Height;
+                <script>
+                    console.log("katannn m800");
+                    document.getElementById("postDetailsImage").classList.add("imgSmall");
 
-                if (width < 744)
-                {
-                    <script>
-                        console.log("katannn m800");
-                        document.getElementById("postDetailsImage").classList.add("imgSmall");
-
-                    </script>
-                }
-                else if (width >= 1024 && height >= 768)
-                {
-                    <script>
-                        document.getElementById("postDetailsImage").classList.add("imgBig");
-                    </script>
-                }
+                </script>
             }
-        </div>
-        <div class="col">
-            <div class="container-fluid col-12 border-right bg-white rounded-bottom pt-3">
+            else if (width >= 744 && height <= 400)
+            {
+                <script>
+                    document.getElementById("postDetailsImage").classList.add("imgSmall");
+                </script>
+            }
+            else if (width >= 1024 && height >= 768)
+            {
+                <script>
+                    document.getElementById("postDetailsImage").classList.add("imgBig");
+                </script>
+            }
+        }
+        <div class="card-body">
+            @*-------------   User info   ------------*@
+            @{
+                var blogUser = await userManager.FindByIdAsync(post.BlogUserId);
+                var user = await userManager.FindByIdAsync(userManager.GetUserId(User));
+            }
+
+            <div class="d-flex d-inline-block px-2 pb-1">
+                <div class="pt-2">
+                    <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail" style="width:40px; height:40px;">
+                </div>
+                <div class="d-flex flex-column m-1 flex-grow-1">
+                    <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
+
+                    @if (post.Updated is not null)
+                    {
+                        <span class="smallFont text-muted fw-lighter fst-italic">Updated : @post.Updated?.ToString("MMM dd, yyyy")</span>
+                    }
+                    else
+                    {
+                        <span class="smallFont text-muted fw-lighter fst-italic">@post.Created.ToString("MMM dd, yyyy")</span>
+                    }
+                </div>
+            </div>
+            <div class="card-title h1 px-sm-5">@post.Title</div>
+            <div class="container-fluid col-12 border-right bg-white rounded-bottom pt-3 px-sm-5">
                 @Html.Raw(Model.Post.Content)
             </div>
-        </div>
-    </div>
-
-</article>
-
-<article>
-    <hr />
-    <h3 class="text-center font-weight-bold">Tags</h3>
-    <div class="col text-center">
-        @foreach (var tag in Model.Post.Tags.ToList())
-        {
-            <a asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="mb-1 btn btn-sm btn-warning btn-outline-dark">#@tag.Text</a>
-        }
-    </div>
-    <hr />
-</article>
-
-
-<div>
-    @if (User.Identity.IsAuthenticated)
-    {
-        <form asp-action="Create" asp-controller="Comments" method="post">
-            @Html.Hidden("PostId", Model.Post.Id)
-            @Html.Hidden("Slug", Model.Post.Slug)
-
-            <div class="form-group">
-                <label class="h2 control-label font-weight-bold">Add Comment</label>
-                <textarea name="body" class="form-control" rows="10"></textarea>
-            </div>
-
-            <button type="submit" class="btn btn-dark btn-block btn-sm">Submit</button>
-        </form>
-    }
-    else
-    {
-        <a class="btn btn-block btn-sm btn-dark" asp-area="Identity" asp-page="/Account/Login">
-            Login to add comments
-        </a>
-    }
-
-    <br />
-    <hr class="card-hr" />
-    <br />
-
-    <a id="commentSection" class="btn btn-sm btn-dark btn-block mb-2">@Model.Post.Comments.Count COMMENT(S)</a>
-
-    @{ var counter = 0; }
-    @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
-    {
-        <div class="media p-3 mb-2 bg-cf media-border">
-            <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@comment.BlogUser.FullName" class="mr-3 mt-3 rounded-pill img-thumbnail " style="width:60px;">
-
-            <div class="media-body">
-                <h4>@comment.BlogUser.FullName</h4>
-
-                @****************************************************************
-                    SECTION 1: POST ON OR UPDATED ON
-                    *****************************************************************@
-                @if (comment.Deleted is not null)
-                {
-                    <span class="small">
-                        <span class="font-weight-bolder">Deleted</span> : @comment.Deleted?.ToString("MMM dd, yyyy")
-                    </span>
-                }
-                else if (comment.Moderated is not null)
-                {
-                    <span class="small">
-                        <span class="font-weight-bolder">
-                            Moderated <span class="text-danger font-italic">(@comment.ModerationType.ToString().ToLower())</span>
-                        </span>
-                        : @comment.Moderated?.ToString("MMM dd, yyyy")
-                    </span>
-                }
-                else if (comment.Updated is not null)
-                {
-                    <span class="small">
-                        <span class="font-weight-bolder">Updated </span> : @comment.Updated?.ToString("MMM dd, yyyy")
-                    </span>
-                }
-                else
-                {
-                    <span class="small">
-                        <span class="font-weight-bolder">Created </span> : @comment.Created.ToString("MMM dd, yyyy")
-                    </span>
-                }
-
-                @*****************************************************************
-                    SECTION 2: HOW DO WE COMPOSE THE BODY
-                    *****************************************************************@
-                @*****************************************************************
-                    SECTION 2A: Render pre text
-                    *****************************************************************@
-                <br />
-                @if (comment.Deleted is not null)
-                {
-                    <span class="small font-italic">The comment posted on @comment.Created.ToString("MMM dd, yyyy") by @comment.BlogUser.FullName was deleted by the Moderator...</span>
-                }
-                else if (comment.Moderated is not null)
-                {
-                    <span class="small font-italic">The comment posted on @comment.Created.ToString("MMM dd, yyyy") by @comment.BlogUser.FullName has been Moderated...</span>
-                }
-
-                <hr />
-
-                @*****************************************************************
-                    SECTION 2B: Render main body
-                    *****************************************************************@
-                @if (!string.IsNullOrEmpty(comment.ModeratedBody))
-                {
-                    <div class="d-flex flex-wrap">@comment.ModeratedBody</div>
-                }
-                else if (comment.Deleted is null)
-                {
-                    <div class="d-flex flex-wrap">@comment.Body</div>
-                }
-                else
-                {
-                    <div class="d-flex flex-wrap">@comment.Body</div>
-                }
-
-
-                @****************************************************************
-                        SECTION 3: CAN WE RENDER THE EDIT BUTTON
-                    *****************************************************************@
-                @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
-                {
-                    <hr>
-                    <button data-bs-toggle="modal" data-bs-target="@($"#editModal{counter}")" class="btn-sm btn-dark float-right font-weight-bold">EDIT</button>
-                }
-
-                @****************************************************************
-                    SECTION 4: CAN WE RENDER THE MODERATE AND DELETE BUTTONS
-                    *****************************************************************@
-                @if (User.IsInRole(BlogRole.Moderator.ToString()) && comment.Deleted is null)
-                {
-                    <hr>
-                    <div class="row">
-                        <div class="col-2">
-                            <button class="btn-sm btn-dark font-weight-bold btn-block" data-bs-toggle="modal" data-bs-target="@($"#moderate{counter}")">MODERATE</button>
-                        </div>
-                        <div class="col-2">
-                            <form asp-action="Delete" asp-controller="Comments">
-                                @Html.Hidden("Id", comment.Id)
-                                @Html.Hidden("Slug", comment.Post.Slug)
-                                <button type="submit" class="btn-sm btn-dark font-weight-bold btn-block">DELETE</button>
-                            </form>
-                        </div>
-                    </div>
-                }
-
-            </div>
-
-        </div>
-
-
-        @*Modals*@
-        <div class="modal" id="@($"editModal{counter}")">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Editing Comment...</h4>
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <form asp-action="Edit" asp-controller="Comments">
-                            @Html.Hidden("Id", comment.Id)
-
-                            <div class="form-group">
-                                <textarea name="Body" class="form-control" required>@comment.Body</textarea>
+            <hr />
+            <div class="card-footer border-0 bg-white rounded-bottom p-0" id="viewUpdate">
+                <div class="row px-sm-1 d-flex m-0">
+                    <div class="col-12 col-sm-6 d-flex justify-content-center justify-content-sm-start">
+                        <div class="d-flex">
+                            @{ var zero = 0;}
+                            <div class=" likeCount" id="likeCount">
+                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
+                                    @if (post.Likes != null)
+                                    {
+                                        @post.Likes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
                             </div>
 
-                            <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
-                        </form>
+                            <div class="text-muted fs-6 opacity-25 px-2">|</div>
+                            <div class="usefulCount" id="usefulCount">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
+                                    @if (post.UsefulCodes != null)
+                                    {
+                                        @post.UsefulCodes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="text-muted fs-6 opacity-25 px-2">|</div>
+                            <div class="">
+                                <i class="fa-regular fa-comments fa-2xs text-muted">
+                                    @if (post.Comments != null)
+                                    {
+                                        @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </i>
+                            </div>
+                            <div class="text-muted fs-6 opacity-25 px-2">|</div>
+                            <div class="">
+                                <i class="fa-regular fa-eye fa-2xs text-muted">
+                                    @if (post.Views != null)
+                                    {
+                                        @post.Views
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                    Views
+                                </i>
+                            </div>
+                        </div>
                     </div>
+                    <div class="col-12 col-sm-6 p-0 m-0 d-flex justify-content-center justify-content-sm-start">
+                        <div class="btn-group d-flex flex-nowrap  p-0 m-0 ms-sm-auto">
 
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn-sm btn-dark font-weight-bold" data-bs-dismiss="modal">CLOSE</button>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                if (post.Likes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.Likes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        <a id="likeBtn" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                            <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+
+                                        <a id="likeBtn" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                            <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                }
+                                else
+                                {
+
+                                    <a id="likeBtn" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                        <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                    </a>
+                                }
+
+                                if (post.UsefulCodes != null)
+                                {
+                                    bool contain = false;
+                                    foreach (var item in post.UsefulCodes)
+                                    {
+                                        if (item == user.Id)
+                                        {
+                                            contain = true;
+                                        }
+                                    }
+                                    if (contain is true)
+                                    {
+
+                                        <a id="UsefulBtn" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                            <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+
+                                    }
+                                    else
+                                    {
+                                        <a id="UsefulBtn" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                            <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a id="UsefulBtn" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" data-slug="@post.Slug" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                        <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                    </a>
+                                }
+
+                            }
+                            else
+                            {
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" title="Like" style="color: var(--hoverLightBlue-color); height:30px;">
+                                    <i class="fa-regular fa-thumbs-up fa-lg align-self-center likesIconSideBar"></i>
+                                </a>
+
+                                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns sortByPageBtn shadow-none px-3 mx-1" title="Like" style="color: #8A1EAE; height: 30px;">
+                                    <i class="fa-regular fa-file-code fa-lg align-self-center usefulIconSideBar"></i>
+                                </a>
+
+                            }
+
+                        </div>
                     </div>
-
+                </div>
+                <hr />
+                <div class="row-cols-1">
+                    <div class="col">
+                        <div class="h6 text-center font-weight-bold">Tags</div>
+                    </div>
+                    <div class="col text-center m-0 border-0 d-flex justify-content-center flex-wrap">
+                        @foreach (var tag in post.Tags.ToList())
+                        {
+                            <a asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag.Text.ToLower()" class="btn btn-primary d-inline-flex flex-nowrap justify-content-center p-0 me-1 px-1 rounded tagViewB" style="height:24px;">#@tag.Text</a>
+                        }
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="modal" id="@($"moderate{counter}")">
-            <div class="modal-dialog">
-                <div class="modal-content">
+    </div>
 
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Moderating Comment...</h4>
+</article>
 
+<div>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="card bg-transparent border-0">
+            <form asp-action="Create" asp-controller="Comments" method="post">
+                @Html.Hidden("PostId", Model.Post.Id)
+                @Html.Hidden("Slug", Model.Post.Slug)
+
+                <div class="row m-0">
+                    <div class="col h5 d-flex justify-content-center py-2 m-0">
+                        Add Comment
+                    </div>
+                </div>
+                <div class="row-cols-1 bg-white rounded shadow-sm">
+                    <div class="col ">
+                        <textarea name="body" rows="10" class="form-control commentAdd"></textarea>
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="w-100 btn btn-primary logoutButton border-1 px-2 shadow-none">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="shadow-sm">
+            <a asp-area="Identity" asp-page="/Account/Login" type="submit" class="w-100 btn btn-primary logoutButton border-1 pt-2 mt-2 px-2 shadow-none">Login to add comments</a>
+        </div>
+    }
+
+    <hr />
+
+    <div class="row m-0" id="commentSection">
+        <div class="col h5 d-flex justify-content-center p-0 mb-1">
+            @Model.Post.Comments.Count COMMENT(S)
+        </div>
+    </div>
+
+
+    @{ var counter = 0; }
+    @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
+    {
+        <div class="card bg-white border-0 rounded shadow-sm p-0 mb-2">
+            <div class="card-body p-0">
+                <div class="row-cols-1">
+                    <div class="col">
+                        <div class="row row-cols-1 d-flex d-inline-block px-2 py-1 m-0">
+                            <div class="col col-sm-9 d-flex d-inline-block pt-2">
+                                <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail me-1" style="width:40px; height:40px;">
+                                <div class="d-flex flex-column">
+                                    <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
+                                    @****************************************************************
+                                        SECTION 1: POST ON OR UPDATED ON
+                                        *****************************************************************@
+                                    @if (comment.Deleted is not null)
+                                    {
+                                        <span class="small small text-muted fw-lighter fst-italic fs-6">
+                                            Deleted : @comment.Deleted?.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                    else if (comment.Moderated is not null)
+                                    {
+                                        <span class="small small text-muted fw-lighter fst-italic fs-6">
+                                            Moderated <span class="text-danger font-italic fs-6">(@comment.ModerationType.ToString().ToLower())</span>
+                                            : @comment.Moderated?.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                    else if (comment.Updated is not null)
+                                    {
+                                        <span class="small text-muted fw-lighter fst-italic fs-6">
+                                            Updated  : @comment.Updated?.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="small text-muted fw-lighter fst-italic fs-6">
+                                            Created  : @comment.Created.ToString("MMM dd, yyyy")
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col col-sm-3 ms-auto d-flex justify-content-end">
+                                <div class="d-flex justify-content-end">
+                                    @if (comment.Moderated is null && comment.Deleted is null && comment.BlogUserId == userManager.GetUserId(User))
+                                    {
+                                        <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#editModal">
+                                            <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
+                                            <span class="pb-1 pe-2">Edit</span>
+                                        </a>
+                                        <div class="px-1 text-muted fs-6 opacity-25 px-2 pt-1">|</div>
+                                    }
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        if ((User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
+                                           || comment.BlogUserId == userManager.GetUserAsync(User).Result.Id
+                                           && comment.Deleted is null)
+                                        {
+                                            <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#delete">
+                                                <i class="fa-solid fa-trash-can fa-lg px-2"></i>
+                                                <span class="pb-1 pe-2">Delete</span>
+                                            </a>
+
+                                        }
+                                        if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
+                                        {
+                                            <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" data-bs-toggle="modal" data-bs-target="#moderate">
+                                                <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
+                                                <span class="pb-1 pe-2">Moderate</span>
+                                            </a>
+
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
+                    <div class="col bg-white py-2">
+                        @if (!string.IsNullOrEmpty(comment.ModeratedBody))
+                        {
+                            <div class="border border-1 bg-white rounded p-2 mx-3 fs-6">
+                                @Html.Raw(comment.ModeratedBody)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="border border-1 bg-white rounded p-2 mx-3 fs-6">
+                                @Html.Raw(comment.Body)
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        @*Modals*@
+        <div class="modal" id="editModal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
                     <!-- Modal body -->
                     <div class="modal-body">
-                        <form asp-action="Moderate" asp-controller="Comments">
-                            @Html.Hidden("Id", comment.Id)
-                            @Html.Hidden("Body", comment.Body)
-
-                            <div class="form-group">
-                                <label class="control-label">Original Comment</label>
-                                <textarea disabled class="form-control" style="resize:none">@comment.Body</textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label">Moderated Comment</label>
-                                <textarea required name="ModeratedBody" class="form-control">@comment.ModeratedBody</textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label">Reason For Moderation</label>
-                                <select class="form-control" asp-for="@comment.ModerationType" name="ModerationType" asp-items="Html.GetEnumSelectList<ModerationType>()"></select>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col">
-                                        <button class="btn-sm btn-block btn-dark border-success font-weight-bold" type="submit">SUBMIT</button>
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn-sm btn-block btn-dark font-weight-bold" type="button" data-dismiss="modal">CLOSE</button>
+                        @using (Html.BeginForm("Edit", "Comments", new { id = comment.Id }, FormMethod.Post))
+                        {
+                            @Html.Hidden("backto", comment.Post.Id)
+                            <div class="row-cols-1">
+                                <div class="col ">
+                                    <h4>Editing Comment</h4>
+                                </div>
+                                <div class="col">
+                                    <textarea asp-for="@comment.Body" name="Body" class="form-control commentAdd"></textarea>
+                                </div>
+                                <div class="col">
+                                    <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                        <button type="submit" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);">
+                                            <span class="pb-1 pe-2">Save Chances</span>
+                                        </button>
+                                        <button type="button" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);" data-bs-dismiss="modal">
+                                            <span class="pb-1 pe-2">Close</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="modal" id="delete">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        @using (Html.BeginForm("Delete", "Comments", new { id = comment.Id }, FormMethod.Post))
+                        {
+                            @Html.Hidden("backto", comment.Post.Id)
+                            <div class="row-cols-1">
+                                <div class="col">
+                                    <h4>Are you sure you want to delete this comment @comment.Id?</h4>
+                                </div>
+                                <hr />
+                                <div class="col">
+                                    <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                        <button type="submit" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);">
+                                            <i class="fa-solid fa-check fa-lg px-2"></i>
+                                            <span class="pb-1 pe-2">Yes</span>
+                                        </button>
+                                        <button type="button" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);" data-bs-dismiss="modal">
+                                            <i class="fa-solid fa-xmark fa-lg px-2"></i>
+                                            <span class="pb-1 pe-2">No</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="moderate">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <form asp-action="Moderate" asp-controller="Comments">
+                            @Html.Hidden("backto", comment.Post.Id)
+                            @Html.Hidden("Id", comment.Id)
+                            @Html.Hidden("Body", comment.Body)
+                            <div class="row-cols-1">
+                                <div class="col ">
+                                    <h4>Moderating Comment</h4>
+                                </div>
+                                <div class="col">
+                                    <label class="h6">Original Comment</label>
+                                    <textarea disabled class="form-control" style="resize:none">@comment.Body</textarea>
+                                </div>
+                                <div class="col">
+                                    <label class="h6">Moderated Comment</label>
+                                    <textarea required name="ModeratedBody" class="form-control">@comment.ModeratedBody</textarea>
+                                </div>
+                                <div class="col">
+                                    <label class="h6">Reason For Moderation</label>
+                                    <select class="form-control" asp-for="@comment.ModerationType" name="ModerationType" asp-items="Html.GetEnumSelectList<ModerationType>()"></select>
+                                </div>
+                                <hr />
+                                <div class="col">
+                                    <div class="btn-group d-flex flex-nowrap p-0 m-0 ms-auto">
+                                        <button type="submit" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);">
+                                            <span class="pb-1 pe-2">Save Chances</span>
+                                        </button>
+                                        <button type="button" class="btn btn-primary logoutButton d-flex flex-nowrap justify-content-center  shadow-none text-white" style="color: var(--customBlack-color);" data-bs-dismiss="modal">
+                                            <span class="pb-1 pe-2">Close</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -284,3 +491,138 @@
         counter++;
     }
 </div>
+
+@section Scripts {
+
+    <script>
+        tinymce.init({
+            selector: '.commentAdd',
+            menubar: false,
+            height: 200,
+            plugins: 'lists code emoticons codesample',
+            toolbar: ' bold italic backcolor underline ' + ' emoticons codesample hr' + 'codesample',
+            codesample_global_prismjs: true,
+            emoticons_append: {
+                custom_mind_explode: {
+                    keywords: ['brain', 'mind', 'explode', 'blown'],
+                    char: '🤯'
+                }
+            },
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            console.log("rdy");
+
+            $(".likeBtn").off("click").on('click', function () {
+                var $el = $(this);
+                var slug = $el.data('slug');
+                var postLikesCount = $(this).attr('postLikesCount');
+
+                var e = $el.parents("#viewUpdate").children().children().children().children();
+                var elId = e.attr('id');
+                console.log(elId);
+                var pageCount = $("#" + elId).children().html();
+                postLikesCount = pageCount;
+
+                let modalId = $(this).attr('id');
+
+                console.log($el.data('slug'));
+                console.log("ziki zuki `` ose string" + ``);
+                $.ajax({
+
+                    type: "POST",
+                    url: '/Home/Like',
+                    data: { slug: slug },
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        trigger = false;
+                        var modalAnchor = document.getElementById(modalId);
+                        var icon = modalAnchor.firstElementChild;
+
+                        if (icon.classList.contains("fa-regular")) {
+                            icon.classList.remove("fa-regular");
+                            icon.classList.add("fa-solid");
+
+                            postLikesCount++;
+
+                        } else if (icon.classList.contains("fa-solid")) {
+                            icon.classList.remove("fa-solid");
+                            icon.classList.add("fa-regular");
+
+                            postLikesCount--;
+                        }
+
+                        var e = $el.parents("#viewUpdate").children().children().children().children();
+                        var elId = e.attr('id');
+
+                        $("#" + elId).children().html(" " + postLikesCount);
+
+                    },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+            });
+
+
+            $(".usefulBtn").off("click").on('click', function () {
+
+                var $el = $(this);
+                var slug = $el.data('slug');
+                var postUsefulCount = $(this).attr('postUsefulCount');
+
+                var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
+                var elId = e.attr('id');
+                console.log(elId);
+                var pageCount = $("#" + elId).children(".usefulCount").html();
+                postUsefulCount = pageCount;
+
+                let modalId = $(this).attr('id');
+
+                console.log($el.data('slug'));
+                console.log("ziki zuki `` ose string" + ``);
+
+                $.ajax({
+
+                    type: "POST",
+                    url: '/Home/UsefulCode',
+                    data: { slug: slug, postUsefulCount: postUsefulCount },
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+                        var modalAnchor = document.getElementById(modalId);
+                        var icon = modalAnchor.firstElementChild;
+
+                        if (icon.classList.contains("fa-regular")) {
+                            icon.classList.remove("fa-regular");
+                            icon.classList.add("fa-solid");
+
+                            postUsefulCount++;
+
+                        } else if (icon.classList.contains("fa-solid")) {
+                            icon.classList.remove("fa-solid");
+                            icon.classList.add("fa-regular");
+
+                            postUsefulCount--;
+                        }
+
+                        var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
+                        var elId = e.attr('id');
+
+                        $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
+
+
+                    },
+                    error: function (req, status, error) {
+                        console.log(status)
+                    }
+                });
+            });
+
+        })
+
+    </script>
+}

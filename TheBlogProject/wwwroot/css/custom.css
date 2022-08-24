@@ -43,9 +43,9 @@ body {
 }
 
 /*-----------------CUSTOM MEDIA OBJECT BORDER---------------*/
-.media-border {
+/*.media-border {
     border: 2px solid black;
-}
+}*/
 
 /*-----------------CUSTOM BG COLOR---------------*/
 .bg-cf {
@@ -65,21 +65,21 @@ header.masthead .site-heading {
     padding: 100px 0 100px 0;
 }
 /*-----------------GOOGLE MAP---------------*/
-#map {
+/*#map {
     height: 400px;
 }
 
 .noline {
     text-decoration: none;
-}
+}*/
 
 /*-----------------SUMMERNOTE---------------*/
-.note-editable, .note-placeholder {
+/*.note-editable, .note-placeholder {
     font-size: 22px;
-}
+}*/
 
 /*-----------------BUTTON STYLES---------------*/
-.btn-tag {
+/*.btn-tag {
     margin-top: 10px;
 }
 
@@ -106,7 +106,7 @@ button.btn-sm, a.btn-sm {
         color: white;
         background-color: #212121;
         outline: 4px solid var(--customOrange-color);
-    }
+    }*/
 
 /*-----------------CARD STYLE---------------*/
 .card-hr {
@@ -134,7 +134,7 @@ button.btn-sm, a.btn-sm {
     height: 350px;
 }
 
-/*-----------------PAGE STYLES---------------*/
+/*-----------------page button pageX---------------*/
 
 .page-item.active .page-link {
     background-color: var(--hoverLightBlue-color);
@@ -165,7 +165,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 }
 
 /*-----------------TOOLTIP STYLES---------------*/
-.cftooltip * {
+/*.cftooltip * {
     opacity: 1.0 !important;
 }
 
@@ -182,7 +182,7 @@ div.swal2-container.swal2-center.swal2-backdrop-show > div {
 
 .tooltip-show {
     opacity: 1;
-}
+}*/
 
 
 
@@ -453,20 +453,30 @@ iframe, object, embed {
 
 }
 
-.imgSmall {
-    object-fit:cover;
+.imgCircle {
+    object-fit: cover;
     object-position: top;
     max-height: 250px;
+    width: 100%;
+    background-color: white;
+
+}
+
+.imgSmall {
+    object-fit: scale-down;
+    object-position: top;
+    height: auto;
     width: 100%;
     background-color: white;
 }
 
 .imgBig {
     object-fit: cover;
-    object-position: top;
-    max-height: 350px;
+    object-position: 0 30%;
+    max-height: 320px;
     width: 100%;
     background-color: white;
+
 }
 
 .logoImg {
@@ -475,12 +485,27 @@ iframe, object, embed {
 }
 
 
+
+
+
+
+/*-----------------font and text---------------*/
+.aTextStyle {
+    letter-spacing: normal;
+    font-weight: 600;
+    padding: 3px;
+    font-style: normal;
+    width: 240px;
+}
+
+
+
 .smallFont {
     font-size: 0.9rem;
     font-weight: 600;
 }
 
-
+/*-----------------contact icon colors---------------*/
 .fa-id-card:before {
     color: transparent;
     position: relative;
@@ -494,6 +519,7 @@ button > a {
     height:inherit;
 }
 
+/*-----------------background colors---------------*/
 .bg-example {
     background-color: var(--customBlack-color);
     
@@ -505,14 +531,9 @@ button > a {
 
 
 
-.aTextStyle {
-    letter-spacing: normal;
-    font-weight: 600;
-    padding: 3px;
-    font-style: normal;
-    width: 240px;
-}
 
+
+/*-----------------side bar buttons---------------*/
 .sideBarBtn{
     color:var(--customBlack-color);
 }
@@ -544,6 +565,8 @@ button > a {
         }
 
 
+
+/*-----------------post card buttons---------------*/
 .postBtns, .postBtns:visited {
     color: var(--customBlack-color);
     background-color:white;
@@ -579,20 +602,24 @@ button > a {
     }
 
 .cardPostSM {
-    font-size: 1rem;
-    color: GrayText;
+    font-size: 0.9rem;
     font-weight:600;
-    padding:0;
-    margin:0;
+    color: GrayText;
+    background-color: white;
+    padding: 0;
+    margin: 0;
 }
     .cardPostSM:hover {
         color: var(--customBlack-color);
+        background-color: var(--backgroundGray-color);
     }
 
 .readBtn{
     height:28px;
 }
 
+
+/*-----------------col settings---------------*/
 .col-3-left {
     width: 22%;
 }
@@ -601,6 +628,10 @@ button > a {
     width:22%;
 }
 
+
+
+
+/*-----------------floating custom---------------*/
 .form-floating > input.floaingCustom {
     height: 50px;
 
@@ -622,7 +653,7 @@ button > a {
 
 
 
-
+/*-----------------upload button---------------*/
 
 .uploadButton {
     border-radius: 3px 3px 3px 3px;
@@ -664,6 +695,7 @@ button > a {
     display: table-cell;
 }
 
+/*-----------------del button---------------*/
 
 .delBtn:hover{
     background-color:red;
@@ -673,6 +705,8 @@ button > a {
     background-color:var(--backgroundGray-color);
 }
 
+
+/*-----------------del button---------------*/
 .sortByPageBtn {
     border-radius: 3px 3px 3px 3px;
     color: var(--customBlack-color);
@@ -686,6 +720,7 @@ button > a {
 
 
 
+/*-----------------del button---------------*/
 .testimonial-card .card-up {
     height: 105px;
     overflow: hidden;
@@ -717,6 +752,34 @@ button > a {
     border-radius: 50%;
 }
 
+
+/*-----------------read more/less button---------------*/
+.toggledTextTags {
+    height: 190px;
+    overflow: hidden;
+}
+.toggledText {
+    height: 35px;
+    overflow: hidden;
+}
+
+    .toggledText.toggle, .toggledTextTags.toggle {
+        height: auto;
+    }
+
+        .readless-txt,
+        .toggledText.toggle, .toggledTextTags.toggle ~ .readM span.readmore-txt {
+            display: none;
+        }
+
+        .toggledText.toggle, .toggledTextTags.toggle ~ .readM span.readless-txt {
+            display: block;
+        }
+
+
+
+/*-----------------mix---------------*/
+
 .imgSize {
     width: 120px;
     height: 120px;
@@ -732,3 +795,17 @@ button > a {
     .pluMinusBtn:hover {
         color: white;
     }
+
+p{
+    margin:0;
+}
+
+.footerIcons {
+    color: white;
+}
+    .footerIcons:hover {
+        color:var(--hoverLightBlue-color);
+    }
+.footerLogo {
+    height: 40px;
+}
