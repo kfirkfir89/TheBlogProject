@@ -25,61 +25,68 @@ else if (ViewBag.Tag != null)
 }
 
 <div id="@tagOrText" class="postPartialContainer row-cols-1">
-    <div class="col">
-        <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
+    @if (ViewBag.Text != null)
+    {
+        <div class="col">
+            <div class="btn-group d-flex flex-nowrap" style="padding: 0px; margin: 0px;">
 
-            @if (User.Identity.IsAuthenticated)
-            {
-                if (ViewBag.Text == "foryou")
+                @if (User.Identity.IsAuthenticated)
                 {
-                    <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortBy" asp-route-text="foryou" title="For you">
+                    if (ViewBag.Text == "foryou")
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortBy" asp-route-text="foryou" title="For you">
+                            <span class="pt-2 smallFont pb-2">For You</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary d-flex flex-nowrap justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="foryou" title="For you">
+                            <span class="pt-2 smallFont pb-2">For You</span>
+                        </a>
+                    }
+
+                }
+                else
+                {
+                    <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-area="Identity" asp-page="/Account/Login" title="For you">
                         <span class="pt-2 smallFont pb-2">For You</span>
+                    </a>
+                }
+
+                @if (ViewBag.Text == "useful")
+                {
+                    <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortBy" asp-route-text="useful" title="Useful">
+                        <span class="pt-2 smallFont pb-2">Useful</span>
                     </a>
                 }
                 else
                 {
-                    <a class="btn btn-primary d-flex flex-nowrap justify-content-center leftButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="foryou" title="For you">
-                        <span class="pt-2 smallFont pb-2">For You</span>
+                    <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="useful" title="Useful">
+                        <span class="pt-2 smallFont pb-2">Useful</span>
                     </a>
                 }
 
-            }
-            else
-            {
-                <a class="btn btn-primary d-flex flex-nowrap  justify-content-center leftButtonMenu shadow-none" asp-area="Identity" asp-page="/Account/Login" title="For you">
-                    <span class="pt-2 smallFont pb-2">For You</span>
-                </a>
-            }
-
-            @if (ViewBag.Text == "useful")
-            {
-                <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortBy" asp-route-text="useful" title="Useful">
-                    <span class="pt-2 smallFont pb-2">Useful</span>
-                </a>
-            }
-            else
-            {
-                <a class="btn btn-primary d-flex flex-nowrap justify-content-center ps-1 middleButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="useful" title="Useful">
-                    <span class="pt-2 smallFont pb-2">Useful</span>
-                </a>
-            }
-
-            @if (ViewBag.Text == "top")
-            {
-                <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortBy" asp-route-text="top" title="Top View">
-                    <span class="pt-2 smallFont pb-2">Top</span>
-                </a>
-            }
-            else
-            {
-                <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="top" title="Top View">
-                    <span class="pt-2 smallFont pb-2">Top</span>
-                </a>
-            }
+                @if (ViewBag.Text == "top")
+                {
+                    <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-top bg-white" asp-controller="Home" asp-action="SortBy" asp-route-text="top" title="Top View">
+                        <span class="pt-2 smallFont pb-2">Top</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="btn btn-primary d-flex flex-nowrap justify-content-center rightButtonMenu shadow-none" asp-controller="Home" asp-action="SortBy" asp-route-text="top" title="Top View">
+                        <span class="pt-2 smallFont pb-2">Top</span>
+                    </a>
+                }
 
 
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="h4 text-center"><span style="color: var(--hoverLightBlue-color);">#</span>@ViewBag.Tag</div>
+    }
 
 </div>
 
