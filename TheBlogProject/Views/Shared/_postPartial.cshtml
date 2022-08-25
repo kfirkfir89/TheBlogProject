@@ -92,21 +92,23 @@
                     <div class="col col-sm-4 d-flex justify-content-center justify-content-sm-end p-0">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            if ((User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
-                            || user.Id == userManager.GetUserAsync(User).Result.Id)
-                            {
-                                <div class="d-flex justify-content-end ">
+                            <div class="d-flex justify-content-end ">
+                                @if ((User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))|| isAuthor)
+                                {
                                     <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
                                         <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
                                         <span class="pb-1 pe-2">Edit</span>
                                     </a>
+                                }
+                                @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                                {
                                     <div class="px-1 text-muted fs-6 opacity-25 px-2 pt-1">|</div>
                                     <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Delete" asp-controller="Posts" asp-route-id="@post.Id">
                                         <i class="fa-solid fa-trash-can fa-lg px-2"></i>
                                         <span class="pb-1 pe-2">Delete</span>
                                     </a>
-                                </div>
-                            }
+                                }
+                            </div>
                         }
                     </div>
                 </div>
