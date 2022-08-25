@@ -506,7 +506,7 @@ namespace TheBlogProject.Controllers
         {
             model.Message = $"{model.Message}<hr/>";
             await _emailSender.SendContactEmailAsync(model.Name, model.Subject, model.Message);
-
+            ViewBag.statusMessage = "Your email has been sent!";
             return View();
         }
 

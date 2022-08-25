@@ -195,7 +195,7 @@ namespace TheBlogProject.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Moderator")]
+        [Authorize(Roles = "Moderator, Administrator")]
         public async Task<IActionResult> Moderate(int id, [Bind("Id, Body, ModeratedBody, ModerationType")] Comment comment,string type ,int backto)
         {
             if(id != comment.Id)
@@ -228,7 +228,7 @@ namespace TheBlogProject.Controllers
                         throw;
                     }
                 }
-                if(backto != null)
+                if(backto != null && backto > 0)
                 {
                     return RedirectToAction("Details", "Posts", new { slug = _context.Posts.Find(backto).Slug });
                 }
