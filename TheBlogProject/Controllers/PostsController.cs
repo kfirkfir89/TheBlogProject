@@ -63,37 +63,6 @@ namespace TheBlogProject.Controllers
             return View("Index", posts);
         }
 
-        //BlogPostIndex
-        public async Task<IActionResult> BlogPostIndex(string? id, int? page)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            //page system version
-/*            var pageNumber = page ?? 1;
-            var pageSize = 5;
-*/
-            //get the post for specificuler blog
-            //var posts = _context.Posts.Where(p => p.BlogId == id).ToList();
-
-            //page system version
-/*            var posts = await _context.Posts
-                .Where(p => p.BlogId == id && p.ReadyStatus == ReadyStatus.ProductionReady)
-                .OrderByDescending(p => p.Created)
-                .ToPagedListAsync(pageNumber, pageSize);*/
-
-
-            var posts = await _context.Posts
-                .Where(p => p.BlogUser.Id == id && p.ReadyStatus == ReadyStatus.ProductionReady)
-                .Include(p => p.Tags)
-                .OrderByDescending(p => p.Created)
-                .ToListAsync();
-
-            ViewBag.PostsUser = id;
-
-            return View(posts);
-        }
 
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(string? slug)

@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace TheBlogProject.Migrations
+namespace TheBlogProject.Data.Migrations
 {
     public partial class _001 : Migration
     {
@@ -35,9 +35,12 @@ namespace TheBlogProject.Migrations
                     DisplayName = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     ImageData = table.Column<byte[]>(type: "bytea", nullable: true),
                     ContentType = table.Column<string>(type: "text", nullable: true),
+                    Location = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: true),
+                    AboutMe = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     FacebookUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    GithubUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    LinkedinUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     TwitterUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
-                    MyTags = table.Column<string[]>(type: "text[]", nullable: true),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -172,7 +175,7 @@ namespace TheBlogProject.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BlogUserId = table.Column<string>(type: "text", nullable: true),
                     Title = table.Column<string>(type: "character varying(75)", maxLength: 75, nullable: false),
-                    Abstract = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Abstract = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     Content = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -203,12 +206,12 @@ namespace TheBlogProject.Migrations
                     PostId = table.Column<int>(type: "integer", nullable: false),
                     BlogUserId = table.Column<string>(type: "text", nullable: true),
                     ModeratorId = table.Column<string>(type: "text", nullable: true),
-                    Body = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
+                    Body = table.Column<string>(type: "text", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Moderated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Deleted = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    ModeratedBody = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: true),
+                    ModeratedBody = table.Column<string>(type: "text", nullable: true),
                     ModerationType = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

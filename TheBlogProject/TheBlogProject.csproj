@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\assets\img\navIcons\Search.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="LazZiya.ImageResize" Version="4.1.0" />
     <PackageReference Include="MailKit" Version="3.2.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.JavaScript" Version="1.0.20-build00666" />
@@ -27,6 +31,10 @@
     <PackageReference Include="X.PagedList" Version="8.4.0" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="8.4.0" />
     <PackageReference Include="X.PagedList.Web.Common" Version="8.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
 </Project>

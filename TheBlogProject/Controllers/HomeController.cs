@@ -710,7 +710,7 @@ namespace TheBlogProject.Controllers
 
             if (Id == "admin")
             {
-                await _signInManager.PasswordSignInAsync("kfirkfir89@gmail.com", "kfir123455AA!", false, lockoutOnFailure: false);
+                await _signInManager.PasswordSignInAsync("kfirkfir89@gmail.com", "kfir123455A!", false, lockoutOnFailure: false);
                 return RedirectToAction(nameof(Index));
             }
             else if(Id == "moderator")

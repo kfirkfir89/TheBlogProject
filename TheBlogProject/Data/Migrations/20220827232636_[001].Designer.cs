@@ -10,11 +10,11 @@ using TheBlogProject.Data;
 
 #nullable disable
 
-namespace TheBlogProject.Migrations
+namespace TheBlogProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220713104239_[004]")]
-    partial class _004
+    [Migration("20220827232636_[001]")]
+    partial class _001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -162,6 +162,10 @@ namespace TheBlogProject.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<string>("AboutMe")
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
 
@@ -193,11 +197,23 @@ namespace TheBlogProject.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
+                    b.Property<string>("GithubUrl")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.Property<byte[]>("ImageData")
                         .HasColumnType("bytea");
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("LinkedinUrl")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Location")
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
@@ -263,8 +279,7 @@ namespace TheBlogProject.Migrations
 
                     b.Property<string>("Body")
                         .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp with time zone");
@@ -276,8 +291,7 @@ namespace TheBlogProject.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ModeratedBody")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<int>("ModerationType")
                         .HasColumnType("integer");

@@ -294,9 +294,9 @@
                     <div class="col">
                         <div class="row row-cols-1 d-flex d-inline-block px-2 py-1 m-0">
                             <div class="col col-sm-9 d-flex d-inline-block pt-2">
-                                <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail me-1" style="width:40px; height:40px;">
+                                <img src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)" alt="@comment.BlogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail me-1" style="width:40px; height:40px;">
                                 <div class="d-flex flex-column">
-                                    <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
+                                    <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@comment.BlogUser.Id" class="smallFont" style=" line-height: 10px; color:var(--customBlack-color);">@comment.BlogUser.DisplayName</a>
                                     @****************************************************************
                                         SECTION 1: POST ON OR UPDATED ON
                                         *****************************************************************@

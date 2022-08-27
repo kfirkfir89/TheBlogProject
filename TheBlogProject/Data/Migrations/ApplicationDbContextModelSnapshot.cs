@@ -9,7 +9,7 @@ using TheBlogProject.Data;
 
 #nullable disable
 
-namespace TheBlogProject.Migrations
+namespace TheBlogProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
