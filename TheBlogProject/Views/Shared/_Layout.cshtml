@@ -258,14 +258,15 @@
 
                                 @if (SignInManager.IsSignedIn(User))
                                 {
+
                                     <div class="h6 border-top border-bottom border-1 py-2 pe-3 mt-4">My Tags</div>
 
-                                    <div class="btn-group-vertical note-btn-block">
+                                    <div class="d-flex flex-column">
                                             @if (_context.Tags.Where(t => t.BlogUserId == user.Id) != null)
                                             {
                                                 foreach (var tag in _context.Tags.Where(t => t.BlogUserId == user.Id).Select(t => t.Text))
                                                 {
-                                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
+                                                    <a class="container-fluid d-flex flex-nowrap tagViewA sideBarBtn py-1 ps-3" asp-controller="Home" asp-action="SortBy" asp-route-tag="@tag">
                                                         <i class="align-self-center likeIconSideBar">#</i>
                                                         <span class="align-self-center">@tag</span>
                                                     </a>
