@@ -17,6 +17,7 @@
 }
 
 <article>
+    <img id="CloudImage" src="@post.CloudImage" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
     <div class="card shadow-sm rounded">
         @if (post.ImageData != null)
         {
@@ -58,8 +59,6 @@
             <div class="d-flex d-inline-block px-2 pb-1">
                 <div class="pt-2">
                     <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail" style="width:40px; height:40px;">
-                    <input type="hidden" id="user_avatar_url" name="user[avatar_url]" class="simple-file-upload">
-                    <img src="the-returned-url" />
                 </div>
                 <div class="d-flex flex-column m-1 flex-grow-1">
                     <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>

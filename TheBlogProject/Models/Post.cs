@@ -44,6 +44,9 @@ namespace TheBlogProject.Models
 
         [NotMapped]
         public  IFormFile? Image { get; set; }
+        [NotMapped]
+        public string? CloudImage { get; set; }
+
 
         //navigation property
         public virtual BlogUser? BlogUser { get; set; }
