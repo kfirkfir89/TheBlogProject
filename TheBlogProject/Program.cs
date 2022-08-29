@@ -81,13 +81,6 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-if (app.Environment.IsProduction())
-{
-    var port = Environment.GetEnvironmentVariable("PORT");
-    app.Urls.Add($"http://*:{port}");
-}
-
-
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
