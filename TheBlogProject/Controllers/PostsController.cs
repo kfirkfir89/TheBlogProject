@@ -118,7 +118,7 @@ namespace TheBlogProject.Controllers
 
             await _context.SaveChangesAsync();
 
-            ViewBag.ImageNow = _imageService.DecodeImage(_userManager.GetUserAsync(User).Result.ImageData, _userManager.GetUserAsync(User).Result.ContentType);
+            ViewBag.ImageNow = _imageService.DecodeImage(post.ImageData, post.ContentType);
             return View(dataVM);
         }
 
@@ -141,7 +141,7 @@ namespace TheBlogProject.Controllers
         // POST: Posts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Abstract,Content,ReadyStatus,Image")] Post post, List<string> tagValues)
+        public async Task<IActionResult> Create([Bind("Title,Abstract,Content,ReadyStatus,Image")] Post post, List<string> tagValues,IFormFile postImage)
         {
             if (ModelState.IsValid)
             {
@@ -153,6 +153,7 @@ namespace TheBlogProject.Controllers
                 //create a variable to store whether an error has occurred
                 var validationError = false;
 
+                post.Image = postImage;
                 //checking for image size
                 if(post.Image != null)
                 {
