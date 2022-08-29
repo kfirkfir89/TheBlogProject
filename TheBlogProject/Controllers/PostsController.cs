@@ -176,7 +176,7 @@ namespace TheBlogProject.Controllers
                 var slug = _slugService.UrlFriendly(post.Title);
 
                 
-                //detect incoming empty Slugs
+/*                //detect incoming empty Slugs
                 if (string.IsNullOrEmpty(slug))
                 {
                     validationError = true;
@@ -188,7 +188,7 @@ namespace TheBlogProject.Controllers
                 {
                     validationError = true;
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
-                }
+                }*/
 
 /*                else if (slug.Contains("test")) 
                 {
