@@ -85,33 +85,7 @@ namespace TheBlogProject.Controllers
             
         }
 
-        public async Task<IActionResult> ModeratedIndex()
-        {
-            var moderatedComments = await _context.Comments.Where(c => c.Moderator != null).ToListAsync();
-            return View("index", moderatedComments);
-        }
 
-        public async Task<IActionResult> DeletedIndex()
-        {
-            var deletedComments = await _context.Comments.Where(c => c.Deleted != null).ToListAsync();
-            return View("index", deletedComments);
-        }
-
-
-        // GET: Comments/Details/5
-
-        // GET: Comments/Create
-        /*        public IActionResult Create()
-                {
-                    ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
-                    ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id");
-                    ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Abstract");
-                    return View();
-                }*/
-
-        // POST: Comments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PostId,Body")] Comment comment)

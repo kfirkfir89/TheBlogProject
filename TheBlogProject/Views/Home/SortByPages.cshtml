@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="avatar ms-sm-4 ms-2 white">
-                    <img src="@imageService.DecodeImage(postsUser.ImageData, postsUser.ContentType)" alt="@postsUser.FullName" class="imgSetup imgCircle rounded-circle img-thumbnail border-5 border-white imgSize" />
+                    <img src="@imageService.DecodeImage(postsUser.ImageData, postsUser.ContentType)" alt="@postsUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail border-5 border-white imgSize" />
                 </div>
                 <div class="row d-flex bg-transparent m-0 mt-2">
                     <div class="col-2"></div>
@@ -76,7 +76,7 @@
                     </div>
 
                 </div>
-                <div class="card-body text-center mt-2">
+                <div class="card-body text-center mt-sm-2 mt-4">
                     <div class="row row-cols-1">
                         @if (postsUser.Location != null)
                         {
@@ -447,121 +447,6 @@
 
 @section Scripts {
 
-    <script>
-        document.getElementById("0").classList.remove("rounded");
-        document.getElementById("0").classList.add("rounded-bottom");
+    <script src="~/js/partialScriptsOneCol.js"></script>
 
-        $(document).ready(function () {
-            console.log("rdy");
-
-            $(".likeBtn").off("click").on('click', function () {
-                var $el = $(this);
-                var slug = $el.data('slug');
-                var postLikesCount = $(this).attr('postLikesCount');
-
-                var e = $el.parents("#viewUpdate").children().children().children().children();
-                var elId = e.attr('id');
-                console.log(elId);
-                var pageCount = $("#" + elId).children().html();
-                postLikesCount = pageCount;
-
-                let modalId = $(this).attr('id');
-
-                console.log($el.data('slug'));
-                console.log("ziki zuki `` ose string" + ``);
-                $.ajax({
-
-                    type: "POST",
-                    url: '/Home/Like',
-                    data: { slug: slug },
-                    dataType: "json",
-                    success: function (result) {
-                        console.log(result);
-                        trigger = false;
-                        var modalAnchor = document.getElementById(modalId);
-                        var icon = modalAnchor.firstElementChild;
-
-                        if (icon.classList.contains("fa-regular")) {
-                            icon.classList.remove("fa-regular");
-                            icon.classList.add("fa-solid");
-
-                            postLikesCount++;
-
-                        } else if (icon.classList.contains("fa-solid")) {
-                            icon.classList.remove("fa-solid");
-                            icon.classList.add("fa-regular");
-
-                            postLikesCount--;
-                        }
-
-                        var e = $el.parents("#viewUpdate").children().children().children().children();
-                        var elId = e.attr('id');
-
-                        $("#" + elId).children().html(" " + postLikesCount);
-
-                    },
-                    error: function (req, status, error) {
-                        console.log(status)
-                    }
-                });
-            });
-
-
-            $(".usefulBtn").off("click").on('click', function () {
-
-                var $el = $(this);
-                var slug = $el.data('slug');
-                var postUsefulCount = $(this).attr('postUsefulCount');
-
-                var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
-                var elId = e.attr('id');
-                console.log(elId);
-                var pageCount = $("#" + elId).children(".usefulCount").html();
-                postUsefulCount = pageCount;
-
-                let modalId = $(this).attr('id');
-
-                console.log($el.data('slug'));
-                console.log("ziki zuki `` ose string" + ``);
-
-                $.ajax({
-
-                    type: "POST",
-                    url: '/Home/UsefulCode',
-                    data: { slug: slug, postUsefulCount: postUsefulCount },
-                    dataType: "json",
-                    success: function (result) {
-                        console.log(result);
-                        var modalAnchor = document.getElementById(modalId);
-                        var icon = modalAnchor.firstElementChild;
-
-                        if (icon.classList.contains("fa-regular")) {
-                            icon.classList.remove("fa-regular");
-                            icon.classList.add("fa-solid");
-
-                            postUsefulCount++;
-
-                        } else if (icon.classList.contains("fa-solid")) {
-                            icon.classList.remove("fa-solid");
-                            icon.classList.add("fa-regular");
-
-                            postUsefulCount--;
-                        }
-
-                        var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
-                        var elId = e.attr('id');
-
-                        $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
-
-
-                    },
-                    error: function (req, status, error) {
-                        console.log(status)
-                    }
-                });
-            });
-
-         })
-
-    </script>
 }

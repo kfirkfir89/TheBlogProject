@@ -9,7 +9,7 @@ using TheBlogProject.Data;
 
 #nullable disable
 
-namespace TheBlogProject.Migrations
+namespace TheBlogProject.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -280,13 +280,13 @@ namespace TheBlogProject.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("Deleted")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime?>("Moderated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ModeratedBody")
                         .HasColumnType("text");
@@ -301,7 +301,7 @@ namespace TheBlogProject.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -337,7 +337,7 @@ namespace TheBlogProject.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<byte[]>("ImageData")
                         .HasColumnType("bytea");
@@ -357,7 +357,7 @@ namespace TheBlogProject.Migrations
                         .HasColumnType("character varying(75)");
 
                     b.Property<DateTime?>("Updated")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<List<string>>("UsefulCodes")
                         .HasColumnType("text[]");

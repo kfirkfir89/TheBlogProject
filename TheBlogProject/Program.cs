@@ -13,10 +13,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 {
 
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+    var connectionString = DataUtility.GetConnectionString(builder.Configuration);
     builder.Services.AddDbContext<ApplicationDbContext>(options => 
         options.UseNpgsql(connectionString), 
         ServiceLifetime.Transient);
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

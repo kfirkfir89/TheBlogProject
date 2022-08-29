@@ -8,6 +8,42 @@ var inProgress = false;
 $(window).ready(function () {
     console.log("doc rdy");
     $("#progress").hide();
+
+    $(".tagsManModalBtn").off("click").on('click', function () {
+        $.ajax({
+            type: 'GET',
+            url: "/Home/TagManagement",
+            dataType: 'html',
+            success: function (data) {
+
+                $(".modal-body").html("");
+                $(".modal-body").append(data);
+            },
+
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    })
+
+    $(".tagsModalBtn").off("click").on('click', function () {
+
+        $.ajax({
+            type: 'GET',
+            url: "/Home/UserTags",
+            dataType: 'html',
+            success: function (data) {
+
+                $(".modal-body").html("");
+                $(".modal-body").append(data);
+            },
+
+            error: function () {
+                alert("Error while retrieving data!");
+            }
+        });
+    })
+
     if (inProgress == true) {
         return;
     }
@@ -41,6 +77,11 @@ $(window).ready(function () {
             }
             GetData();
         },
+        statusCode: {
+            500: function () {
+                GetData();
+            }
+        },
         beforeSend: function () {
             $("#progress").show();
         },
@@ -59,8 +100,6 @@ $(window).on("scroll", function () {
     var docHeight = $(document).height()-500;
     var winScrolled = $(window).height() + $(window).scrollTop();
     if ((docHeight - winScrolled) < 1 && !noMoreData) {
-        console.log("module scrolled to bottom");
-        console.log(noMoreData);
         GetData();
     }
 })
@@ -68,15 +107,12 @@ $(window).on("scroll", function () {
 
 
 function GetData() {
-    console.log("---------------------------");
-    console.log("proIN:" + inProgress);
+
     if (inProgress == true) {
         return;
     }
     inProgress = true;
-    console.log("pro:" + inProgress);
-    console.log("nomore:" + noMoreData);
-    console.log("block:" + BlockNumber);
+
     if (noMoreData == true) {
         return;
     }
@@ -118,45 +154,6 @@ function GetData() {
 
 
 function myPartialView_Load() {
-    $(".tagsManModalBtn").off("click").on('click', function () {
-        console.log("----------modall-----------------");
-
-        $.ajax({
-            type: 'GET',
-            url: "/Home/TagManagement",
-            dataType: 'html',
-            success: function (data) {
-                console.log(data);
-
-                $(".modal-body").html("");
-                $(".modal-body").append(data);
-            },
-
-            error: function () {
-                alert("Error while retrieving data!");
-            }
-        });
-    })
-
-    $(".tagsModalBtn").off("click").on('click', function () {
-        console.log("----------modall-----------------");
-
-        $.ajax({
-            type: 'GET',
-            url: "/Home/UserTags",
-            dataType: 'html',
-            success: function (data) {
-                console.log(data);
-
-                $(".modal-body").html("");
-                $(".modal-body").append(data);
-            },
-
-            error: function () {
-                alert("Error while retrieving data!");
-            }
-        });
-    })
 
     $(".likeBtn").off("click").on('click', function () {
         var $el = $(this);
@@ -170,8 +167,6 @@ function myPartialView_Load() {
 
         let modalId = $(this).attr('id');
 
-        console.log($el.data('slug'));
-        console.log("ziki zuki `` ose string" + ``);
         $.ajax({
 
             type: "POST",
@@ -179,7 +174,6 @@ function myPartialView_Load() {
             data: { slug: slug },
             dataType: "json",
             success: function (result) {
-                console.log(result);
                 trigger = false;
                 var modalAnchor = document.getElementById(modalId);
                 var icon = modalAnchor.firstElementChild;
@@ -199,7 +193,7 @@ function myPartialView_Load() {
 
                 var e = $el.parents("#viewUpdate").children().children();
                 var elId = e.attr('id');
-                console.log(elId);
+
                 $("#" + elId).children().html(" " + postLikesCount);
 
             },
@@ -223,9 +217,6 @@ function myPartialView_Load() {
 
         let modalId = $(this).attr('id');
 
-        console.log($el.data('slug'));
-        console.log("ziki zuki `` ose string" + ``);
-
         $.ajax({
 
             type: "POST",
@@ -233,7 +224,7 @@ function myPartialView_Load() {
             data: { slug: slug, postUsefulCount: postUsefulCount },
             dataType: "json",
             success: function (result) {
-                console.log(result);
+
                 var modalAnchor = document.getElementById(modalId);
                 var icon = modalAnchor.firstElementChild;
 
@@ -253,7 +244,6 @@ function myPartialView_Load() {
                 var e = $el.parents("#viewUpdate").children().children(".usefulCount");
                 var elId = e.attr('id');
 
-                console.log(elId);
                 $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
 
 
