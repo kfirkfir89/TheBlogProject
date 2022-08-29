@@ -155,7 +155,7 @@ namespace TheBlogProject.Controllers
 
                 post.Image = postImage;
                 //checking for image size
-/*                if(post.Image != null)
+                if(post.Image != null)
                 {
                     MemoryStream memoryStreamImgByte = new MemoryStream(await _imageService.EncodeImageAsync(post.Image));
                     Bitmap image = new Bitmap(memoryStreamImgByte);
@@ -166,7 +166,7 @@ namespace TheBlogProject.Controllers
                         validationError = true;
                         ModelState.AddModelError("Image", "Minimum image width 744px");
                     }
-                }*/
+                }
 
                 //use the _imageService to store the incoming user specified image
                 post.ImageData = await _imageService.EncodeImageAsync(post.Image);
@@ -176,7 +176,7 @@ namespace TheBlogProject.Controllers
                 var slug = _slugService.UrlFriendly(post.Title);
 
                 
-/*                //detect incoming empty Slugs
+                //detect incoming empty Slugs
                 if (string.IsNullOrEmpty(slug))
                 {
                     validationError = true;
@@ -188,7 +188,7 @@ namespace TheBlogProject.Controllers
                 {
                     validationError = true;
                     ModelState.AddModelError("Title", "The Title you provided cannot be used as it results in a duplicate slug.");
-                }*/
+                }
 
 /*                else if (slug.Contains("test")) 
                 {
@@ -197,11 +197,11 @@ namespace TheBlogProject.Controllers
                     ModelState.AddModelError("Title", "The Title cannot contain the word test.");
                 }
 */
-/*                if (validationError)
+                if (validationError)
                 {
                     ViewData["TagValues"] = string.Join("," , tagValues);
                     return View(post);
-                }*/
+                }
 
 
                 //how do i loop over the incoming list of string?
@@ -224,7 +224,7 @@ namespace TheBlogProject.Controllers
                 await _context.SaveChangesAsync();
 
 
-                return RedirectToAction("Details",new { slug = post.Slug });
+                return View(post);
             }
 
             var user = await _userManager.GetUserAsync(User);
