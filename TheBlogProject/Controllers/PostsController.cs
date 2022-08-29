@@ -155,7 +155,7 @@ namespace TheBlogProject.Controllers
 
                 post.Image = postImage;
                 //checking for image size
-                if(post.Image != null)
+/*                if(post.Image != null)
                 {
                     MemoryStream memoryStreamImgByte = new MemoryStream(await _imageService.EncodeImageAsync(post.Image));
                     Bitmap image = new Bitmap(memoryStreamImgByte);
@@ -166,7 +166,7 @@ namespace TheBlogProject.Controllers
                         validationError = true;
                         ModelState.AddModelError("Image", "Minimum image width 744px");
                     }
-                }
+                }*/
 
                 //use the _imageService to store the incoming user specified image
                 post.ImageData = await _imageService.EncodeImageAsync(post.Image);
@@ -197,11 +197,11 @@ namespace TheBlogProject.Controllers
                     ModelState.AddModelError("Title", "The Title cannot contain the word test.");
                 }
 */
-                if (validationError)
+/*                if (validationError)
                 {
                     ViewData["TagValues"] = string.Join("," , tagValues);
                     return View(post);
-                }
+                }*/
 
 
                 //how do i loop over the incoming list of string?
