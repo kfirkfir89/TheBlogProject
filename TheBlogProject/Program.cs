@@ -6,6 +6,7 @@ using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
 using TheBlogProject.ViewModels;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,10 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 {
 
     var connectionString = DataUtility.GetConnectionString(builder.Configuration);
-    builder.Services.AddDbContext<ApplicationDbContext>(options => 
+/*    builder.Services.AddDbContext<ApplicationDbContext>(options => 
         options.UseNpgsql(connectionString), 
         ServiceLifetime.Transient);
-    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);*/
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -55,6 +57,11 @@ var builder = WebApplication.CreateBuilder(args);
 }
                                                                                                                                                                                  
 var app = builder.Build();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions()
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto
+});
 
 var dataService = app.Services.CreateScope()
                      .ServiceProvider
@@ -109,4 +116,5 @@ app.UseEndpoints(endpoints =>
 
 app.MapRazorPages();
 
-app.Run();
+var port = Environment.GetEnvironmentVariable("PORT") ?? "3100";
+app.Run("http://*:" + port);
