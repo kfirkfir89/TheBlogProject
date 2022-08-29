@@ -4,7 +4,7 @@
         <div class="h4 text-center pb-1">My Tags</div>
     </div>
     <div class="col">
-        @using (Html.BeginForm("UserTags", "Home", FormMethod.Post))
+        @using (Html.BeginForm("UserTags", "Home", new { tagValues = ViewData["TagList"] }, FormMethod.Post))
         {
             <div class="row row-cols-1 d-flex justify-content-center">
                 <div class="col-12 col-sm-5 d-flex justify-content-center p-0">
@@ -48,7 +48,7 @@
 
 
             <script>
-                let tagValues = '@ViewData["TagValues"]';
+@*                let tagValues = '@ViewData["TagValues"]';*@
 
                 $("form").on("submit", function () {
                     selectBox = document.getElementById("TagList");
