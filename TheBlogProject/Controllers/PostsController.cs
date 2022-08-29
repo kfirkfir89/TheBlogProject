@@ -118,6 +118,7 @@ namespace TheBlogProject.Controllers
 
             await _context.SaveChangesAsync();
 
+            ViewBag.ImageNow = _imageService.DecodeImage(_userManager.GetUserAsync(User).Result.ImageData, _userManager.GetUserAsync(User).Result.ContentType);
             return View(dataVM);
         }
 
