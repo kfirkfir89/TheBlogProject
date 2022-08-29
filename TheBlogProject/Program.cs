@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +7,6 @@ using TheBlogProject.Data;
 using TheBlogProject.Models;
 using TheBlogProject.Services;
 using TheBlogProject.ViewModels;
-using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +15,10 @@ var builder = WebApplication.CreateBuilder(args);
 {
 
     var connectionString = DataUtility.GetConnectionString(builder.Configuration);
-/*    builder.Services.AddDbContext<ApplicationDbContext>(options => 
+    builder.Services.AddDbContext<ApplicationDbContext>(options => 
         options.UseNpgsql(connectionString), 
         ServiceLifetime.Transient);
-
-    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);*/
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -54,14 +53,11 @@ var builder = WebApplication.CreateBuilder(args);
         options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/Login");
     });
 
-}
-                                                                                                                                                                                 
-var app = builder.Build();
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions()
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedProto
-});
+
+}
+
+var app = builder.Build();
 
 var dataService = app.Services.CreateScope()
                      .ServiceProvider
@@ -87,6 +83,11 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedProto
+});
 
 app.UseEndpoints(endpoints =>
 {
@@ -116,5 +117,4 @@ app.UseEndpoints(endpoints =>
 
 app.MapRazorPages();
 
-var port = Environment.GetEnvironmentVariable("PORT") ?? "3100";
-app.Run("http://*:" + port);
+app.Run();
