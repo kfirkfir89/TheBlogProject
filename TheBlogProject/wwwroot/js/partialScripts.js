@@ -58,7 +58,6 @@ $(window).ready(function () {
         url: '/Home/InfinateScroll',
         data: { "BlockNumber": BlockNumber, "text": text, "tag": tag},
         dataType: 'HTML',
-        debug: true,
         success: function (data) {
 
             if (data == "true") {
@@ -123,7 +122,6 @@ function GetData() {
         url: '/Home/InfinateScroll',
         data: { "BlockNumber": BlockNumber, "text": text},
         dataType: 'HTML',
-        debug: true,
         success: function (data) {
 
             if (data == "true") {
