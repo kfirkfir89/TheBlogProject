@@ -1,10 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogProject.Models
-@using TheBlogProject.ViewModels
 @using TheBlogProject.Services
-@using X.PagedList
-@using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common
 @using TheBlogProject.Enums
 @using TheBlogProject.Data
 
@@ -129,6 +125,7 @@
             </div>
     
             @*-------------   Post Image   ------------*@
+
             @if (post.ImageData != null)
                     {
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
