@@ -720,7 +720,7 @@ namespace TheBlogProject.Controllers
             }
             else if(Id == "user1")
             {
-                await _signInManager.PasswordSignInAsync("benhalpern15614@mailinator.com", "kfir123A!", false, lockoutOnFailure: false);
+                await _signInManager.PasswordSignInAsync("CharlieGerard15614@mailinator.com", "kfir123A!", false, lockoutOnFailure: false);
                 return RedirectToAction(nameof(Index));
             }
 
