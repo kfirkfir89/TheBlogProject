@@ -90,11 +90,11 @@ namespace TheBlogProject.Services
 
             var guestUser = new BlogUser()
             {
-                Email = "kfirA2334@mailinator.com",
-                UserName = "kfirA2334@mailinator.com",
-                FirstName = "ModKfir453",
-                LastName = "ModAvraham5345",
-                DisplayName = "Modavrakfir435",
+                Email = "benhalpern15614@mailinator.com",
+                UserName = "benhalpern15614@mailinator.com",
+                FirstName = "Ben",
+                LastName = "Halpern",
+                DisplayName = "BenHalpern",
                 EmailConfirmed = true,
             };
             await _userManager.CreateAsync(modUser, "Abc&123!33");
