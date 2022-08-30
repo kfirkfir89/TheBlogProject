@@ -68,7 +68,7 @@ namespace TheBlogProject.Services
             };
 
             //use the UserManager to create a new user that is defined by adminUser.
-            await _userManager.CreateAsync(adminUser, "kfir123455A!");
+            await _userManager.CreateAsync(adminUser, "kfir123A!");
 
             //add this new user to the Administrator role
             await _userManager.AddToRoleAsync(adminUser, BlogRole.Administrator.ToString());
@@ -84,7 +84,7 @@ namespace TheBlogProject.Services
                 DisplayName = "Modavrakfir",
                 EmailConfirmed = true,
             };
-            await _userManager.CreateAsync(modUser, "Abc&123!33");
+            await _userManager.CreateAsync(modUser, "kfir123A!");
             await _userManager.AddToRoleAsync(modUser, BlogRole.Moderator.ToString());
 
 
@@ -97,7 +97,7 @@ namespace TheBlogProject.Services
                 DisplayName = "BenHalpern",
                 EmailConfirmed = true,
             };
-            await _userManager.CreateAsync(modUser, "Abc&123!33");
+            await _userManager.CreateAsync(modUser, "kfir123A!");
 
         }
     }
