@@ -13,7 +13,6 @@ using TheBlogProject.Services;
 using TheBlogProject.Enums;
 using X.PagedList;
 using TheBlogProject.ViewModels;
-using System.Drawing;
 
 
 
@@ -153,7 +152,7 @@ namespace TheBlogProject.Controllers
                 var validationError = false;
 
                 //checking for image size
-                if(post.Image != null)
+/*                if(post.Image != null)
                 {
                     MemoryStream memoryStreamImgByte = new MemoryStream(await _imageService.EncodeImageAsync(post.Image));
                     Bitmap image = new Bitmap(memoryStreamImgByte);
@@ -164,7 +163,7 @@ namespace TheBlogProject.Controllers
                         validationError = true;
                         ModelState.AddModelError("Image", "Minimum image width 744px");
                     }
-                }
+                }*/
 
                 //use the _imageService to store the incoming user specified image
                 post.ImageData = await _imageService.EncodeImageAsync(post.Image);

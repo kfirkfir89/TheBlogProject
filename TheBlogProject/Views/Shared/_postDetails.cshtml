@@ -3,7 +3,7 @@
 @using TheBlogProject.Services
 @using TheBlogProject.ViewModels
 @using Microsoft.AspNetCore.Identity
-@using System.Drawing
+
 
 @inject IImageService imageService
 @inject UserManager<BlogUser> userManager
@@ -21,27 +21,8 @@
             @if (post.ImageData != null)
             {
                 <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                    <img id="postDetailsImage" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
+                    <img id="postDetailsImage" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup imgBig card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
                 </a>
-                MemoryStream imageStream = new MemoryStream(post.ImageData);
-                Bitmap image = new Bitmap(imageStream);
-                int width = image.Width;
-                int height = image.Height;
-
-                if (width < 744)
-                {
-                    <script>
-                        console.log("katannn m800");
-                        document.getElementById("postDetailsImage").classList.add("imgSmall");
-
-                    </script>
-                }
-                else if (width >= 1024 && height >= 768)
-                {
-                    <script>
-                        document.getElementById("postDetailsImage").classList.add("imgBig");
-                    </script>
-                }
             }
         </div>
         <div class="col">
