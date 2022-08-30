@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,11 +14,9 @@ var builder = WebApplication.CreateBuilder(args);
 {
 
     var connectionString = DataUtility.GetConnectionString(builder.Configuration);
-
     builder.Services.AddDbContext<ApplicationDbContext>(options => 
         options.UseNpgsql(connectionString), 
         ServiceLifetime.Transient);
-
     AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -55,10 +52,8 @@ var builder = WebApplication.CreateBuilder(args);
         options.Conventions.AddAreaPageRoute("Identity", "/Account/Login", "/Login");
     });
 
-
-
 }
-
+                                                                                                                                                                                 
 var app = builder.Build();
 
 var dataService = app.Services.CreateScope()
@@ -86,13 +81,15 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+
+
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
-/*    endpoints.MapControllerRoute(
+    endpoints.MapControllerRoute(
         name: "SlugRoute",
         pattern: "BlogPosts/UrlFreindly/{slug}",
         defaults: new { controller = "Posts", action = "Details"});
@@ -107,7 +104,7 @@ app.UseEndpoints(endpoints =>
     pattern: "login",
     defaults: new { area = "Identity", controller = "Account", action = "Login" });
 
-*/
+
 
     endpoints.MapRazorPages(); // this one
 });
