@@ -92,7 +92,7 @@ app.UseEndpoints(endpoints =>
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}");
 
-    endpoints.MapControllerRoute(
+/*    endpoints.MapControllerRoute(
         name: "SlugRoute",
         pattern: "BlogPosts/UrlFreindly/{slug}",
         defaults: new { controller = "Posts", action = "Details"});
@@ -107,7 +107,7 @@ app.UseEndpoints(endpoints =>
     pattern: "login",
     defaults: new { area = "Identity", controller = "Account", action = "Login" });
 
-
+*/
 
     endpoints.MapRazorPages(); // this one
 });
