@@ -97,7 +97,7 @@ namespace TheBlogProject.Services
                 DisplayName = "BenHalpern",
                 EmailConfirmed = true,
             };
-            await _userManager.CreateAsync(modUser, "kfir123A!");
+            await _userManager.CreateAsync(guestUser, "kfir123A!");
 
         }
     }
