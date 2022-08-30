@@ -129,7 +129,7 @@
             @if (post.ImageData != null)
                     {
                         <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                            <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup imgBig card-img-top img-fluid p-0 m-0" alt="image">
+                            <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup imgFit card-img-top img-fluid p-0 m-0" alt="image">
                         </a>
                     }
     

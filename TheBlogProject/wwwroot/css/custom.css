@@ -479,6 +479,14 @@ iframe, object, embed {
 
 }
 
+.imgFit {
+    object-fit: cover;
+    object-position: 0 30%;
+    max-height: 250px;
+    width: 100%;
+    background-color: white;
+}
+
 .logoImg {
     max-width: 250px;
     height: 41px;

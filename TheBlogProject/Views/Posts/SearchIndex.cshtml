@@ -119,7 +119,7 @@
                 @if (post.ImageData != null)
                 {
                     <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                        <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0" alt="image">
+                        <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup imgFit card-img-top img-fluid p-0 m-0" alt="image">
                     </a>
                 }
 
@@ -317,16 +317,13 @@
                 var slug = $el.data('slug');
                 var postLikesCount = $(this).attr('postLikesCount');
 
-                var e = $el.parents("#viewUpdate").children().children().children().children();
+                var e = $el.parents("#viewUpdate").children().children();
                 var elId = e.attr('id');
-                console.log(elId);
                 var pageCount = $("#" + elId).children().html();
                 postLikesCount = pageCount;
 
                 let modalId = $(this).attr('id');
 
-                console.log($el.data('slug'));
-                console.log("ziki zuki `` ose string" + ``);
                 $.ajax({
 
                     type: "POST",
@@ -334,7 +331,6 @@
                     data: { slug: slug },
                     dataType: "json",
                     success: function (result) {
-                        console.log(result);
                         trigger = false;
                         var modalAnchor = document.getElementById(modalId);
                         var icon = modalAnchor.firstElementChild;
@@ -352,7 +348,7 @@
                             postLikesCount--;
                         }
 
-                        var e = $el.parents("#viewUpdate").children().children().children().children();
+                        var e = $el.parents("#viewUpdate").children().children();
                         var elId = e.attr('id');
 
                         $("#" + elId).children().html(" " + postLikesCount);
@@ -371,16 +367,12 @@
                 var slug = $el.data('slug');
                 var postUsefulCount = $(this).attr('postUsefulCount');
 
-                var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
+                var e = $el.parents("#viewUpdate").children().children(".usefulCount");
                 var elId = e.attr('id');
-                console.log(elId);
                 var pageCount = $("#" + elId).children(".usefulCount").html();
                 postUsefulCount = pageCount;
 
                 let modalId = $(this).attr('id');
-
-                console.log($el.data('slug'));
-                console.log("ziki zuki `` ose string" + ``);
 
                 $.ajax({
 
@@ -389,7 +381,7 @@
                     data: { slug: slug, postUsefulCount: postUsefulCount },
                     dataType: "json",
                     success: function (result) {
-                        console.log(result);
+
                         var modalAnchor = document.getElementById(modalId);
                         var icon = modalAnchor.firstElementChild;
 
@@ -406,7 +398,7 @@
                             postUsefulCount--;
                         }
 
-                        var e = $el.parents("#viewUpdate").children().children().children().children(".usefulCount");
+                        var e = $el.parents("#viewUpdate").children().children(".usefulCount");
                         var elId = e.attr('id');
 
                         $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
