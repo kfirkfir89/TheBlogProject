@@ -87,6 +87,18 @@ namespace TheBlogProject.Services
             await _userManager.CreateAsync(modUser, "Abc&123!33");
             await _userManager.AddToRoleAsync(modUser, BlogRole.Moderator.ToString());
 
+            var guestUser = new BlogUser()
+            {
+                Email = "kfirA2334@mailinator.com",
+                UserName = "kfirA2334@mailinator.com",
+                FirstName = "ModKfir",
+                LastName = "ModAvraham",
+                DisplayName = "Modavrakfir",
+                EmailConfirmed = true,
+            };
+            await _userManager.CreateAsync(modUser, "Abc&123!33");
+            await _userManager.AddToRoleAsync(modUser, BlogRole.Moderator.ToString());
+
         }
     }
 }
