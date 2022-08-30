@@ -1,13 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using TheBlogProject.Models
-@using TheBlogProject.ViewModels
 @using TheBlogProject.Services
-@using X.PagedList
-@using X.PagedList.Mvc.Core
-@using X.PagedList.Web.Common
 @using TheBlogProject.Enums
 @using TheBlogProject.Data
-@using System.Drawing
 
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
@@ -71,10 +66,10 @@
                     <div class="col col-sm-8 p-0">
                         <div class="d-flex d-inline-block px-2">
                             <div class="pt-2 me-1">
-                                <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.FullName" class="imgSetup imgCircle rounded-circle img-thumbnail" style="width:40px; height:40px;">
+                                <img src="@imageService.DecodeImage(blogUser.ImageData, blogUser.ContentType)" alt="@blogUser.DisplayName" class="imgSetup imgCircle rounded-circle img-thumbnail" style="width:40px; height:40px;">
                             </div>
                             <div class="d-flex flex-column flex-grow-1 mt-1">
-                                <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.FullName</a>
+                                <a asp-action="SortByPages" asp-controller="Home" asp-route-id="@blogUser.Id" class="smallFont pt-2" style=" line-height: 10px; color:var(--customBlack-color);">@blogUser.DisplayName</a>
                                 <div class="d-flex flex-column">
 
                                     @if (post.Updated is not null)
@@ -130,40 +125,11 @@
             </div>
     
             @*-------------   Post Image   ------------*@
-            @if (post.ImageData != null)
-                    {
-                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                            <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0" alt="image">
-                        </a>
-                        MemoryStream imageStream = new MemoryStream(post.ImageData);
-                        Bitmap image = new Bitmap(imageStream);
-                        int width = image.Width;
-                        int height = image.Height;
 
-                        if (width < 744)
-                        {
-                            <script>
-                                       console.log("katannn m800");
-                                       document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
+            <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                <img id="@($"postImage{counter}")" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup imgBig card-img-top img-fluid p-0 m-0" alt="image">
+            </a>
 
-                            </script>
-                        }
-                        else if (width >= 1024 && height >= 768)
-                        {
-                            <script>
-                                       document.getElementById("@($"postImage{counter}")").classList.add("imgBig");
-                            </script>
-                        }
-                        else if (width >= 700 && height >= 300)
-                        {
-                            <script>
-                                               console.log("katannn m800");
-                                               document.getElementById("@($"postImage{counter}")").classList.add("imgSmall");
-
-                            </script>
-
-                        }
-                    }
     
             @*-------------   Post footer buttons   ------------*@
             <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
