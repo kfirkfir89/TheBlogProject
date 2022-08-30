@@ -3,7 +3,7 @@
 @using TheBlogProject.Services
 @using TheBlogProject.ViewModels
 @using Microsoft.AspNetCore.Identity
-@using System.Drawing
+
 @using TheBlogProject.Data
 
 @inject ApplicationDbContext _context
@@ -18,36 +18,9 @@
 
 <article>
     <div class="card shadow-sm rounded">
-        @if (post.ImageData != null)
-        {
-            <img id="postDetailsImage" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
 
-            MemoryStream imageStream = new MemoryStream(post.ImageData);
-            Bitmap image = new Bitmap(imageStream);
-            int width = image.Width;
-            int height = image.Height;
+            <img id="postDetailsImage" src="@imageService.DecodeImage(post.ImageData, post.ContentType)" class="imgSetup imgBig card-img-top img-fluid p-0 m-0 rounded-top" alt="image">
 
-            if (width < 744)
-            {
-                <script>
-                    console.log("katannn m800");
-                    document.getElementById("postDetailsImage").classList.add("imgSmall");
-
-                </script>
-            }
-            else if (width >= 744 && height <= 400)
-            {
-                <script>
-                    document.getElementById("postDetailsImage").classList.add("imgSmall");
-                </script>
-            }
-            else if (width >= 1024 && height >= 768)
-            {
-                <script>
-                    document.getElementById("postDetailsImage").classList.add("imgBig");
-                </script>
-            }
-        }
         <div class="card-body">
             @*-------------   User info   ------------*@
             @{
@@ -73,7 +46,7 @@
                 </div>
             </div>
             <div class="h1 px-sm-5 text-wrap">@post.Title</div>
-            <div class="container-fluid col-12 border-right rounded-bottom pt-3 px-sm-5">
+            <div class="container-fluid col-12 border-right rounded-bottom pt-3 px-1 px-sm-5">
                 @Html.Raw(Model.Post.Content)
             </div>
             <hr />
