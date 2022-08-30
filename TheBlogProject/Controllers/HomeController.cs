@@ -723,26 +723,6 @@ namespace TheBlogProject.Controllers
                 await _signInManager.PasswordSignInAsync("CharlieGerard15614@mailinator.com", "kfir123A!", false, lockoutOnFailure: false);
                 return RedirectToAction(nameof(Index));
             }
-            else if (Id == "user2")
-            {
-                await _signInManager.PasswordSignInAsync("KaushikVaranasi15614@mailinator.com", "kfir123A!", false, lockoutOnFailure: false);
-                return RedirectToAction(nameof(Index));
-            }
-            else if (Id == "user3")
-            {
-                await _signInManager.PasswordSignInAsync("dylanoh6544@mailinator.com", "kfir123A!", false, lockoutOnFailure: false);
-                return RedirectToAction(nameof(Index));
-            }
-            else if (Id == "user4")
-            {
-                await _signInManager.PasswordSignInAsync("LukeShiru6544@mailinator.com", "kfir123A!", false, lockoutOnFailure: false);
-                return RedirectToAction(nameof(Index));
-            }
-            else if (Id == "user5")
-            {
-                await _signInManager.PasswordSignInAsync("julia654459@mailinator.com", "kfir123A!", false, lockoutOnFailure: false);
-                return RedirectToAction(nameof(Index));
-            }
 
             return View();
         }
