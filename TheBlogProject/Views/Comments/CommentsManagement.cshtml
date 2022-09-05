@@ -268,7 +268,7 @@
     <hr />
     <div class="row m-auto p-0">
         <div class="col">
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page, id = ViewBag.CommentUser }),
+            @Html.PagedListPager(Model, page => Url.Action("CommentsManagement", new { page = page, id = ViewBag.CommentUser }),
                 new PagedListRenderOptions
                 {
                     LiElementClasses = new string[] { "page-item" },
