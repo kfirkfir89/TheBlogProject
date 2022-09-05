@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\assets\img\navIcons\Search.svg" />
-    <Content Remove="wwwroot\css\styles.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,10 +35,6 @@
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
     <Folder Include="Properties\ServiceDependencies\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\css\styles.css" />
   </ItemGroup>
 
 </Project>
