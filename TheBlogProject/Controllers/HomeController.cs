@@ -344,7 +344,7 @@ namespace TheBlogProject.Controllers
             if (user == null)
             {
                 var guestPosts = _context.Posts
-
+                    .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                     .Include(p => p.Tags)
                     .OrderByDescending(p => p.Created)
                     .ToPagedList(pageNumber, pageSize);
