@@ -14,7 +14,7 @@
 
 @model IPagedList<Post>
 
-<div class="row row-cols-1">
+<div class="row row-cols-1 p-0 m-0">
     <div class="h4 text-center">@ViewData["searchTerm"]</div>
     @{ var counter = 0;
 
@@ -80,21 +80,23 @@
                         <div class="col col-sm-4 d-flex justify-content-center justify-content-sm-end p-0">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                if ((User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString()))
-                                || user.Id == userManager.GetUserAsync(User).Result.Id)
-                                {
-                                    <div class="d-flex justify-content-end ">
+                                <div class="d-flex justify-content-end ">
+                                    @if ((User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString())) || isAuthor)
+                                    {
                                         <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">
                                             <i class="fa-solid fa-pen-to-square fa-lg px-2"></i>
                                             <span class="pb-1 pe-2">Edit</span>
                                         </a>
+                                    }
+                                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                                    {
                                         <div class="px-1 text-muted fs-6 opacity-25 px-2 pt-1">|</div>
                                         <a class=" btn btn-primary d-flex flex-nowrap justify-content-center postBtns shadow-none" style="color: var(--customBlack-color);" asp-action="Delete" asp-controller="Posts" asp-route-id="@post.Id">
                                             <i class="fa-solid fa-trash-can fa-lg px-2"></i>
                                             <span class="pb-1 pe-2">Delete</span>
                                         </a>
-                                    </div>
-                                }
+                                    }
+                                </div>
                             }
                         </div>
                     </div>
@@ -102,8 +104,8 @@
                     @*-------------   Title   ------------*@
 
                     <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug" style="color: var(--customBlack-color);">
-                        <div class="card-title px-4 h2 d-flex flex-wrap m-0">@post.Title</div>
-                        <p class="card-text px-4 mx-1 m-0">@post.Abstract</p>
+                        <div class=" px-4 h2 m-0 text-wrap">@post.Title</div>
+                        <p class=" px-4 mx-1 m-0 text-wrap">@post.Abstract</p>
                     </a>
 
                     @*-------------   TAGS   ------------*@
@@ -116,6 +118,7 @@
                 </div>
 
                 @*-------------   Post Image   ------------*@
+
                 @if (post.ImageData != null)
                 {
                     <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
@@ -124,107 +127,116 @@
                 }
 
                 @*-------------   Post footer buttons   ------------*@
-            <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
-                <div class="d-flex bd-highlight px-3 border-bottom border-1">
-                    @{ var zero = 0;}
-                    <div class="likeCount row ps-2" id="@($"likeCount{counter}")">
-                        <div class="col p-0" style="margin:2px;">
-                            <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
-                            </i>
+                <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
+                    <div class="d-flex bd-highlight px-3 border-bottom border-1">
+                        @{ var zero = 0;}
+                        <div class="likeCount row ps-2" id="@($"likeCount{counter}")">
+                            <div class="col p-0" style="margin:2px;">
+                                <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
+                                </i>
+                            </div>
+                            <div class="col p-0 spanPostPartial">
+                                <span class="text-muted fs-6 postSpan">
+                                    @if (post.Likes != null)
+                                    {
+                                        @post.Likes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </span>
+                            </div>
                         </div>
-                        <div class="col p-0 spanPostPartial">
-                            <span class="text-muted fs-6 postSpan">
-                                @if (post.Likes != null)
-                                {
-                                    @post.Likes.Count()
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                            </span>
+                        <div class="text-muted fs-6 opacity-25" style="padding: 4px 8px 0px 8px;">|</div>
+                        <div class="usefulCount row ps-2" id="@($"usefulCount{counter}")">
+                            <div class="col p-0" style="margin:2px;">
+                                <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
+                                </i>
+                            </div>
+                            <div class="col p-0 spanPostPartial">
+                                <span class="text-muted fs-6 postSpan">
+                                    @if (post.UsefulCodes != null)
+                                    {
+                                        @post.UsefulCodes.Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                        <div class="text-muted fs-6 opacity-25" style="padding: 4px 8px 0px 8px;">|</div>
+                        <div class="row ps-2">
+                            <div class="col p-0" style="margin:2px;">
+                                <i class="fa-regular fa-comments fa-2xs text-muted ">
+                                </i>
+                            </div>
+                            <div class="col p-0 spanPostPartial">
+                                <span class="text-muted fs-6 postSpan">
+                                    @if (post.Comments != null)
+                                    {
+                                        @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ms-auto row">
+                            <div class="col p-0" style="margin:2px;">
+                                <i class="fa-regular fa-eye fa-2xs text-muted">
+                                </i>
+                            </div>
+                            <div class="col p-0 spanPostPartial">
+                                <span class="text-muted fs-6 postSpan text-nowrap">
+                                    @if (post.Views != null)
+                                    {
+                                        @post.Views
+                                    }
+                                    else
+                                    {
+                                        @zero
+                                    }
+                                    Views
+                                </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="text-muted fs-6 opacity-25" style="padding: 4px 8px 0px 8px;">|</div>
-                    <div class="usefulCount row ps-2" id="@($"usefulCount{counter}")">
-                        <div class="col p-0" style="margin:2px;">
-                            <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
-                            </i>
-                        </div>
-                        <div class="col p-0 spanPostPartial">
-                            <span class="text-muted fs-6 postSpan">
-                                @if (post.UsefulCodes != null)
-                                {
-                                    @post.UsefulCodes.Count()
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                            </span>
-                        </div>
-                    </div>
-                    <div class="text-muted fs-6 opacity-25" style="padding: 4px 8px 0px 8px;">|</div>
-                    <div class="row ps-2">
-                        <div class="col p-0" style="margin:2px;">
-                            <i class="fa-regular fa-comments fa-2xs text-muted ">
-                            </i>
-                        </div>
-                        <div class="col p-0 spanPostPartial">
-                            <span class="text-muted fs-6 postSpan">
-                                @if (post.Comments != null)
-                                {
-                                    @_context.Comments.Where(c => c.PostId == post.Id).Count()
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                            </span>
-                        </div>
-                    </div>
-                    <div class="ms-auto row">
-                        <div class="col p-0" style="margin:2px;">
-                            <i class="fa-regular fa-eye fa-2xs text-muted">
-                            </i>
-                        </div>
-                        <div class="col p-0 spanPostPartial">
-                            <span class="text-muted fs-6 postSpan text-nowrap">
-                                @if (post.Views != null)
-                                {
-                                    @post.Views
-                                }
-                                else
-                                {
-                                    @zero
-                                }
-                                Views
-                            </span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="btn-group d-flex flex-nowrap">
+                    <div class="btn-group d-flex flex-nowrap">
 
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        if (post.Likes != null)
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            bool contain = false;
-                            foreach (var item in post.Likes)
+                            if (post.Likes != null)
                             {
-                                if (item == user.Id)
+                                bool contain = false;
+                                foreach (var item in post.Likes)
                                 {
-                                    contain = true;
+                                    if (item == user.Id)
+                                    {
+                                        contain = true;
+                                    }
                                 }
-                            }
-                            if (contain is true)
-                            {
+                                if (contain is true)
+                                {
 
-                                <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
-                                    <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
-                                </a>
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                        <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                    </a>
 
+                                }
+                                else
+                                {
+
+                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                        <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                    </a>
+
+                                }
                             }
                             else
                             {
@@ -232,34 +244,32 @@
                                 <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
                                     <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                 </a>
-
                             }
-                        }
-                        else
-                        {
 
-                            <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
-                                <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
-                            </a>
-                        }
-
-                        if (post.UsefulCodes != null)
-                        {
-                            bool contain = false;
-                            foreach (var item in post.UsefulCodes)
+                            if (post.UsefulCodes != null)
                             {
-                                if (item == user.Id)
+                                bool contain = false;
+                                foreach (var item in post.UsefulCodes)
                                 {
-                                    contain = true;
+                                    if (item == user.Id)
+                                    {
+                                        contain = true;
+                                    }
                                 }
-                            }
-                            if (contain is true)
-                            {
+                                if (contain is true)
+                                {
 
-                                <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
-                                    <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
-                                </a>
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                        <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                    </a>
 
+                                }
+                                else
+                                {
+                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                        <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                    </a>
+                                }
                             }
                             else
                             {
@@ -267,37 +277,30 @@
                                     <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                 </a>
                             }
+
+                            <a asp-controller="Posts" asp-action="Details" asp-fragment="commentSection" asp-route-slug="@post.Slug" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" data-slug="@post.Slug" title="Commentse" style=" height: 30px;">
+                                <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
+                            </a>
+
                         }
                         else
                         {
-                            <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                <i class="fa-regular fa-thumbs-up fa-xl align-self-center likesIconSideBar"></i>
+                            </a>
+
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" title="Like" style="color: #8A1EAE; height: 30px;">
                                 <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                            </a>
+
+                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" title="Like" style="color: var(--customBlack-color); height: 30px;">
+                                <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
                             </a>
                         }
 
-                        <a asp-controller="Posts" asp-action="Details" asp-fragment="commentSection" asp-route-slug="@post.Slug" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" data-slug="@post.Slug" title="Commentse" style=" height: 30px;">
-                            <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
-                        </a>
-
-                    }
-                    else
-                    {
-
-                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
-                            <i class="fa-regular fa-thumbs-up fa-xl align-self-center likesIconSideBar"></i>
-                        </a>
-
-                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" title="Like" style="color: #8A1EAE; height: 30px;">
-                            <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
-                        </a>
-
-                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" title="Like" style="color: var(--customBlack-color); height: 30px;">
-                            <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
-                        </a>
-                    }
-
+                    </div>
                 </div>
-            </div>
             </div>
 
         </div>
@@ -312,12 +315,12 @@
 
 <hr />
 
-<div class="row">
+<div class="row m-auto p-0">
     <div class="col h3">
         Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
     </div>
 </div>
-<div class="row">
+<div class="row m-auto p-0">
     <div class="col">
         @Html.PagedListPager(Model, page => Url.Action("SearchIndex", new { page = page, searchTerm = ViewData["SearchTerm"] }),
             new PagedListRenderOptions
