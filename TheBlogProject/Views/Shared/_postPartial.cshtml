@@ -137,56 +137,80 @@
             <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
                 <div class="d-flex bd-highlight px-3 border-bottom border-1">
                     @{ var zero = 0;}
-                    <div class="likeCount" id="@($"likeCount{counter}")">
-                        <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
-                            @if (post.Likes != null)
-                            {
-                                @post.Likes.Count()
-                            }
-                            else
-                            {
-                                @zero
-                            }
-                        </i>
+                    <div class="likeCount row ps-2" id="@($"likeCount{counter}")">
+                        <div class="col p-0" style="margin:2px;">
+                            <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
+                            </i>
+                        </div>
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan">
+                                @if (post.Likes != null)
+                                {
+                                    @post.Likes.Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </span>
+                        </div>
                     </div>
-                    <div class="text-muted fs-6 opacity-25 px-2">|</div>
-                    <div class="usefulCount" id="@($"usefulCount{counter}")">
-                        <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
-                            @if (post.UsefulCodes != null)
-                            {
-                                @post.UsefulCodes.Count()
-                            }
-                            else
-                            {
-                                @zero
-                            }
-                        </i>
+                    <div class="text-muted fs-6 opacity-25 px-2" style="margin-top:4px">|</div>
+                    <div class="usefulCount row ps-2" id="@($"usefulCount{counter}")">
+                        <div class="col p-0" style="margin:2px;">
+                            <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
+                            </i>
+                        </div>
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan">
+                                @if (post.UsefulCodes != null)
+                                {
+                                    @post.UsefulCodes.Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </span>
+                        </div>
                     </div>
-                    <div class="text-muted fs-6 opacity-25 px-2">|</div>
-                    <div class="">
-                        <i class="fa-regular fa-comments fa-2xs text-muted ">
-                            @if (post.Comments != null)
-                            {
-                                @_context.Comments.Where(c => c.PostId == post.Id).Count()
-                            }
-                            else
-                            {
-                                @zero
-                            }
-                        </i>
+                    <div class="text-muted fs-6 opacity-25 px-2" style="margin-top:4px">|</div>
+                    <div class="row ps-2">
+                        <div class="col p-0" style="margin:2px;">
+                            <i class="fa-regular fa-comments fa-2xs text-muted ">
+                            </i>
+                        </div>
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan">
+                                @if (post.Comments != null)
+                                {
+                                    @_context.Comments.Where(c => c.PostId == post.Id).Count()
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                            </span>
+                        </div>
                     </div>
-                    <div class="ms-auto">
-                        <i class="fa-regular fa-eye fa-2xs text-muted">
-                            @if (post.Views != null)
-                            {
-                                @post.Views
-                            }
-                            else
-                            {
-                                @zero
-                            }
-                            Views
-                        </i>
+                    <div class="ms-auto row">
+                        <div class="col p-0" style="margin:2px;">
+                            <i class="fa-regular fa-eye fa-2xs text-muted">
+                            </i>
+                        </div>
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan text-nowrap">
+                                @if (post.Views != null)
+                                {
+                                    @post.Views
+                                }
+                                else
+                                {
+                                    @zero
+                                }
+                                Views
+                            </span>
+                        </div>
                     </div>
                 </div>
     

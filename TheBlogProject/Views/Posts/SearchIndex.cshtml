@@ -124,11 +124,16 @@
                 }
 
                 @*-------------   Post footer buttons   ------------*@
-                <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
-                    <div class="d-flex bd-highlight px-3 border-bottom border-1">
-                        @{ var zero = 0;}
-                        <div class="likeCount" id="@($"likeCount{counter}")">
+            <div class="card-footer d-flex flex-column p-0 m-0 border-0 bg-white rounded-bottom" id="viewUpdate">
+                <div class="d-flex bd-highlight px-3 border-bottom border-1">
+                    @{ var zero = 0;}
+                    <div class="likeCount row ps-2" id="@($"likeCount{counter}")">
+                        <div class="col p-0" style="margin:2px;">
                             <i class="fa-regular fa-thumbs-up fa-2xs text-muted">
+                            </i>
+                        </div>
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan">
                                 @if (post.Likes != null)
                                 {
                                     @post.Likes.Count()
@@ -137,11 +142,17 @@
                                 {
                                     @zero
                                 }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-muted fs-6 opacity-25 px-2" style="margin-top:4px">|</div>
+                    <div class="usefulCount row ps-2" id="@($"usefulCount{counter}")">
+                        <div class="col p-0" style="margin:2px;">
+                            <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
                             </i>
                         </div>
-                        <div class="text-muted fs-6 opacity-25 px-2">|</div>
-                        <div class="usefulCount" id="@($"usefulCount{counter}")">
-                            <i class="fa-regular fa-file-code fa-2xs text-muted usefulCount">
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan">
                                 @if (post.UsefulCodes != null)
                                 {
                                     @post.UsefulCodes.Count()
@@ -150,11 +161,17 @@
                                 {
                                     @zero
                                 }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-muted fs-6 opacity-25 px-2" style="margin-top:4px">|</div>
+                    <div class="row ps-2">
+                        <div class="col p-0" style="margin:2px;">
+                            <i class="fa-regular fa-comments fa-2xs text-muted ">
                             </i>
                         </div>
-                        <div class="text-muted fs-6 opacity-25 px-2">|</div>
-                        <div class="">
-                            <i class="fa-regular fa-comments fa-2xs text-muted ">
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan">
                                 @if (post.Comments != null)
                                 {
                                     @_context.Comments.Where(c => c.PostId == post.Id).Count()
@@ -163,10 +180,16 @@
                                 {
                                     @zero
                                 }
+                            </span>
+                        </div>
+                    </div>
+                    <div class="ms-auto row">
+                        <div class="col p-0" style="margin:2px;">
+                            <i class="fa-regular fa-eye fa-2xs text-muted">
                             </i>
                         </div>
-                        <div class="ms-auto">
-                            <i class="fa-regular fa-eye fa-2xs text-muted">
+                        <div class="col p-0 spanPostPartial">
+                            <span class="text-muted fs-6 postSpan text-nowrap">
                                 @if (post.Views != null)
                                 {
                                     @post.Views
@@ -176,40 +199,32 @@
                                     @zero
                                 }
                                 Views
-                            </i>
+                            </span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="btn-group d-flex flex-nowrap">
+                <div class="btn-group d-flex flex-nowrap">
 
-                        @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (post.Likes != null)
                         {
-                            if (post.Likes != null)
+                            bool contain = false;
+                            foreach (var item in post.Likes)
                             {
-                                bool contain = false;
-                                foreach (var item in post.Likes)
+                                if (item == user.Id)
                                 {
-                                    if (item == user.Id)
-                                    {
-                                        contain = true;
-                                    }
+                                    contain = true;
                                 }
-                                if (contain is true)
-                                {
+                            }
+                            if (contain is true)
+                            {
 
-                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
-                                        <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
-                                    </a>
+                                <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                    <i class="fa-solid fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                                </a>
 
-                                }
-                                else
-                                {
-
-                                    <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
-                                        <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
-                                    </a>
-
-                                }
                             }
                             else
                             {
@@ -217,32 +232,34 @@
                                 <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
                                     <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
                                 </a>
+
                             }
+                        }
+                        else
+                        {
 
-                            if (post.UsefulCodes != null)
+                            <a id="@($"likeBtn{counter}")" class="likeBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" data-slug="@post.Slug" postLikesCount="@postLikesCount" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                                <i class="fa-regular fa-thumbs-up fa-xl align-self-center likeIconSideBar"></i>
+                            </a>
+                        }
+
+                        if (post.UsefulCodes != null)
+                        {
+                            bool contain = false;
+                            foreach (var item in post.UsefulCodes)
                             {
-                                bool contain = false;
-                                foreach (var item in post.UsefulCodes)
+                                if (item == user.Id)
                                 {
-                                    if (item == user.Id)
-                                    {
-                                        contain = true;
-                                    }
+                                    contain = true;
                                 }
-                                if (contain is true)
-                                {
+                            }
+                            if (contain is true)
+                            {
 
-                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
-                                        <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
-                                    </a>
+                                <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
+                                    <i class="fa-solid fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                                </a>
 
-                                }
-                                else
-                                {
-                                    <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
-                                        <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
-                                    </a>
-                                }
                             }
                             else
                             {
@@ -250,30 +267,37 @@
                                     <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
                                 </a>
                             }
-
-                            <a asp-controller="Posts" asp-action="Details" asp-fragment="commentSection" asp-route-slug="@post.Slug" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" data-slug="@post.Slug" title="Commentse" style=" height: 30px;">
-                                <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
-                            </a>
-
                         }
                         else
                         {
-
-                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
-                                <i class="fa-regular fa-thumbs-up fa-xl align-self-center likesIconSideBar"></i>
-                            </a>
-
-                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" title="Like" style="color: #8A1EAE; height: 30px;">
+                            <a id="@($"UsefulBtn{counter}")" class="usefulBtn btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" data-slug="@post.Slug" postUsefulCount="@postUsefulCount" title="Useful Code" style="color: #8A1EAE; height: 30px;">
                                 <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
-                            </a>
-
-                            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" title="Like" style="color: var(--customBlack-color); height: 30px;">
-                                <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
                             </a>
                         }
 
-                    </div>
+                        <a asp-controller="Posts" asp-action="Details" asp-fragment="commentSection" asp-route-slug="@post.Slug" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" data-slug="@post.Slug" title="Commentse" style=" height: 30px;">
+                            <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
+                        </a>
+
+                    }
+                    else
+                    {
+
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsLike shadow-none" title="Like" style="color: var(--hoverLightBlue-color); height: 30px;">
+                            <i class="fa-regular fa-thumbs-up fa-xl align-self-center likesIconSideBar"></i>
+                        </a>
+
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsUseful shadow-none" title="Like" style="color: #8A1EAE; height: 30px;">
+                            <i class="fa-regular fa-file-code fa-xl align-self-center usefulIconSideBar"></i>
+                        </a>
+
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-primary d-flex flex-nowrap justify-content-center postBtns postBtnsComments shadow-none" title="Like" style="color: var(--customBlack-color); height: 30px;">
+                            <i class="fa-regular fa-comments fa-xl align-self-center commentsIconSideBar"></i>
+                        </a>
+                    }
+
                 </div>
+            </div>
             </div>
 
         </div>
@@ -311,7 +335,6 @@
 
         $(document).ready(function () {
             console.log("rdy");
-
             $(".likeBtn").off("click").on('click', function () {
                 var $el = $(this);
                 var slug = $el.data('slug');
@@ -319,7 +342,8 @@
 
                 var e = $el.parents("#viewUpdate").children().children();
                 var elId = e.attr('id');
-                var pageCount = $("#" + elId).children().html();
+                var pageCount = $("#" + elId).children(".spanPostPartial").children().html();
+                console.log(pageCount);
                 postLikesCount = pageCount;
 
                 let modalId = $(this).attr('id');
@@ -349,9 +373,12 @@
                         }
 
                         var e = $el.parents("#viewUpdate").children().children();
+                        console.log(e.attr('id'));
                         var elId = e.attr('id');
 
-                        $("#" + elId).children().html(" " + postLikesCount);
+
+                        $("#" + elId).children(".spanPostPartial").children(".postSpan").html(" " + postLikesCount);
+
 
                     },
                     error: function (req, status, error) {
@@ -369,7 +396,7 @@
 
                 var e = $el.parents("#viewUpdate").children().children(".usefulCount");
                 var elId = e.attr('id');
-                var pageCount = $("#" + elId).children(".usefulCount").html();
+                var pageCount = $("#" + elId).children(".spanPostPartial").children().html();
                 postUsefulCount = pageCount;
 
                 let modalId = $(this).attr('id');
@@ -401,7 +428,7 @@
                         var e = $el.parents("#viewUpdate").children().children(".usefulCount");
                         var elId = e.attr('id');
 
-                        $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
+                        $("#" + elId).children(".spanPostPartial").children(".postSpan").html(" " + postUsefulCount);
 
 
                     },

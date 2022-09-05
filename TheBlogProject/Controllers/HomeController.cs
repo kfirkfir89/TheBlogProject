@@ -152,6 +152,7 @@ namespace TheBlogProject.Controllers
 
 
             var query = _context.Posts
+                    .Where(p => p.ReadyStatus == ReadyStatus.ProductionReady)
                     .Include(p => p.BlogUser)
                     .Include(p => p.Tags)
                     .Include(p => p.Comments)

@@ -162,7 +162,8 @@ function myPartialView_Load() {
 
         var e = $el.parents("#viewUpdate").children().children();
         var elId = e.attr('id');
-        var pageCount = $("#" + elId).children().html();
+        var pageCount = $("#" + elId).children(".spanPostPartial").children().html();
+        console.log(pageCount);
         postLikesCount = pageCount;
 
         let modalId = $(this).attr('id');
@@ -192,9 +193,12 @@ function myPartialView_Load() {
                 }
 
                 var e = $el.parents("#viewUpdate").children().children();
+                console.log(e.attr('id'));
                 var elId = e.attr('id');
 
-                $("#" + elId).children().html(" " + postLikesCount);
+
+                $("#" + elId).children(".spanPostPartial").children(".postSpan").html(" " + postLikesCount);
+
 
             },
             error: function (req, status, error) {
@@ -212,7 +216,7 @@ function myPartialView_Load() {
 
         var e = $el.parents("#viewUpdate").children().children(".usefulCount");
         var elId = e.attr('id');
-        var pageCount = $("#" + elId).children(".usefulCount").html();
+        var pageCount = $("#" + elId).children(".spanPostPartial").children().html();
         postUsefulCount = pageCount;
 
         let modalId = $(this).attr('id');
@@ -244,7 +248,7 @@ function myPartialView_Load() {
                 var e = $el.parents("#viewUpdate").children().children(".usefulCount");
                 var elId = e.attr('id');
 
-                $("#" + elId).children(".usefulCount").html(" " + postUsefulCount);
+                $("#" + elId).children(".spanPostPartial").children(".postSpan").html(" " + postUsefulCount);
 
 
             },
