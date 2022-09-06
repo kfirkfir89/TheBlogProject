@@ -123,7 +123,7 @@
                                     @Html.Raw(item.Body)
                                 </div>
                             </div>
-                            @if (item.Body.Length > 90)
+                            @if (item.Body.Length > 100)
                             {
                                 <a href="#" id="@($"readmore{counter}")" class="readM">
                                     <span class="readmore-txt fst-italic fs-6">Read more</span>
@@ -141,7 +141,7 @@
                                         <span class="fw-bold">Moderated Content </span> :@Html.Raw(item.ModeratedBody)
                                     </span>
                                 </div>
-                                @if (item.ModeratedBody.Length > 90)
+                                @if (item.ModeratedBody.Length > 100)
                                 {
                                     <a href="#" id="@($"read2more{counter}")" class="readM">
                                         <span class="readmore-txt fst-italic fs-6">Read more</span>
