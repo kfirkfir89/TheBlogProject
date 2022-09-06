@@ -71,7 +71,7 @@
 {
 
     <div id="@counter" class="col bg-white rounded shadow-sm p-2 mb-2">
-        <div class="row row-cols-1 p-0 m-0">
+        <div class="row row-cols-1 p-0 m-0 card-body">
             <div class="col col-sm-11">
                 <div class="row-cols-1">
                     <div class="col">
@@ -114,13 +114,19 @@
                         </span>
                     </div>
                     <div class="col">
+                        <div class="border border-1 bg-white rounded p-2 mx-3 fs-6">
+                            @Html.Raw(item.Body)
+                        </div>
                         <div class="truncate">
                             <div class="toggledText" id="@($"toggledText{counter}")">
                                 <span class="small">
-                                    <span class="fw-bold">Content </span> :@Html.Raw(item.Body)
+                                    <span class="fw-bold">Content: </span>
                                 </span>
+                                <div class="d-flex flex-wrap text-wrap">
+                                    @Html.Raw(item.Body)
+                                </div>
                             </div>
-                            @if (item.Body.Length > 100)
+                            @if (item.Body.Length > 15)
                             {
                                 <a href="#" id="@($"readmore{counter}")" class="readM">
                                     <span class="readmore-txt fst-italic fs-6">Read more</span>
@@ -138,7 +144,7 @@
                                         <span class="fw-bold">Moderated Content </span> :@Html.Raw(item.ModeratedBody)
                                     </span>
                                 </div>
-                                @if (item.ModeratedBody.Length > 100)
+                                @if (item.ModeratedBody.Length > 15)
                                 {
                                     <a href="#" id="@($"read2more{counter}")" class="readM">
                                         <span class="readmore-txt fst-italic fs-6">Read more</span>
