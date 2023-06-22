@@ -19,8 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
         ServiceLifetime.Transient);
     AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+    //builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddRoles<IdentityRole>()
